@@ -1,0 +1,855 @@
+/* ==========================================================================
+   OAMS (Oslo Akuttmedisinske Studentforening) - Stylesheet
+   ========================================================================== */
+
+/* --- CSS Variables & Design Tokens --- */
+:root {
+  --primary-red: #d32025;
+  --primary-red-hover: #b3161a;
+  --primary-red-subtle: #fdf2f2;
+  --dark-header: rgba(18, 18, 18, 0.88);
+  --dark-header-scrolled: rgba(18, 18, 18, 0.98);
+  --light-blue-bg: #edf8fd;
+  --text-dark: #1e293b;
+  --text-muted: #64748b;
+  --text-light: #ffffff;
+  --border-color: #e2e8f0;
+  --border-light: #f1f5f9;
+
+  --font-heading: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --transition-fast: all 0.2s ease-in-out;
+  --container-max-width: 1140px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-pill: 50px;
+}
+
+/* --- Global Reset & Box Sizing --- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  scroll-padding-top: 115px;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--text-dark);
+  background-color: #ffffff;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: var(--primary-red);
+  text-decoration: none;
+  transition: var(--transition-fast);
+}
+
+a:hover,
+a:focus {
+  color: var(--primary-red-hover);
+}
+
+/* --- Container & Utilities --- */
+.container {
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* --- Site Header & Navigation --- */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: var(--dark-header);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: padding 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.site-header.scrolled {
+  background: var(--dark-header-scrolled);
+  padding: 10px 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.header-container {
+  max-width: 1260px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Brand */
+.site-branding .brand-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.header-logo {
+  height: 82px;
+  width: auto;
+  max-width: 290px;
+  object-fit: contain;
+  display: block;
+  margin-top: 6px;
+  transition: height 0.3s ease, margin-top 0.3s ease, opacity 0.2s ease, transform 0.2s ease;
+  will-change: height, margin-top;
+}
+
+.site-header.scrolled .header-logo {
+  height: 60px;
+  margin-top: 4px;
+}
+
+.brand-link:hover .header-logo {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+/* Desktop Menu */
+.main-navigation {
+  display: flex;
+  align-items: center;
+}
+
+.nav-list {
+  display: flex;
+  list-style: none;
+  gap: 24px;
+  align-items: center;
+}
+
+.nav-item {
+  position: relative;
+}
+
+.nav-link {
+  font-family: var(--font-heading);
+  font-size: 0.96rem;
+  font-weight: 600;
+  color: #ffffff;
+  padding: 8px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: var(--transition-fast);
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: #ffffff;
+  opacity: 0.9;
+}
+
+.chevron-down {
+  width: 15px;
+  height: 15px;
+  transition: transform 0.2s ease;
+  opacity: 0.8;
+}
+
+.nav-item:hover .chevron-down {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #1a1a1a;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  list-style: none;
+  min-width: 260px;
+  padding: 8px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: all 0.2s ease;
+  z-index: 999;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.nav-item:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-menu li a {
+  display: block;
+  padding: 9px 18px;
+  font-size: 0.84rem;
+  color: #d1d5db;
+  font-family: var(--font-heading);
+  font-weight: 500;
+  transition: var(--transition-fast);
+}
+
+.dropdown-menu li a:hover {
+  background: rgba(211, 32, 37, 0.15);
+  color: #ffffff;
+  padding-left: 22px;
+}
+
+/* Mobile Menu Toggle */
+.mobile-menu-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 38px;
+  height: 38px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 1001;
+}
+
+.hamburger-bar {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: #ffffff;
+  border-radius: 2px;
+  transition: var(--transition-fast);
+}
+
+/* --- Hero Section --- */
+.hero-section {
+  position: relative;
+  min-height: 88vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('assets/hovedside.jpg');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding: 185px 20px 105px 20px;
+  color: var(--text-light);
+  text-align: center;
+}
+
+.hero-bg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.65) 100%);
+  z-index: 1;
+}
+
+.hero-container {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-subheading {
+  font-family: var(--font-heading);
+  font-size: clamp(1.15rem, 2.5vw, 1.55rem);
+  font-weight: 500;
+  color: #f1f5f9;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+}
+
+/* Heartbeat / Pulse Divider */
+.heartbeat-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 16px auto 26px auto;
+  max-width: 320px;
+}
+
+.heartbeat-divider .divider-line {
+  flex: 1;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.35);
+}
+
+.heartbeat-icon {
+  width: 34px;
+  height: 34px;
+  color: var(--primary-red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heartbeat-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.hero-title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  line-height: 1.15;
+  color: #ffffff;
+  margin-bottom: 32px;
+  letter-spacing: -0.5px;
+}
+
+.hero-cta-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+/* --- Buttons --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: var(--radius-pill);
+  transition: transform 0.15s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+  user-select: none;
+  letter-spacing: 1.5px;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn-arrow {
+  width: 12px;
+  height: 12px;
+  transition: transform 0.2s ease;
+}
+
+.btn:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+.btn-primary {
+  background-color: var(--primary-red);
+  color: #ffffff !important;
+  border: 1px solid transparent;
+  padding: 14px 38px;
+  box-shadow: 0 4px 14px rgba(211, 32, 37, 0.3);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-red-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(211, 32, 37, 0.45);
+}
+
+.btn-secondary {
+  background-color: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 14px 34px;
+}
+
+.btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.28);
+  border-color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.btn-outline-red {
+  background-color: #ffffff;
+  color: var(--primary-red) !important;
+  border: 1px solid rgba(211, 32, 37, 0.3);
+  padding: 14px 34px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.btn-outline-red:hover {
+  background-color: var(--primary-red-subtle);
+  border-color: var(--primary-red);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(211, 32, 37, 0.15);
+}
+
+.btn-solid-red {
+  background-color: var(--primary-red);
+  color: #ffffff !important;
+  padding: 14px 34px;
+  border: none;
+  box-shadow: 0 4px 14px rgba(211, 32, 37, 0.3);
+}
+
+.btn-solid-red:hover {
+  background-color: var(--primary-red-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(211, 32, 37, 0.45);
+}
+
+/* --- Section General Styling --- */
+.section {
+  padding: 90px 20px;
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.8rem, 3.5vw, 2.3rem);
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: var(--text-dark);
+}
+
+.section-title a {
+  color: var(--text-dark);
+}
+
+.section-title a:hover {
+  color: var(--primary-red);
+}
+
+.section-text {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  max-width: 740px;
+  margin: 0 auto 28px auto;
+  line-height: 1.7;
+}
+
+.inline-link {
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.btn-wrap {
+  margin-top: 10px;
+}
+
+/* --- Section 2: Book Oss --- */
+.section-book {
+  background-color: #fbfcfd;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* --- Section 3: Logo & Info --- */
+.section-info {
+  background-color: #ffffff;
+  padding: 90px 20px;
+}
+
+.logo-box {
+  margin: 0 auto 32px auto;
+  display: flex;
+  justify-content: center;
+}
+
+.center-logo {
+  max-width: 400px;
+  width: 100%;
+}
+
+.info-content p {
+  font-size: 1.05rem;
+  color: #334155;
+  max-width: 720px;
+  margin: 0 auto 12px auto;
+  line-height: 1.7;
+}
+
+.bold-link {
+  font-weight: 700;
+  color: var(--primary-red);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.bold-link:hover {
+  color: var(--primary-red-hover);
+}
+
+/* --- Section 4: Førstehjelp Banner (Parallax) --- */
+.section-firstaid {
+  position: relative;
+  background-image: url('assets/forste-side.jpg');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  padding: 140px 20px;
+  color: #ffffff;
+}
+
+.firstaid-bg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1;
+}
+
+.section-firstaid .container {
+  position: relative;
+  z-index: 2;
+}
+
+.firstaid-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.firstaid-col {
+  text-align: center;
+}
+
+.firstaid-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 2.7rem);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  line-height: 1.2;
+  margin-bottom: 12px;
+  color: #ffffff;
+}
+
+.heartbeat-divider-center {
+  margin: 16px auto 22px auto;
+}
+
+.firstaid-text {
+  font-size: 1.05rem;
+  color: #f1f5f9;
+  line-height: 1.75;
+  margin-bottom: 28px;
+}
+
+/* --- Section: Våre Kurs (Clean Grid) --- */
+.section-courses {
+  background-color: #ffffff;
+  padding: 95px 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.section-title-wrap {
+  margin-bottom: 48px;
+}
+
+.courses-clean-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+.course-clean-card {
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition-fast);
+}
+
+.course-clean-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--primary-red);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+}
+
+.course-clean-title {
+  font-family: var(--font-heading);
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 12px;
+  line-height: 1.35;
+}
+
+.course-clean-desc {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* --- Section 5: Skoleprosjektet --- */
+.section-school {
+  background-color: var(--light-blue-bg);
+  padding: 95px 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.school-card {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.school-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 20px;
+}
+
+.school-title a {
+  color: #0f172a;
+}
+
+.school-title a:hover {
+  color: var(--primary-red);
+}
+
+.school-text {
+  font-size: 1.05rem;
+  color: #334155;
+  line-height: 1.75;
+  margin-bottom: 16px;
+}
+
+.school-text-bold {
+  font-size: 1.15rem;
+  color: #0f172a;
+  margin-bottom: 28px;
+}
+
+/* --- Section 6: Kontakt oss --- */
+.section-contact {
+  background-color: #ffffff;
+  padding: 90px 20px;
+}
+
+.contact-simple-box {
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 30px;
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.contact-simple-box p {
+  font-size: 1rem;
+  color: #334155;
+}
+
+/* --- Site Footer --- */
+.site-footer {
+  background-color: #141414;
+  color: #94a3b8;
+  padding: 40px 20px;
+  font-size: 0.88rem;
+  border-top: 1px solid #222222;
+}
+
+.footer-container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+}
+
+.footer-info {
+  color: #94a3b8;
+  font-size: 0.85rem;
+  letter-spacing: 0.3px;
+}
+
+.footer-info a {
+  color: #ffffff;
+}
+
+.footer-info a:hover {
+  color: var(--primary-red);
+}
+
+.footer-navigation .footer-menu {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  list-style: none;
+}
+
+.footer-menu li a {
+  color: #ffffff;
+  font-size: 0.86rem;
+  font-weight: 500;
+  font-family: var(--font-heading);
+  transition: color 0.2s ease;
+}
+
+.footer-menu li a:hover {
+  color: var(--primary-red);
+}
+
+/* ==========================================================================
+   Responsive Media Queries
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .firstaid-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .empty-col {
+    display: none;
+  }
+
+  .section-firstaid {
+    background-attachment: scroll;
+    padding: 100px 20px;
+  }
+}
+
+@media (max-width: 860px) {
+  .mobile-menu-btn {
+    display: flex;
+  }
+
+  .main-navigation {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: rgba(18, 18, 18, 0.98);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease-in-out;
+  }
+
+  .main-navigation.is-open {
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .nav-list {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 16px 20px 24px 20px;
+  }
+
+  .nav-link {
+    padding: 14px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    justify-content: space-between;
+    font-size: 0.95rem;
+  }
+
+  .dropdown-menu {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    border-top: none;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 4px;
+    margin: 4px 0 10px 10px;
+    padding: 4px 0;
+    display: none;
+  }
+
+  .nav-item.dropdown-open .dropdown-menu {
+    display: block;
+  }
+
+  .dropdown-menu li a {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+  }
+
+  .hero-section {
+    padding: 155px 16px 80px 16px;
+  }
+
+  .section {
+    padding: 70px 16px;
+  }
+}
+
+@media (max-width: 540px) {
+  .header-logo {
+    height: 56px;
+    max-width: 210px;
+    margin-top: 4px;
+  }
+
+  .hero-title {
+    font-size: 1.9rem;
+  }
+
+  .hero-subheading {
+    font-size: 1.15rem;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-outline-red,
+  .btn-solid-red {
+    padding: 12px 26px;
+    letter-spacing: 1px;
+    font-size: 0.8rem;
+  }
+
+  .footer-menu {
+    gap: 14px 18px;
+  }
+}

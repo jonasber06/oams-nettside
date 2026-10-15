@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="no">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OAMS - Oslo Akuttmedisinske Studentforening</title>
+  <meta name="description"
+    content="Oslo Akuttmedisinske Studentforening (OAMS) - Lær akuttmedisin hos oss! Førstehjelpskurs for medisinstudenter, skoler og eksterne.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+
+  <!-- Google Fonts: Montserrat & Noto Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+    rel="stylesheet">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Top Header / Navigation -->
+  <header class="site-header" id="masthead">
+    <div class="header-container">
+
+      <!-- Brand Logo -->
+      <div class="site-branding">
+        <a href="#hjem" class="brand-link" aria-label="OAMS Hjem">
+          <img src="assets/logo_hvit.svg" alt="OAMS - Oslo Akuttmedisinske Studentforening" class="header-logo">
+        </a>
+      </div>
+
+      <!-- Main Navigation -->
+      <nav class="main-navigation" id="mainNav" aria-label="Hovednavigasjon">
+        <ul class="nav-list">
+          <li class="nav-item">
+            <a href="#hjem" class="nav-link active">Hjem</a>
+          </li>
+
+          <li class="nav-item has-dropdown">
+            <a href="#om-oss" class="nav-link">
+              Om oss
+              <svg class="chevron-down" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="#om-oss">Om foreningen</a></li>
+              <li><a href="#skoleprosjektet">Skoleprosjektet</a></li>
+              <li><a href="https://www.facebook.com/OsloAMS" target="_blank" rel="noopener noreferrer">Facebook-siden
+                  vår &nearr;</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item has-dropdown">
+            <a href="#kurs" class="nav-link">
+              Kurs
+              <svg class="chevron-down" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="#kurs">Kommende Arrangementer</a></li>
+              <li><a href="#kurs">AMK 1 - Akuttmedisinkurs 1</a></li>
+              <li><a href="#kurs">AMK 2 - Akuttmedisinkurs 2</a></li>
+              <li><a href="#kurs">Instruktørkurs</a></li>
+              <li><a href="#kurs">eFAST - kurs og traumesimulering</a></li>
+              <li><a href="#kurs">Mini-StudentBEST</a></li>
+              <li><a href="#kurs">Akutt Pediatrikurs</a></li>
+              <li><a href="#kurs">Villmarksmedisin</a></li>
+              <li><a href="#kurs">Tema-kvelder</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item has-dropdown">
+            <a href="#kontakt-oss" class="nav-link">
+              Kontakt oss
+              <svg class="chevron-down" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="#book-oss">Book oss</a></li>
+              <li><a href="#kontakt-oss">Kontaktinformasjon</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item has-dropdown">
+            <a href="#oams-medlemskap" class="nav-link">
+              OAMS-Medlemskap
+              <svg class="chevron-down" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd" />
+              </svg>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="mailto:post@oams.no?subject=Innlogging%20OAMS">Logg inn</a></li>
+              <li><a href="mailto:post@oams.no?subject=Nytt%20medlemskap%20OAMS">Registrer ny bruker</a></li>
+              <li><a href="mailto:post@oams.no?subject=Endring%20av%20profil">Rediger profilen din</a></li>
+              <li><a href="#kurs">Mine kurs</a></li>
+              <li><a href="#kontakt-oss">Betaling med VIPPS</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Mobile Menu Toggle Button -->
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Åpne meny" aria-expanded="false">
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+        <span class="hamburger-bar"></span>
+      </button>
+
+    </div>
+  </header>
+
+  <main id="content">
+
+    <!-- Hero Section -->
+    <section class="hero-section" id="hjem">
+      <div class="hero-bg-overlay"></div>
+
+      <div class="hero-container">
+
+        <p class="hero-subheading">Lær akuttmedisin hos oss!</p>
+
+        <!-- Authentic Heartbeat Divider -->
+        <div class="heartbeat-divider" aria-hidden="true">
+          <span class="divider-line"></span>
+          <div class="heartbeat-icon">
+            <svg viewBox="0 0 512 512">
+              <path fill="currentColor"
+                d="M320.2 243.8l-49.7 99.4c-6 12.1-23.4 11.7-28.9-.6l-56.9-126.3-30 71.7c-5.9 14-24.2 16.6-33.7 4.7l-29.2-36.5H16c-8.8 0-16-7.2-16-16s7.2-16 16-16h85.5c5.9 0 11.4 3.3 14.2 8.5l14.7 18.4 34.2-81.8c6.1-14.5 25.1-16.1 33.5-2.9l54.8 121.7 45.4-90.8c5.4-10.9 20.2-12.8 28.2-3.8l56.8 63.9H496c8.8 0 16 7.2 16 16s-7.2 16-16 16h-110c-6.2 0-12-2.8-15.8-7.7l-46-51.8z" />
+            </svg>
+          </div>
+          <span class="divider-line"></span>
+        </div>
+
+        <h1 class="hero-title">Oslo Akuttmedisinske Studentforening</h1>
+
+        <div class="hero-cta-wrapper">
+          <a href="#om-oss" class="btn btn-primary hero-btn">Hvem er vi?</a>
+          <a href="#kurs" class="btn btn-secondary hero-btn">Våre kurs</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 2: Ønsker du å booke oss? -->
+    <section class="section section-book" id="book-oss">
+      <div class="container text-center">
+
+        <h2 class="section-title">
+          <a href="#book-oss">Ønsker du å booke oss?</a>
+        </h2>
+
+        <p class="section-text">
+          Vi er en faglig studentforening som tilbyr både <strong>interne</strong> og <strong>eksterne</strong> <a
+            href="#kurs" class="inline-link">førstehjelps-kurs</a>.<br>
+          Det vil si at vi underviser akuttmedisin til både medisinstudenter og andre! Er du interessert?
+        </p>
+
+        <div class="btn-wrap">
+          <a href="mailto:post@oams.no?subject=Foresp%C3%B8rsel%20om%20booking" class="btn btn-outline-red">
+            <span>Book oss</span>
+            <svg class="btn-arrow" viewBox="0 0 448 512" fill="currentColor">
+              <path
+                d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z" />
+            </svg>
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 3: Facebook & Forening Info -->
+    <section class="section section-info" id="om-oss">
+      <div class="container text-center">
+
+        <div class="logo-box">
+          <img src="assets/logo_svart.svg" alt="OAMS - Oslo Akuttmedisinske Studentforening" class="center-logo">
+        </div>
+
+        <div class="info-content">
+          <p>
+            Informasjon om kommende kurs vil bli publisert på Facebooksiden vår,
+            <a href="https://www.facebook.com/OsloAMS" target="_blank" rel="noopener noreferrer" class="bold-link">Oslo
+              Akuttmedisinske studentforening</a>
+          </p>
+          <p>
+            Der publiserer vi informasjon om kurs fortløpende og andre spennende ting som skjer i foreningen!
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Førstehjelp banner (Parallax) -->
+    <section class="section section-firstaid" id="forstehjelp">
+      <div class="firstaid-bg-overlay"></div>
+
+      <div class="container">
+        <div class="firstaid-grid">
+
+          <div class="firstaid-col">
+            <h2 class="firstaid-title">
+              Førstehjelp:<br>Hva gjør du?
+            </h2>
+
+            <div class="heartbeat-divider heartbeat-divider-center" aria-hidden="true">
+              <span class="divider-line"></span>
+              <div class="heartbeat-icon">
+                <svg viewBox="0 0 512 512">
+                  <path fill="currentColor"
+                    d="M320.2 243.8l-49.7 99.4c-6 12.1-23.4 11.7-28.9-.6l-56.9-126.3-30 71.7c-5.9 14-24.2 16.6-33.7 4.7l-29.2-36.5H16c-8.8 0-16-7.2-16-16s7.2-16 16-16h85.5c5.9 0 11.4 3.3 14.2 8.5l14.7 18.4 34.2-81.8c6.1-14.5 25.1-16.1 33.5-2.9l54.8 121.7 45.4-90.8c5.4-10.9 20.2-12.8 28.2-3.8l56.8 63.9H496c8.8 0 16 7.2 16 16s-7.2 16-16 16h-110c-6.2 0-12-2.8-15.8-7.7l-46-51.8z" />
+                </svg>
+              </div>
+              <span class="divider-line"></span>
+            </div>
+
+            <p class="firstaid-text">
+              Det skal ikke mye til for å redde et liv.<br>
+              Alt du trenger er kunnskap og hos oss får du verktøyet du trenger.
+            </p>
+
+            <div class="btn-wrap">
+              <a href="#kurs" class="btn btn-solid-red">
+                <span>Våre kurs</span>
+                <svg class="btn-arrow" viewBox="0 0 448 512" fill="currentColor">
+                  <path
+                    d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z" />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="firstaid-col empty-col"></div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Section: Kurs Oversikt -->
+    <section class="section section-courses" id="kurs">
+      <div class="container">
+
+        <div class="section-title-wrap text-center">
+          <h2 class="section-title">Våre Kurs</h2>
+          <p class="section-text">
+            OAMS arrangerer praktiske kurs og workshops for medisinstudenter og eksterne gjennom hele studieåret.
+          </p>
+        </div>
+
+        <div class="courses-clean-grid">
+
+          <div class="course-clean-card">
+            <h3 class="course-clean-title">AMK 1 – Akuttmedisinkurs 1</h3>
+            <p class="course-clean-desc">
+              Vårt grunnleggende akuttmedisinkurs. Fokus på primærundersøkelse, ABCDE-metodikk, hjerte-lunge-redning og
+              vanlige akuttmedisinske tilstander.
+            </p>
+          </div>
+
+          <div class="course-clean-card">
+            <h3 class="course-clean-title">AMK 2 – Akuttmedisinkurs 2</h3>
+            <p class="course-clean-desc">
+              Videregående kurs for studenter i kliniske terminer. Avansert HLR (AHLR), rytmegjenkjenning,
+              defibrillering, medikamenter og simulatorcaser.
+            </p>
+          </div>
+
+          <div class="course-clean-card">
+            <h3 class="course-clean-title">Instruktørkurs</h3>
+            <p class="course-clean-desc">
+              Opplæring av nye instruktører til OAMS. Pedagogikk, veiledning, scenariostyring og praktisk
+              undervisningsteknikk.
+            </p>
+          </div>
+
+          <div class="course-clean-card">
+            <h3 class="course-clean-title">eFAST – Kurs og traumesimulering</h3>
+            <p class="course-clean-desc">
+              Fokusert ultralydundersøkelse ved traumer (eFAST). Praktisk ultralydskanning kombinert med simulering av
+              traumepasienter.
+            </p>
+          </div>
+
+          <div class="course-clean-card">
+            <h3 class="course-clean-title">Mini-StudentBEST</h3>
+            <p class="course-clean-desc">
+              Tverrfaglig traumeteam-trening basert på BEST-konseptet. Samhandling, roller og kommunikasjon i
+              akuttmottaket.
+            </p>
+          </div>
+
+          <div class="course-clean-card">
+            <h3 class="course-clean-title">Akutt Pediatrikurs</h3>
+            <p class="course-clean-desc">
+              Håndtering av akutt syke og skadde barn. Pediatrisk undersøkelse, livreddende tiltak og tilpasset
+              akuttbehandling.
+            </p>
+          </div>
+
+          <div class="course-clean-card">
+            <h3 class="course-clean-title">Villmarksmedisin</h3>
+            <p class="course-clean-desc">
+              Akuttmedisinsk behandling i felt og utendørsmiljøer hvor profesjonell hjelp kan ta tid. Hypotermi,
+              improvisert spjelking og redning.
+            </p>
+          </div>
+
+          <div class="course-clean-card">
+            <h3 class="course-clean-title">Tema-kvelder & Arrangementer</h3>
+            <p class="course-clean-desc">
+              Faglige kvelder med aktuelle foredragsholdere, legespesialister og spennende akuttmedisinske emner.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 5: Skoleprosjektet -->
+    <section class="section section-school" id="skoleprosjektet">
+      <div class="container text-center">
+        <div class="school-card">
+
+          <h2 class="school-title">
+            <a href="#skoleprosjektet">Skoleprosjektet</a>
+          </h2>
+
+          <p class="school-text">
+            Vi kjemper for å spre kunnskap om førstehjelp!<br>
+            Derfor tilbyr vi <strong>undervisning</strong> til elever <strong>ved primært ungdoms- og videregående
+              skoler.</strong>
+          </p>
+          <p class="school-text-bold">
+            <strong>Book oss i dag!</strong>
+          </p>
+
+          <div class="btn-wrap">
+            <a href="mailto:post@oams.no?subject=Skoleprosjektet%20booking" class="btn btn-outline-red">
+              <span>Mer info</span>
+              <svg class="btn-arrow" viewBox="0 0 448 512" fill="currentColor">
+                <path
+                  d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z" />
+              </svg>
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: Kontakt oss -->
+    <section class="section section-contact" id="kontakt-oss">
+      <div class="container text-center">
+
+        <h2 class="section-title">Kontakt oss</h2>
+
+        <p class="section-text">
+          Har du spørsmål om kurs, booking eller medlemskap? Ta gjerne kontakt med oss på e-post eller via sosiale
+          medier.
+        </p>
+
+        <div class="contact-simple-box">
+          <p>
+            <strong>Adresse:</strong> Domus Medica, Sognsvannsveien 9, 0372 Oslo
+          </p>
+          <p>
+            <strong>E-post:</strong> <a href="mailto:post@oams.no" class="inline-link">post@oams.no</a>
+          </p>
+          <p>
+            <strong>Facebook:</strong> <a href="https://www.facebook.com/OsloAMS" target="_blank"
+              rel="noopener noreferrer" class="bold-link">facebook.com/OsloAMS</a>
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer" id="colophon">
+    <div class="footer-container">
+
+      <div class="footer-info">
+        Domus Medica, Sognsvannsveien 9, 0372 Oslo &nbsp;|&nbsp; E-post: <a href="mailto:post@oams.no">post@oams.no</a>
+      </div>
+
+      <nav class="footer-navigation" aria-label="Bunnmeny">
+        <ul class="footer-menu">
+          <li><a href="#hjem">Hjem</a></li>
+          <li><a href="#om-oss">Om oss</a></li>
+          <li><a href="#kurs">Kurs</a></li>
+          <li><a href="#kontakt-oss">Kontakt oss</a></li>
+          <li><a href="mailto:post@oams.no?subject=OAMS-Medlemskap">OAMS-Medlemskap</a></li>
+        </ul>
+      </nav>
+
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
