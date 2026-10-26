@@ -15,7 +15,7 @@
         letter-spacing: -0.2px;
       }
       .ekg-stroke {
-        stroke: #e31837;
+        stroke: #d32025;
         stroke-width: 17;
         stroke-linecap: butt;
         stroke-linejoin: miter;
