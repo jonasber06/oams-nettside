@@ -253,7 +253,7 @@ a:focus {
 /* --- Hero Section --- */
 .hero-section {
   position: relative;
-  min-height: 88vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
