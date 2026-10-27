@@ -334,8 +334,8 @@ textarea.form-control {
 }
 
 .admin-item-row.has-avatar {
-  grid-template-columns: 32px 36px 1fr 1fr 1.2fr 75px 36px;
-  gap: 10px;
+  grid-template-columns: 38px 36px 1fr 1fr 1.2fr 75px 36px;
+  gap: 12px;
 }
 
 /* Reorder Control (Up/Down + Number) */
@@ -344,25 +344,29 @@ textarea.form-control {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: 3px;
   user-select: none;
+  flex-shrink: 0;
 }
 
 .role-index-num {
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   font-weight: 700;
-  color: #64748b;
+  color: #475569;
   line-height: 1;
+  text-align: center;
 }
 
 .btn-reorder {
-  background: none;
-  border: none;
-  color: #94a3b8;
+  background-color: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #475569;
   cursor: pointer;
-  padding: 1px 4px;
+  width: 32px;
+  height: 24px;
+  padding: 0;
   line-height: 1;
-  border-radius: 3px;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -370,18 +374,28 @@ textarea.form-control {
 }
 
 .btn-reorder svg {
-  width: 13px;
-  height: 13px;
+  width: 17px;
+  height: 17px;
 }
 
 .btn-reorder:hover:not(:disabled) {
-  background-color: #e2e8f0;
+  background-color: #fee2e2;
+  border-color: #fca5a5;
   color: var(--admin-primary);
 }
 
+.btn-reorder:active:not(:disabled) {
+  background-color: var(--admin-primary);
+  border-color: var(--admin-primary);
+  color: #ffffff;
+  transform: scale(0.95);
+}
+
 .btn-reorder:disabled {
-  opacity: 0.2;
+  opacity: 0.25;
   cursor: not-allowed;
+  background-color: transparent;
+  border-color: transparent;
 }
 
 .admin-item-row.is-dragging {
@@ -543,6 +557,15 @@ textarea.form-control {
   border-left: 4px solid #ef4444;
 }
 
+/* Touch & Mobile Optimizations */
+@media (pointer: coarse) {
+  .admin-item-row {
+    -webkit-user-drag: none;
+    user-select: auto;
+    touch-action: pan-y;
+  }
+}
+
 /* Responsive */
 @media (max-width: 860px) {
   .admin-sidebar {
@@ -567,5 +590,92 @@ textarea.form-control {
   .admin-item-row {
     grid-template-columns: 1fr;
     gap: 8px;
+    -webkit-user-drag: none;
+    touch-action: pan-y;
+  }
+
+  /* Kort-oppsett for styreverv på mobil */
+  .admin-item-row.has-avatar {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    grid-template-areas:
+      "reorder avatar . delete"
+      "title   title  title title"
+      "name    name   name  name"
+      "email   email  email email"
+      "visible visible visible visible";
+    gap: 10px;
+    padding: 14px 16px;
+    align-items: center;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  .admin-item-row.has-avatar .role-reorder-wrap {
+    grid-area: reorder;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    background: #f1f5f9;
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+  }
+
+  .admin-item-row.has-avatar .btn-reorder {
+    width: 40px;
+    height: 36px;
+    background-color: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .admin-item-row.has-avatar .btn-reorder svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .admin-item-row.has-avatar .role-index-num {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e293b;
+    padding: 0 4px;
+    min-width: 20px;
+  }
+
+  .admin-item-row.has-avatar .role-avatar-uploader {
+    grid-area: avatar;
+    justify-self: start;
+    margin-left: 6px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .admin-item-row.has-avatar .delete-role-btn {
+    grid-area: delete;
+    justify-self: end;
+    padding: 8px 14px;
+    font-size: 1.1rem;
+    line-height: 1;
+    border-radius: 6px;
+  }
+
+  .admin-item-row.has-avatar .role-title-input {
+    grid-area: title;
+  }
+
+  .admin-item-row.has-avatar .role-name-input {
+    grid-area: name;
+  }
+
+  .admin-item-row.has-avatar .role-email-input {
+    grid-area: email;
+  }
+
+  .admin-item-row.has-avatar .role-visible-label {
+    grid-area: visible;
+    padding-top: 4px;
   }
 }

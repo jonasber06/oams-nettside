@@ -93,6 +93,23 @@ function syncRolesFromDom() {
   });
 }
 
+function isMobileOrTouch() {
+  const isMobileUA = /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const isSmallScreen = window.matchMedia('(max-width: 860px)').matches;
+  const isCoarseTouch = window.matchMedia('(pointer: coarse)').matches && (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
+  return isMobileUA || isSmallScreen || isCoarseTouch;
+}
+
+let lastIsMobileState = isMobileOrTouch();
+window.addEventListener('resize', () => {
+  const current = isMobileOrTouch();
+  if (current !== lastIsMobileState) {
+    lastIsMobileState = current;
+    syncRolesFromDom();
+    renderRolesList();
+  }
+});
+
 let draggedRoleIndex = null;
 
 function renderRolesList() {
@@ -104,6 +121,8 @@ function renderRolesList() {
     return;
   }
 
+  const isMobile = isMobileOrTouch();
+
   currentRoles.forEach((role, index) => {
     // Sørg for at vervet alltid har en gyldig UUID
     if (!role.id) role.id = crypto.randomUUID();
@@ -111,19 +130,25 @@ function renderRolesList() {
     const row = document.createElement('div');
     row.className = 'admin-item-row has-avatar';
     row.dataset.index = index;
-    row.setAttribute('draggable', 'true');
+
+    // Sperre for drag and drop på mobil for å unngå scroll-konflikter og utilsiktede flytt
+    if (!isMobile) {
+      row.setAttribute('draggable', 'true');
+    } else {
+      row.setAttribute('draggable', 'false');
+    }
 
     const hasImage = Boolean(role.image_url && role.image_url.trim());
 
     row.innerHTML = `
       <!-- Rekkefølge med Opp/Ned-knapper -->
       <div class="role-reorder-wrap">
-        <button type="button" class="btn-reorder btn-move-up" title="Flytt opp" ${index === 0 ? 'disabled' : ''}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg>
+        <button type="button" class="btn-reorder btn-move-up" title="Flytt opp" aria-label="Flytt opp" ${index === 0 ? 'disabled' : ''}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
         </button>
         <span class="role-index-num">${index + 1}</span>
-        <button type="button" class="btn-reorder btn-move-down" title="Flytt ned" ${index === currentRoles.length - 1 ? 'disabled' : ''}>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        <button type="button" class="btn-reorder btn-move-down" title="Flytt ned" aria-label="Flytt ned" ${index === currentRoles.length - 1 ? 'disabled' : ''}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </button>
       </div>
 
@@ -144,7 +169,7 @@ function renderRolesList() {
       <input type="text" class="form-control role-title-input" placeholder="Tittel (f.eks. Leder)" value="${escapeHtml(role.title || '')}" required>
       <input type="text" class="form-control role-name-input" placeholder="Navn" value="${escapeHtml(role.member_name || '')}">
       <input type="email" class="form-control role-email-input" placeholder="navn@oams.no" value="${escapeHtml(role.email || '')}" required>
-      <label style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; margin: 0; cursor: pointer;">
+      <label class="role-visible-label" style="display: flex; align-items: center; gap: 6px; font-size: 0.8rem; margin: 0; cursor: pointer;">
         <input type="checkbox" class="role-visible-input" ${role.visible !== false ? 'checked' : ''}> Synlig
       </label>
       <button type="button" class="btn-admin btn-admin-danger delete-role-btn" style="padding: 6px 10px; font-size: 0.75rem;" title="Slett verv">
@@ -163,57 +188,59 @@ function renderRolesList() {
       moveRole(index, 1);
     });
 
-    // Drag & Drop
-    row.addEventListener('dragstart', (e) => {
-      syncRolesFromDom();
-      draggedRoleIndex = index;
-      row.classList.add('is-dragging');
-      e.dataTransfer.effectAllowed = 'move';
-    });
-
-    row.addEventListener('dragend', () => {
-      row.classList.remove('is-dragging');
-      document.querySelectorAll('#rolesList .admin-item-row').forEach(r => r.classList.remove('drag-over-top', 'drag-over-bottom'));
-    });
-
-    row.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = 'move';
-      const rect = row.getBoundingClientRect();
-      const offset = e.clientY - rect.top;
-      if (offset < rect.height / 2) {
-        row.classList.add('drag-over-top');
-        row.classList.remove('drag-over-bottom');
-      } else {
-        row.classList.add('drag-over-bottom');
-        row.classList.remove('drag-over-top');
-      }
-    });
-
-    row.addEventListener('dragleave', () => {
-      row.classList.remove('drag-over-top', 'drag-over-bottom');
-    });
-
-    row.addEventListener('drop', (e) => {
-      e.preventDefault();
-      row.classList.remove('drag-over-top', 'drag-over-bottom');
-      if (draggedRoleIndex === null || draggedRoleIndex === index) return;
-
-      const rect = row.getBoundingClientRect();
-      const dropTop = (e.clientY - rect.top) < rect.height / 2;
-      let targetIndex = dropTop ? index : index + 1;
-      if (draggedRoleIndex < targetIndex) targetIndex--;
-
-      const [movedItem] = currentRoles.splice(draggedRoleIndex, 1);
-      currentRoles.splice(targetIndex, 0, movedItem);
-
-      currentRoles.forEach((r, idx) => {
-        r.sort_order = idx + 1;
+    // Drag & Drop er kun aktivt på PC/Mac (ikke på mobil/touch)
+    if (!isMobile) {
+      row.addEventListener('dragstart', (e) => {
+        syncRolesFromDom();
+        draggedRoleIndex = index;
+        row.classList.add('is-dragging');
+        e.dataTransfer.effectAllowed = 'move';
       });
 
-      draggedRoleIndex = null;
-      renderRolesList();
-    });
+      row.addEventListener('dragend', () => {
+        row.classList.remove('is-dragging');
+        document.querySelectorAll('#rolesList .admin-item-row').forEach(r => r.classList.remove('drag-over-top', 'drag-over-bottom'));
+      });
+
+      row.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        const rect = row.getBoundingClientRect();
+        const offset = e.clientY - rect.top;
+        if (offset < rect.height / 2) {
+          row.classList.add('drag-over-top');
+          row.classList.remove('drag-over-bottom');
+        } else {
+          row.classList.add('drag-over-bottom');
+          row.classList.remove('drag-over-top');
+        }
+      });
+
+      row.addEventListener('dragleave', () => {
+        row.classList.remove('drag-over-top', 'drag-over-bottom');
+      });
+
+      row.addEventListener('drop', (e) => {
+        e.preventDefault();
+        row.classList.remove('drag-over-top', 'drag-over-bottom');
+        if (draggedRoleIndex === null || draggedRoleIndex === index) return;
+
+        const rect = row.getBoundingClientRect();
+        const dropTop = (e.clientY - rect.top) < rect.height / 2;
+        let targetIndex = dropTop ? index : index + 1;
+        if (draggedRoleIndex < targetIndex) targetIndex--;
+
+        const [movedItem] = currentRoles.splice(draggedRoleIndex, 1);
+        currentRoles.splice(targetIndex, 0, movedItem);
+
+        currentRoles.forEach((r, idx) => {
+          r.sort_order = idx + 1;
+        });
+
+        draggedRoleIndex = null;
+        renderRolesList();
+      });
+    }
 
     // Sletting
     row.querySelector('.delete-role-btn').addEventListener('click', () => {
