@@ -14,6 +14,7 @@
     href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Noto+Sans:wght@400;500;600&display=swap"
     rel="stylesheet">
 
+  <base href="/admin/">
   <link rel="stylesheet" href="admin.css">
 </head>
 
@@ -24,33 +25,87 @@
 
       <img src="../assets/logo_svart.svg" alt="OAMS Logo" class="login-logo">
 
-      <h1 class="login-title">OAMS Adminpanel</h1>
+      <!-- Felles varsel-boks for meldinger -->
+      <div id="loginAlert" class="login-alert"></div>
 
-      <div id="loginAlert"
-        style="display: none; padding: 12px; margin-bottom: 20px; border-radius: var(--radius-sm); font-size: 0.88rem; background-color: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; text-align: left;">
+      <!-- 1. Innloggingsvisning (Standard) -->
+      <div id="loginView">
+        <h1 class="login-title">OAMS Adminpanel</h1>
+        <p class="login-subtitle">Logg inn for å administrere nettsiden</p>
+
+        <form id="loginForm">
+          <div class="form-group" style="text-align: left;">
+            <label for="email">E-postadresse</label>
+            <input type="email" id="email" class="form-control" required placeholder="admin@oams.no" autocomplete="email">
+          </div>
+
+          <div class="form-group" style="text-align: left;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label for="password" style="margin-bottom: 0;">Passord</label>
+              <button type="button" id="toForgotBtn" class="login-link-btn">Glemt passord?</button>
+            </div>
+            <input type="password" id="password" class="form-control" required placeholder="••••••••"
+              autocomplete="current-password">
+          </div>
+
+          <button type="submit" id="loginBtn" class="btn-admin btn-admin-primary"
+            style="width: 100%; justify-content: center; padding: 12px; margin-top: 10px;">
+            Logg inn
+          </button>
+        </form>
+
+        <p style="margin-top: 24px; font-size: 0.82rem; color: #94a3b8;">
+          Kun autoriserte administratorer har tilgang. <br>Nye brukere må inviteres av styret.
+        </p>
       </div>
 
-      <form id="loginForm">
-        <div class="form-group" style="text-align: left;">
-          <label for="email">E-postadresse</label>
-          <input type="email" id="email" class="form-control" required placeholder="admin@oams.no" autocomplete="email">
-        </div>
+      <!-- 2. Glemt passord-visning -->
+      <div id="forgotView" style="display: none;">
+        <h1 class="login-title">Glemt passord</h1>
+        <p class="login-subtitle">Skriv inn e-postadressen din, så sender vi deg en lenke for å tilbakestille passordet.</p>
 
-        <div class="form-group" style="text-align: left;">
-          <label for="password">Passord</label>
-          <input type="password" id="password" class="form-control" required placeholder="••••••••"
-            autocomplete="current-password">
-        </div>
+        <form id="forgotForm">
+          <div class="form-group" style="text-align: left;">
+            <label for="forgotEmail">E-postadresse</label>
+            <input type="email" id="forgotEmail" class="form-control" required placeholder="admin@oams.no" autocomplete="email">
+          </div>
 
-        <button type="submit" id="loginBtn" class="btn-admin btn-admin-primary"
-          style="width: 100%; justify-content: center; padding: 12px; margin-top: 10px;">
-          Logg inn
-        </button>
-      </form>
+          <button type="submit" id="forgotBtn" class="btn-admin btn-admin-primary"
+            style="width: 100%; justify-content: center; padding: 12px; margin-top: 10px;">
+            Send tilbakestillingslenke
+          </button>
 
-      <p style="margin-top: 24px; font-size: 0.82rem; color: #94a3b8;">
-        Kun autoriserte administratorer har tilgang. <br>Nye brukere må inviteres av styret.
-      </p>
+          <div style="margin-top: 20px;">
+            <button type="button" id="backToLoginBtn" class="login-link-btn" style="font-size: 0.85rem;">
+              &larr; Tilbake til innlogging
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- 3. Sett nytt passord-visning (når bruker ankommer via recovery-lenke) -->
+      <div id="resetView" style="display: none;">
+        <h1 class="login-title">Nytt passord</h1>
+        <p class="login-subtitle">Oppgi et nytt passord for din administratorkonto.</p>
+
+        <form id="resetForm">
+          <div class="form-group" style="text-align: left;">
+            <label for="newPassword">Nytt passord</label>
+            <input type="password" id="newPassword" class="form-control" required minlength="6" placeholder="Minst 6 tegn" autocomplete="new-password">
+          </div>
+
+          <div class="form-group" style="text-align: left;">
+            <label for="confirmPassword">Gjenta nytt passord</label>
+            <input type="password" id="confirmPassword" class="form-control" required minlength="6" placeholder="Gjenta passordet" autocomplete="new-password">
+          </div>
+
+          <button type="submit" id="resetBtn" class="btn-admin btn-admin-primary"
+            style="width: 100%; justify-content: center; padding: 12px; margin-top: 10px;">
+            Oppdater passord
+          </button>
+        </form>
+      </div>
+
     </div>
   </div>
 
