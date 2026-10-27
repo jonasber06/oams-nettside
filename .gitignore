@@ -1,5 +1,10 @@
 # Generated documentation
 om_oss.md
+admin_endringer.md
+
+# Secrets and local notes
+database.txt
+*.txt
 
 # macOS system files
 .DS_Store

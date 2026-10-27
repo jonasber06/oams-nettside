@@ -1,0 +1,37 @@
+# ==============================================================================
+# OAMS Nettside - Apache Konfigurasjon (.htaccess)
+# ==============================================================================
+
+# Standard tegnsett
+AddDefaultCharset UTF-8
+
+# Slå på RewriteEngine
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Send /admin til /admin/index.html dersom forespurt uten skråstrek
+  RewriteRule ^admin$ admin/ [R=301,L]
+</IfModule>
+
+# Sikkerhetsheadere for hele nettstedet
+<IfModule mod_headers.c>
+  # Hindre clickjacking
+  Header set X-Frame-Options "SAMEORIGIN"
+  # Hindre MIME-sniffing
+  Header set X-Content-Type-Options "nosniff"
+  # Personvern for referer
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  # Permissions policy
+  Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>
+
+# Ekstra sikkerhet og ingen indeksering for admin-panelet
+<If "%{REQUEST_URI} =~ m#^/admin#">
+  <IfModule mod_headers.c>
+    # Fortell søkemotorer (Google, Bing) at de ALDRI skal indeksere admin-panelet
+    Header set X-Robots-Tag "noindex, nofollow, noarchive"
+    Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+  </IfModule>
+</If>
