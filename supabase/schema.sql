@@ -89,10 +89,26 @@ begin
 end;
 $$;
 
+-- Automatisk oppdatering av updated_at og updated_by for site_sections
+create or replace function public.touch_site_sections_updated()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  new.updated_at = now();
+  if new.updated_by is null and auth.uid() is not null then
+    new.updated_by = auth.uid();
+  end if;
+  return new;
+end;
+$$;
+
 drop trigger if exists touch_site_sections_updated on public.site_sections;
 create trigger touch_site_sections_updated
-  before update on public.site_sections
-  for each row execute function public.touch_updated_at();
+  before insert or update on public.site_sections
+  for each row execute function public.touch_site_sections_updated();
 
 drop trigger if exists touch_board_roles_updated on public.board_roles;
 create trigger touch_board_roles_updated
