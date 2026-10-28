@@ -89,8 +89,6 @@ Editoren i `admin/om-oss.html` og tilhørende skript [admin/js/editors/om-oss.js
 1. **Topp-banner (Hero):** Redigering av undertittel og hovedtittel («Hva er OAMS?»).
 2. **Hvem er vi?:** Redigering av seksjonstittel, fremhevet ingress (lead) og brødtekstavsnitt.
 * Lagres som strukturerte JSON-data i tabellen `public.site_sections` under nøklene `hero` og `about`.
-* **Sporing av endringer:** Hver rad i `site_sections` sporer nøyaktig når og hvem som sist gjorde endringer via kolonnene `updated_at` (tidsstempel) og `updated_by` (UUID koblet til `auth.users`).
-* **Visuell status i admin:** Øverst i hvert seksjonskort vises et diskret merke med klokkeslett, dato og e-postadressen til administratoren som sist lagret seksjonen.
 
 ---
 
@@ -139,6 +137,21 @@ Administrerer dokumentkortene nederst på «Om oss»-siden (vedtekter, vervbeskr
 * Knappetekst (f.eks. «Les vedtekter», «Åpne mappe»). Den skrå eksternlenke-pilen legges automatisk til på egen linje under knappen på nettsiden.
 * Synlighetsbryter og slettemulighet.
 * Mulighet for å legge til nye dokumenter med «+ Legg til dokument».
+
+---
+
+### 4.4 Redigering av «Kontakt oss» (kontakt-oss.html)
+
+Editoren i [admin/kontakt-oss.html](file:///Users/jonasbergersen/Desktop/oams-nettside-repo/oams-nettside/admin/kontakt-oss.html) og tilhørende skript [admin/js/editors/kontakt-oss.js](file:///Users/jonasbergersen/Desktop/oams-nettside-repo/oams-nettside/admin/js/editors/kontakt-oss.js) styrer innholdet på [kontakt_oss.html](file:///Users/jonasbergersen/Desktop/oams-nettside-repo/oams-nettside/kontakt_oss.html) via tabellen `public.site_sections` (`page = 'kontakt_oss'`):
+
+1. **Topp-banner (Hero):** Redigering av undertittel og hovedtittel (`kontakt_oss.hero`).
+2. **Kontaktinfo (`kontakt_oss.kontaktinfo`):**
+   - Seksjonstittel («Kontaktinfo») og valgfri introtekst.
+   - Dynamisk liste over kontaktpunkter (standard: **Adresse** ved Domus Medica og **Email oss** `post@oams.no`).
+   - Hvert kontaktpunkt har valgbart ikon (kartnål, e-post, telefon, sprøyte, kalender, info), tittel, visningstekst (med linjeskift-støtte), valgfri klikkbar lenke (`mailto:`, `https://` osv.), rekkefølgepiler (**▲** / **▼**), synlighetsbryter og slett/legg til-mulighet.
+3. **Sosiale medier (`kontakt_oss.socials`):**
+   - Dynamisk liste over sosiale medier-knapper (standard: **Facebook**, **Instagram** og **LinkedIn**).
+   - Kan endre plattformikon, knappetekst, URL, rekkefølge (**▲** / **▼**), synlighet eller legge til/fjerne kanaler.
 
 ---
 

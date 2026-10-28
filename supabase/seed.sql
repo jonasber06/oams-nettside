@@ -49,6 +49,74 @@ values
       "title": "Innsyn og dokumenter",
       "text": "Offisiell dokumentasjon om foreningens drift, styreverv, vedtekter, styremøtereferater og regnskap."
     }'::jsonb
+  ),
+  (
+    'kontakt_oss.hero',
+    'kontakt_oss',
+    '{
+      "subheading": "Oslo Akuttmedisinske Studentforening",
+      "title": "Kontakt oss"
+    }'::jsonb
+  ),
+  (
+    'kontakt_oss.kontaktinfo',
+    'kontakt_oss',
+    '{
+      "title": "Kontaktinfo",
+      "subtitle": "Har du spørsmål om kurs, booking eller medlemskap? Ta gjerne kontakt med oss på e-post eller via våre sosiale medier.",
+      "items": [
+        {
+          "id": "default-address",
+          "title": "Adresse",
+          "text": "Domus Medica, Sognsvannsveien 9,\n0372 Oslo",
+          "link": "",
+          "icon": "location",
+          "visible": true,
+          "sort_order": 1
+        },
+        {
+          "id": "default-email",
+          "title": "Email oss",
+          "text": "post@oams.no",
+          "link": "mailto:post@oams.no",
+          "icon": "mail",
+          "visible": true,
+          "sort_order": 2
+        }
+      ]
+    }'::jsonb
+  ),
+  (
+    'kontakt_oss.socials',
+    'kontakt_oss',
+    '{
+      "items": [
+        {
+          "id": "default-fb",
+          "platform": "facebook",
+          "label": "Facebook",
+          "url": "https://www.facebook.com/OsloAMS/",
+          "visible": true,
+          "sort_order": 1
+        },
+        {
+          "id": "default-ig",
+          "platform": "instagram",
+          "label": "Instagram",
+          "url": "https://www.instagram.com/osloams/",
+          "visible": true,
+          "sort_order": 2
+        },
+        {
+          "id": "default-li",
+          "platform": "linkedin",
+          "label": "LinkedIn",
+          "url": "https://www.linkedin.com/company/oslo-akuttmedisinske-studentforening/",
+          "visible": true,
+          "sort_order": 3
+        }
+      ]
+    }'::jsonb
   )
 on conflict (key) do update
   set content = excluded.content,

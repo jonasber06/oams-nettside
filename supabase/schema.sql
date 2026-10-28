@@ -49,8 +49,7 @@ create table if not exists public.site_sections (
   key         text primary key,
   page        text not null,
   content     jsonb not null,
-  updated_at  timestamptz not null default now(),
-  updated_by  uuid references auth.users(id)
+  updated_at  timestamptz not null default now()
 );
 
 -- 3. BOARD ROLES (Styret i OAMS)
@@ -89,26 +88,10 @@ begin
 end;
 $$;
 
--- Automatisk oppdatering av updated_at og updated_by for site_sections
-create or replace function public.touch_site_sections_updated()
-returns trigger
-language plpgsql
-security definer
-set search_path = public
-as $$
-begin
-  new.updated_at = now();
-  if new.updated_by is null and auth.uid() is not null then
-    new.updated_by = auth.uid();
-  end if;
-  return new;
-end;
-$$;
-
 drop trigger if exists touch_site_sections_updated on public.site_sections;
 create trigger touch_site_sections_updated
-  before insert or update on public.site_sections
-  for each row execute function public.touch_site_sections_updated();
+  before update on public.site_sections
+  for each row execute function public.touch_updated_at();
 
 drop trigger if exists touch_board_roles_updated on public.board_roles;
 create trigger touch_board_roles_updated

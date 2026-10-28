@@ -85,15 +85,6 @@ async function initOmOss() {
           });
         }
       }
-
-      // Kjerneverdier (hvis boksen finnes i DOM)
-      const kjerneverdier = sectionsMap.get('om_oss.kjerneverdier');
-      if (kjerneverdier) {
-        const kvTitle = document.querySelector('[data-cms="values-title"]');
-        const kvText = document.querySelector('[data-cms="values-text"]');
-        if (kvTitle && kjerneverdier.title) kvTitle.textContent = kjerneverdier.title;
-        if (kvText && kjerneverdier.text) kvText.textContent = kjerneverdier.text;
-      }
     }
 
     // 2. Rendrer Styreverv

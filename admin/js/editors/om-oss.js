@@ -35,60 +35,28 @@ if (document.readyState === 'loading') {
   initEditor();
 }
 
-function formatUpdatedBadge(updatedAt, updatedBy, profileMap) {
-  if (!updatedAt) return '';
-  const d = new Date(updatedAt);
-  const dateStr = d.toLocaleDateString('no-NO', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric'
-  });
-  const timeStr = d.toLocaleTimeString('no-NO', {
-    hour: '2-digit',
-    minute: '2-digit'
-  });
-  const email = profileMap?.get(updatedBy);
-  const who = email ? escapeHtml(email) : (updatedBy ? `admin (${updatedBy.slice(0, 6)}...)` : 'admin');
-  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Sist endret: ${dateStr} kl. ${timeStr} av ${who}`;
-}
-
 async function loadContent() {
   try {
-    const [sectionsRes, rolesRes, docsRes, profilesRes] = await Promise.all([
-      supabaseClient.from('site_sections').select('key, content, updated_at, updated_by').eq('page', 'om_oss'),
+    const [sectionsRes, rolesRes, docsRes] = await Promise.all([
+      supabaseClient.from('site_sections').select('key, content').eq('page', 'om_oss'),
       supabaseClient.from('board_roles').select('*').order('sort_order', { ascending: true }),
-      supabaseClient.from('documents').select('*').order('sort_order', { ascending: true }),
-      supabaseClient.from('profiles').select('id, email')
+      supabaseClient.from('documents').select('*').order('sort_order', { ascending: true })
     ]);
-
-    const profileMap = new Map((profilesRes.data || []).map(p => [p.id, p.email]));
 
     // 1. Seksjoner
     if (sectionsRes.data) {
-      const sectionMap = new Map(sectionsRes.data.map(s => [s.key, s]));
+      const map = new Map(sectionsRes.data.map(s => [s.key, s.content]));
 
-      const heroRow = sectionMap.get('om_oss.hero');
-      const hero = heroRow?.content || {};
+      const hero = map.get('om_oss.hero') || {};
       document.getElementById('heroSubheading').value = hero.subheading || '';
       document.getElementById('heroTitle').value = hero.title || '';
-      const heroMetaEl = document.getElementById('heroUpdatedInfo');
-      if (heroMetaEl && heroRow?.updated_at) {
-        heroMetaEl.innerHTML = formatUpdatedBadge(heroRow.updated_at, heroRow.updated_by, profileMap);
-        heroMetaEl.style.display = 'inline-flex';
-      }
 
-      const hvemRow = sectionMap.get('om_oss.hvem_er_vi');
-      const hvem = hvemRow?.content || {};
+      const hvem = map.get('om_oss.hvem_er_vi') || {};
       document.getElementById('aboutTitle').value = hvem.title || '';
       document.getElementById('aboutLead').value = hvem.lead || '';
       const p = Array.isArray(hvem.paragraphs) ? hvem.paragraphs : [];
       document.getElementById('aboutParagraph1').value = p[0] || '';
       document.getElementById('aboutParagraph2').value = p[1] || '';
-      const aboutMetaEl = document.getElementById('aboutUpdatedInfo');
-      if (aboutMetaEl && hvemRow?.updated_at) {
-        aboutMetaEl.innerHTML = formatUpdatedBadge(hvemRow.updated_at, hvemRow.updated_by, profileMap);
-        aboutMetaEl.style.display = 'inline-flex';
-      }
     }
 
     // 2. Roller
@@ -511,43 +479,20 @@ async function saveAll(e, triggerBtn) {
       paragraphs
     };
 
-    // Hent aktiv innlogget bruker
-    const { data: userData } = await supabaseClient.auth.getUser();
-    const currentUserId = userData?.user?.id || null;
-    const currentUserEmail = userData?.user?.email || 'deg';
-    const nowIso = new Date().toISOString();
-
     const sectionUpserts = [
       supabaseClient.from('site_sections').upsert({
         key: 'om_oss.hero',
         page: 'om_oss',
-        content: heroContent,
-        updated_at: nowIso,
-        updated_by: currentUserId
-      }, { onConflict: 'key' }),
+        content: heroContent
+      }),
       supabaseClient.from('site_sections').upsert({
         key: 'om_oss.hvem_er_vi',
         page: 'om_oss',
-        content: hvemContent,
-        updated_at: nowIso,
-        updated_by: currentUserId
-      }, { onConflict: 'key' })
+        content: hvemContent
+      })
     ];
 
     await Promise.all(sectionUpserts);
-
-    // Oppdater synlig status i editor
-    const nowText = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> Sist endret: akkurat nå av ${escapeHtml(currentUserEmail)}`;
-    const heroMetaEl = document.getElementById('heroUpdatedInfo');
-    if (heroMetaEl) {
-      heroMetaEl.innerHTML = nowText;
-      heroMetaEl.style.display = 'inline-flex';
-    }
-    const aboutMetaEl = document.getElementById('aboutUpdatedInfo');
-    if (aboutMetaEl) {
-      aboutMetaEl.innerHTML = nowText;
-      aboutMetaEl.style.display = 'inline-flex';
-    }
 
     // 2. Slett fjernede roller
     if (deletedRoleIds.length > 0) {
