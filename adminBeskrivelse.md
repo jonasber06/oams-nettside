@@ -89,6 +89,8 @@ Editoren i `admin/om-oss.html` og tilhørende skript [admin/js/editors/om-oss.js
 1. **Topp-banner (Hero):** Redigering av undertittel og hovedtittel («Hva er OAMS?»).
 2. **Hvem er vi?:** Redigering av seksjonstittel, fremhevet ingress (lead) og brødtekstavsnitt.
 * Lagres som strukturerte JSON-data i tabellen `public.site_sections` under nøklene `hero` og `about`.
+* **Sporing av endringer:** Hver rad i `site_sections` sporer nøyaktig når og hvem som sist gjorde endringer via kolonnene `updated_at` (tidsstempel) og `updated_by` (UUID koblet til `auth.users`).
+* **Visuell status i admin:** Øverst i hvert seksjonskort vises et diskret merke med klokkeslett, dato og e-postadressen til administratoren som sist lagret seksjonen.
 
 ---
 
