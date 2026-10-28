@@ -202,7 +202,7 @@ function renderContactItemsList() {
 
       <div class="form-row">
         <div class="form-group">
-          <label>Overskrift (f.eks. Adresse eller Email oss)</label>
+          <label>Overskrift</label>
           <input type="text" class="form-control ci-title-input" value="${escapeHtml(item.title || '')}" placeholder="Adresse" required>
         </div>
         <div class="form-group">
@@ -224,7 +224,7 @@ function renderContactItemsList() {
           <textarea class="form-control ci-text-input" rows="2" placeholder="Domus Medica, Sognsvannsveien 9, 0372 Oslo" style="min-height: 62px;" required>${escapeHtml(item.text || '')}</textarea>
         </div>
         <div class="form-group">
-          <label>Klikkbar lenke (valgfritt, f.eks. mailto:post@oams.no)</label>
+          <label>Klikkbar lenke (f.eks. mailto:post@oams.no) (valgfritt)</label>
           <input type="text" class="form-control ci-link-input" value="${escapeHtml(item.link || '')}" placeholder="mailto:post@oams.no eller https://...">
         </div>
       </div>
