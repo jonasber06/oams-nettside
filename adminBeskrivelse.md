@@ -8,10 +8,11 @@ Dette dokumentet gir en samlet og detaljert oversikt over administrasjonspanelet
 1. [Overordnet Arkitektur og Teknologistakk](#1-overordnet-arkitektur-og-teknologistakk)
 2. [Fil- og Mappestruktur](#2-fil--og-mappestruktur)
 3. [Autentisering og Sikkerhet](#3-autentisering-og-sikkerhet)
-4. [Redigering av «Om oss» (om-oss.html)](#4-redigering-av-om-oss-om-osshtml)
-   - [Hero og introduksjonstekster](#hero-og-introduksjonstekster)
-   - [Styreverv: Bilder, rekkefølge og mobilhåndtering](#styreverv-bilder-rekkefølge-og-mobilhåndtering)
-   - [Dokumenter og innsynslenker](#dokumenter-og-innsynslenker)
+4. [Redigering av «Om oss» og «Kontakt oss»](#4-redigering-av-om-oss-om-osshtml)
+   - [Hero og introduksjonstekster (Om oss)](#41-hero-og-introduksjonstekster)
+   - [Styreverv: Bilder, rekkefølge og mobilhåndtering](#42-styreverv-bilder-rekkefølge-og-mobilhåndtering)
+   - [Dokumenter og innsynslenker](#43-dokumenter-og-innsynslenker)
+   - [Redigering av «Kontakt oss» (kontakt-oss.html)](#44-redigering-av-kontakt-oss-kontakt-osshtml)
 5. [Dynamisk Visning på Nettsiden (Frontend)](#5-dynamisk-visning-på-nettsiden-frontend)
 6. [Database og Supabase-struktur](#6-database-og-supabase-struktur)
 7. [Feilrettinger og Tekniske Forbedringer](#7-feilrettinger-og-tekniske-forbedringer)
@@ -34,24 +35,30 @@ Admin-panelet er bygget som en lettvekts, moderne og sikker løsning tilpasset O
 
 ```
 oams-nettside/
+├── index.html                  # Offentlig forside
+├── om_oss.html                 # Offentlig "Om oss"-side (dynamisk via Supabase)
+├── kontakt_oss.html            # Offentlig "Kontakt oss"-side (dynamisk via Supabase)
 ├── admin/
 │   ├── admin.css               # Komplett stilark for admin-grensesnittet
 │   ├── index.html              # Hoveddashboard med snarveier og status
 │   ├── login.html              # Innloggingsside for administratorer
 │   ├── om-oss.html             # CMS-editor for "Om oss"-siden
+│   ├── kontakt-oss.html        # CMS-editor for "Kontakt oss"-siden
 │   └── js/
 │       ├── auth-guard.js       # Beskytter admin-sidene mot uautoriserte brukere
 │       ├── login.js            # Innloggingslogikk og sesjonshåndtering
 │       ├── ui.js               # Felles UI-komponenter (toast-varsler, knappe-status)
 │       └── editors/
-│           └── om-oss.js       # Full forretningslogikk for redigering av "Om oss"
+│           ├── om-oss.js       # Full forretningslogikk for redigering av "Om oss"
+│           └── kontakt-oss.js  # Full forretningslogikk for redigering av "Kontakt oss"
 ├── js/
 │   ├── supabase-client.js      # Felles Supabase-klient for både admin og offentlig side
 │   └── pages/
-│       └── om-oss.js           # Henter og renderer data dynamisk på om_oss.html
+│       ├── om-oss.js           # Henter og renderer data dynamisk på om_oss.html
+│       └── kontakt-oss.js      # Henter og renderer data dynamisk på kontakt_oss.html
 ├── supabase/
 │   ├── schema.sql              # Tabeller, relasjoner og RLS-sikkerhetspolicyer
-│   ├── seed.sql                # Startdata (15 styreverv, 4 dokumenter, seksjonstekster)
+│   ├── seed.sql                # Startdata (styreverv, dokumenter, seksjonstekster for om_oss og kontakt_oss)
 │   ├── storage.sql             # Konfigurasjon av "media"-lagringsbøtte
 │   └── add_board_images.sql    # Migrering for image_url-kolonne i styreverv
 ├── .htaccess                   # Sikkerhetsheadere og sperre for søkemotorindeksering
@@ -68,7 +75,7 @@ oams-nettside/
 * Sesjonen lagres sikkert i nettleserens `localStorage` via Supabase Client.
 
 ### 3.2 Tilgangssperre (`admin/js/auth-guard.js`)
-* Alle administrative sider (`index.html`, `om-oss.html`) inkluderer `auth-guard.js`.
+* Alle administrative sider (`index.html`, `om-oss.html`, `kontakt-oss.html`) inkluderer `auth-guard.js`.
 * Skjuler `<body>` (`auth-pending`) inntil sesjonen er verifisert for å unngå at uautoriserte brukere ser administrative data (Flash of Unauthenticated Content).
 * Verifiserer ikke bare at brukeren er logget inn, men sjekker opp mot tabellen `public.profiles` at brukeren har rollen `ADMIN`.
 * Dersom brukeren ikke har tilgang, videresendes de umiddelbart til `login.html`.
@@ -142,7 +149,7 @@ Administrerer dokumentkortene nederst på «Om oss»-siden (vedtekter, vervbeskr
 
 ### 4.4 Redigering av «Kontakt oss» (kontakt-oss.html)
 
-Editoren i [admin/kontakt-oss.html](file:///Users/jonasbergersen/Desktop/oams-nettside-repo/oams-nettside/admin/kontakt-oss.html) og tilhørende skript [admin/js/editors/kontakt-oss.js](file:///Users/jonasbergersen/Desktop/oams-nettside-repo/oams-nettside/admin/js/editors/kontakt-oss.js) styrer innholdet på [kontakt_oss.html](file:///Users/jonasbergersen/Desktop/oams-nettside-repo/oams-nettside/kontakt_oss.html) via tabellen `public.site_sections` (`page = 'kontakt_oss'`):
+Editoren i [admin/kontakt-oss.html] og tilhørende skript [admin/js/editors/kontakt-oss.js] styrer innholdet på [kontakt_oss.html] via tabellen `public.site_sections` (`page = 'kontakt_oss'`):
 
 1. **Topp-banner (Hero):** Redigering av undertittel og hovedtittel (`kontakt_oss.hero`).
 2. **Kontaktinfo (`kontakt_oss.kontaktinfo`):**
@@ -157,16 +164,20 @@ Editoren i [admin/kontakt-oss.html](file:///Users/jonasbergersen/Desktop/oams-ne
 
 ## 5. Dynamisk Visning på Nettsiden (Frontend)
 
-Skriptet [js/pages/om-oss.js](file:///Users/jonasbergersen/Desktop/oams-nettside-repo/oams-nettside/js/pages/om-oss.js) er integrert i [om_oss.html](file:///Users/jonasbergersen/Desktop/oams-nettside-repo/oams-nettside/om_oss.html):
+Skriptene [js/pages/om-oss.js] (integrert i [om_oss.html]) og [js/pages/kontakt-oss.js] (integrert i [kontakt_oss.html]) sørger for dynamisk gjengivelse fra Supabase:
 
-1. **Parallell innlasting:** Tekster, styreverv og dokumenter hentes samtidig med `Promise.all` for raskest mulig gjengivelse.
+1. **Parallell og rask innlasting:**
+   - På `om_oss.html` hentes seksjonstekster, styreverv og dokumenter samtidig med `Promise.all`.
+   - På `kontakt_oss.html` hentes alle seksjoner for `page = 'kontakt_oss'` i én samlet spørring.
 2. **Reaktiv oppdatering:**
-   - Tekster oppdateres via `[data-cms="..."]`.
-   - Styreverv genereres dynamisk i `[data-cms-list="board-roles"]` sortert etter `sort_order ASC`.
-   - Dokumenter genereres dynamisk i `[data-cms-list="documents"]`.
-3. **Fjerning av hardkodede dubletter:** De 240 linjene med hardkodede fallback-kort i `om_oss.html` er ryddet bort. Listen rendres nå dynamisk fra databasen, med en subtil laste-indikator frem til dataene er klare.
-4. **XSS-beskyttelse:** Alle brukerdefinerte tekster settes via `textContent`, noe som eliminerer risikoen for script-injeksjon.
-5. **Modul-timing:** Skriptet sjekker `document.readyState` for å håndtere både direkte lasting og asynkron ES-modulutførelse uten å miste `DOMContentLoaded`.
+   - Tekster og overskrifter populeres i `[data-cms="..."]`-elementer.
+   - Lister på `om_oss.html` genereres dynamisk i `[data-cms-list="board-roles"]` og `[data-cms-list="documents"]` sortert etter `sort_order ASC`.
+   - Lister på `kontakt_oss.html` genereres dynamisk i `[data-cms-list="contact-items"]` (Adresse, E-post osv.) og `[data-cms-list="social-links"]` (Facebook, Instagram, LinkedIn osv.).
+3. **Ren HTML uten overflødig duplisering:**
+   - All overflødig, hardkodet innholds-HTML (styreverv-kort, dokument-kort, kontaktbokser, sosiale medier-knapper og seksjonstekster) er fjernet fra [om_oss.html] og [kontakt_oss.html].
+   - HTML-filene inneholder kun det strukturelle rammeverket med tomme `[data-cms]`- og `[data-cms-list]`-containere som fylles direkte fra databasen ved innlasting.
+4. **XSS-beskyttelse:** Alle brukerdefinerte tekster settes via `textContent` / sikre tekstnoder, og lenker valideres (`https://`, `http://`, `mailto:`, `tel:`), noe som eliminerer risikoen for script-injeksjon.
+5. **Modul-timing:** Skriptene sjekker `document.readyState` for å håndtere både direkte lasting og asynkron ES-modulutførelse uten å miste `DOMContentLoaded`.
 
 ---
 
@@ -174,7 +185,9 @@ Skriptet [js/pages/om-oss.js](file:///Users/jonasbergersen/Desktop/oams-nettside
 
 ### Tabelloversikt:
 * **`public.profiles`**: Brukerprofiler med felt `role` (`ADMIN` eller `NONE`).
-* **`public.site_sections`**: Seksjonstekster lagret som JSON per side/seksjon (`hero`, `about`).
+* **`public.site_sections`**: Seksjonstekster og strukturerte sideblokker lagret som JSONB per side/seksjon:
+  * Side `om_oss`: `om_oss.hero`, `om_oss.hvem_er_vi`.
+  * Side `kontakt_oss`: `kontakt_oss.hero`, `kontakt_oss.kontaktinfo` (inkl. liste over kontaktpunkter), `kontakt_oss.socials` (liste over sosiale medier-lenker).
 * **`public.board_roles`**:
   * `id UUID PRIMARY KEY`
   * `title TEXT NOT NULL`
@@ -228,4 +241,12 @@ Under utviklingen ble følgende utfordringer analysert og utbedret:
    - **Bytte rekkefølge:** Trykk på **▲** eller **▼** (eller dra og slipp på datamaskin).
    - **Endre tekster:** Rediger fritt i feltene under Hero og «Hvem er vi?».
 4. Trykk på den grønne knappen **«Lagre alle endringer»** (øverst eller nederst).
-5. En bekreftelse («Endringene er lagret!») vises nede i høyre hjørne, og nettsiden er oppdatert på sekundet.
+5. En bekreftelse («Endringene er lagret og publisert!») vises nede i høyre hjørne, og nettsiden er oppdatert på sekundet.
+
+### Slik gjør du endringer på «Kontakt oss»:
+1. Velg **«Kontakt oss»** fra venstremenyen i adminpanelet eller fra dashbordet.
+2. Gjør ønskede endringer:
+   - **Topp-banner (Hero):** Endre undertittel eller hovedtittel.
+   - **Kontaktinfo:** Endre seksjonstittel, introtekst eller kontaktpunktene (Adresse, E-post osv.). Du kan legge til nye kontaktpunkter med «+ Legg til kontaktpunkt», velge ikon, endre rekkefølge med **▲** / **▼**, eller skjule/slette punkter.
+   - **Sosiale medier:** Oppdater lenker og knappetekst for Facebook, Instagram og LinkedIn, eller legg til nye kanaler med «+ Legg til kanal».
+3. Trykk på **«Lagre alle endringer»** for å publisere endringene direkte til `kontakt_oss.html`.
