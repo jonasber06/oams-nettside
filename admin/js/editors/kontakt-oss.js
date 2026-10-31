@@ -256,6 +256,14 @@ function addContactItemRow() {
     visible: true
   });
   renderContactItemsList();
+
+  const lastCard = document.querySelector('#contactItemsList > .contact-editor-card:last-child');
+  if (lastCard) {
+    lastCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => {
+      lastCard.querySelector('.ci-title-input')?.focus({ preventScroll: true });
+    }, 300);
+  }
 }
 
 // ==============================================================================
@@ -371,6 +379,14 @@ function addSocialRow() {
     visible: true
   });
   renderSocialsList();
+
+  const lastCard = document.querySelector('#socialsList > .social-editor-card:last-child');
+  if (lastCard) {
+    lastCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => {
+      lastCard.querySelector('.soc-label-input')?.focus({ preventScroll: true });
+    }, 300);
+  }
 }
 
 // ==============================================================================

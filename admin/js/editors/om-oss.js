@@ -346,6 +346,14 @@ function addRoleRow() {
     sort_order: currentRoles.length + 1
   });
   renderRolesList();
+
+  const lastRow = document.querySelector('#rolesList .admin-item-row:last-child');
+  if (lastRow) {
+    lastRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => {
+      lastRow.querySelector('.role-title-input')?.focus({ preventScroll: true });
+    }, 300);
+  }
 }
 
 // Synkroniserer det brukeren har skrevet i dokumentfeltene
@@ -451,6 +459,14 @@ function addDocRow() {
     sort_order: currentDocs.length + 1
   });
   renderDocsList();
+
+  const lastCard = document.querySelector('#docsList > div:last-child');
+  if (lastCard) {
+    lastCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => {
+      lastCard.querySelector('.doc-title-input')?.focus({ preventScroll: true });
+    }, 300);
+  }
 }
 
 async function saveAll(e, triggerBtn) {

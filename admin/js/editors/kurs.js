@@ -362,6 +362,14 @@ function addCourseRow() {
     sort_order: currentCourses.length + 1
   });
   renderCoursesList();
+
+  const lastCard = document.querySelector('#coursesList > .course-editor-card:last-child');
+  if (lastCard) {
+    lastCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => {
+      lastCard.querySelector('.course-title-input')?.focus({ preventScroll: true });
+    }, 300);
+  }
 }
 
 // ==============================================================================
@@ -490,6 +498,14 @@ function addActionRow() {
     visible: true
   });
   renderActionsList();
+
+  const lastCard = document.querySelector('#actionsList > .action-editor-card:last-child');
+  if (lastCard) {
+    lastCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => {
+      lastCard.querySelector('.act-title-input')?.focus({ preventScroll: true });
+    }, 300);
+  }
 }
 
 // ==============================================================================
