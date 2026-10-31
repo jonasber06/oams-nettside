@@ -77,6 +77,19 @@ create table if not exists public.documents (
   updated_at   timestamptz not null default now()
 );
 
+-- 5. COURSES (Våre kurs på kurs.html og forsiden)
+create table if not exists public.courses (
+  id           uuid primary key default gen_random_uuid(),
+  slug         text, -- f.eks. 'amk-1', 'amk-2', 'instruktorkurs'
+  badge        text, -- f.eks. 'Grunnkurs', 'Videregående', 'Instruktør'
+  title        text not null,
+  description  text not null,
+  target_group text, -- f.eks. 'Alle medisinstudenter (ingen forkunnskapskrav)'
+  sort_order   int not null default 0,
+  visible      boolean not null default true,
+  updated_at   timestamptz not null default now()
+);
+
 -- Automatisk oppdater updated_at på endringer
 create or replace function public.touch_updated_at()
 returns trigger
@@ -101,6 +114,11 @@ create trigger touch_board_roles_updated
 drop trigger if exists touch_documents_updated on public.documents;
 create trigger touch_documents_updated
   before update on public.documents
+  for each row execute function public.touch_updated_at();
+
+drop trigger if exists touch_courses_updated on public.courses;
+create trigger touch_courses_updated
+  before update on public.courses
   for each row execute function public.touch_updated_at();
 
 
@@ -192,4 +210,28 @@ create policy "Admin kan oppdatere dokumenter"
 drop policy if exists "Admin kan slette dokumenter" on public.documents;
 create policy "Admin kan slette dokumenter"
   on public.documents for delete
+  using (public.is_admin());
+
+-- Courses RLS
+alter table public.courses enable row level security;
+
+drop policy if exists "Offentlig lesetilgang til synlige kurs" on public.courses;
+create policy "Offentlig lesetilgang til synlige kurs"
+  on public.courses for select
+  using (visible = true or public.is_admin());
+
+drop policy if exists "Admin kan sette inn kurs" on public.courses;
+create policy "Admin kan sette inn kurs"
+  on public.courses for insert
+  with check (public.is_admin());
+
+drop policy if exists "Admin kan oppdatere kurs" on public.courses;
+create policy "Admin kan oppdatere kurs"
+  on public.courses for update
+  using (public.is_admin())
+  with check (public.is_admin());
+
+drop policy if exists "Admin kan slette kurs" on public.courses;
+create policy "Admin kan slette kurs"
+  on public.courses for delete
   using (public.is_admin());

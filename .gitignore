@@ -8,3 +8,9 @@ database.txt
 
 # macOS system files
 .DS_Store
+
+# Hallmark cache and reports
+.hallmark/
+
+# agents
+.agents

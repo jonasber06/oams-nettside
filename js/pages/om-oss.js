@@ -42,6 +42,39 @@ const ICONS = {
   `
 };
 
+function setMultilineText(el, text) {
+  if (!el) return;
+  el.innerHTML = '';
+  const lines = String(text || '').replace(/\r\n/g, '\n').split('\n');
+  lines.forEach((line, idx) => {
+    if (idx > 0) el.appendChild(document.createElement('br'));
+    el.appendChild(document.createTextNode(line));
+  });
+}
+
+function renderParagraphsWithBreaks(container, bodyOrParagraphs) {
+  if (!container) return;
+  container.innerHTML = '';
+
+  let blocks = [];
+  if (typeof bodyOrParagraphs === 'string' && bodyOrParagraphs.trim()) {
+    blocks = bodyOrParagraphs.replace(/\r\n/g, '\n').split(/\n\s*\n/);
+  } else if (Array.isArray(bodyOrParagraphs)) {
+    blocks = bodyOrParagraphs.flatMap(item =>
+      String(item || '').replace(/\r\n/g, '\n').split(/\n\s*\n/)
+    );
+  }
+
+  blocks
+    .map(b => b.trim())
+    .filter(Boolean)
+    .forEach(block => {
+      const p = document.createElement('p');
+      setMultilineText(p, block);
+      container.appendChild(p);
+    });
+}
+
 async function initOmOss() {
   try {
     const supabase = await getSupabase();
@@ -76,13 +109,11 @@ async function initOmOss() {
 
         if (title && hvem.title) title.textContent = hvem.title;
         if (lead && hvem.lead) lead.textContent = hvem.lead;
-        if (bodyContainer && Array.isArray(hvem.paragraphs)) {
-          bodyContainer.innerHTML = '';
-          hvem.paragraphs.forEach(pText => {
-            const p = document.createElement('p');
-            p.textContent = pText;
-            bodyContainer.appendChild(p);
-          });
+        if (bodyContainer) {
+          const source = typeof hvem.body === 'string' && hvem.body.trim()
+            ? hvem.body
+            : hvem.paragraphs;
+          renderParagraphsWithBreaks(bodyContainer, source);
         }
       }
     }

@@ -55,8 +55,9 @@ async function loadContent() {
       document.getElementById('aboutTitle').value = hvem.title || '';
       document.getElementById('aboutLead').value = hvem.lead || '';
       const p = Array.isArray(hvem.paragraphs) ? hvem.paragraphs : [];
-      document.getElementById('aboutParagraph1').value = p[0] || '';
-      document.getElementById('aboutParagraph2').value = p[1] || '';
+      document.getElementById('aboutBody').value = typeof hvem.body === 'string'
+        ? hvem.body
+        : p.join('\n\n');
     }
 
     // 2. Roller
@@ -467,15 +468,15 @@ async function saveAll(e, triggerBtn) {
       title: document.getElementById('heroTitle').value.trim()
     };
 
-    const paragraphs = [];
-    const p1 = document.getElementById('aboutParagraph1').value.trim();
-    const p2 = document.getElementById('aboutParagraph2').value.trim();
-    if (p1) paragraphs.push(p1);
-    if (p2) paragraphs.push(p2);
+    const rawBody = document.getElementById('aboutBody').value.replace(/\r\n/g, '\n').trim();
+    const paragraphs = rawBody
+      ? rawBody.split(/\n\s*\n/).map(block => block.trim()).filter(Boolean)
+      : [];
 
     const hvemContent = {
       title: document.getElementById('aboutTitle').value.trim(),
       lead: document.getElementById('aboutLead').value.trim(),
+      body: rawBody,
       paragraphs
     };
 
