@@ -42,6 +42,13 @@ const ICONS = {
   `
 };
 
+const DEFAULT_ROLES = [
+  { title: 'Leder', member_name: null, email: 'post@oams.no', sort_order: 1, visible: true },
+  { title: 'Nestleder', member_name: null, email: 'post@oams.no', sort_order: 2, visible: true },
+  { title: 'Økonomiansvarlig', member_name: null, email: 'okonomi@oams.no', sort_order: 3, visible: true },
+  { title: 'PR- og webansvarlig', member_name: null, email: 'admin@oams.no', sort_order: 4, visible: true }
+];
+
 function setMultilineText(el, text) {
   if (!el) return;
   el.innerHTML = '';
@@ -118,12 +125,12 @@ async function initOmOss() {
       }
     }
 
-    // 2. Rendrer Styreverv
-    if (rolesRes.data && rolesRes.data.length > 0) {
-      const rolesContainer = document.querySelector('[data-cms-list="board-roles"]');
-      if (rolesContainer) {
-        rolesContainer.innerHTML = '';
-        rolesRes.data.forEach(role => {
+    // 2. Rendrer Styreverv (med DEFAULT_ROLES som fallback)
+    const activeRoles = (rolesRes.data && rolesRes.data.length > 0) ? rolesRes.data : DEFAULT_ROLES;
+    const rolesContainer = document.querySelector('[data-cms-list="board-roles"]');
+    if (rolesContainer) {
+      rolesContainer.innerHTML = '';
+      activeRoles.forEach(role => {
           const card = document.createElement('div');
           card.className = 'role-card';
 
@@ -159,9 +166,8 @@ async function initOmOss() {
           card.querySelector('.role-member-notice').textContent = memberDisplay;
           card.querySelector('.role-contact-link span').textContent = role.email;
 
-          rolesContainer.appendChild(card);
-        });
-      }
+        rolesContainer.appendChild(card);
+      });
     }
 
     // 3. Rendrer Dokumenter

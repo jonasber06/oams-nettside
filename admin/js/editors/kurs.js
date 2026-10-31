@@ -66,7 +66,6 @@ const DEFAULT_ACTIONS = {
 const DEFAULT_COURSES = [
   {
     slug: 'amk-1',
-    badge: 'Grunnkurs',
     title: 'AMK 1 – Akuttmedisinkurs 1',
     description: 'Grunnsteinen i foreningens kurstilbud. Fokus på skadestedsledelse, systematisk primærundersøkelse etter ABCDE-prinsippet, basal hjerte-lunge-redning (HLR) og håndtering av vanlige akuttmedisinske tilstander.',
     target_group: 'Alle medisinstudenter (ingen forkunnskapskrav)',
@@ -75,7 +74,6 @@ const DEFAULT_COURSES = [
   },
   {
     slug: 'amk-2',
-    badge: 'Videregående',
     title: 'AMK 2 – Akuttmedisinkurs 2',
     description: 'Vårt mest avanserte og intensive kurs over to dager. Bygger videre på AMK 1 med krevende praktiske simulatorcaser, avansert HLR (AHLR), rytmegjenkjenning, defibrillering og bruk av medikamenter under veiledning av anestesilege.',
     target_group: 'Studenter i kliniske terminer (fra modul 3, krever AMK 1)',
@@ -84,56 +82,10 @@ const DEFAULT_COURSES = [
   },
   {
     slug: 'instruktorkurs',
-    badge: 'Instruktør',
     title: 'Instruktørkurs',
     description: 'Opplæring av nye instruktører til OAMS. Du lærer pedagogiske prinsipper, veiledning, scenariostyring og praktisk undervisningsteknikk. Etter endt kurs og praksis blir du godkjent OAMS-instruktør og kan holde interne og betalte eksterne kurs.',
     target_group: 'Medlemmer som har fullført AMK 1',
     sort_order: 3,
-    visible: true
-  },
-  {
-    slug: 'efast',
-    badge: 'Ultralyd & Traume',
-    title: 'eFAST – Kurs og traumesimulering',
-    description: 'Spesialkurs i fokusert ultralydundersøkelse ved traumer (Extended Focused Assessment with Sonography in Trauma). Praktisk ultralydskanning på markører kombinert med simulering av akutt mottak av traumepasienter.',
-    target_group: 'Medisinstudenter med interesse for traume og ultralyd',
-    sort_order: 4,
-    visible: true
-  },
-  {
-    slug: 'mini-studentbest',
-    badge: 'Teamtrening',
-    title: 'Mini-StudentBEST',
-    description: 'Tverrfaglig akuttmedisinsk simuleringskurs utviklet i samarbeid mellom Det medisinske fakultet ved UiO og OAMS, basert på BEST-konseptet. Fokus på samhandling, ledelse, roller og lukket-sløyfe-kommunikasjon med levende markører.',
-    target_group: 'Medisinstudenter på modul 3',
-    sort_order: 5,
-    visible: true
-  },
-  {
-    slug: 'akutt-pediatrikurs',
-    badge: 'Pediatri',
-    title: 'Akutt Pediatrikurs',
-    description: 'Spesialkurs i vurdering og håndtering av akutt syke og skadde barn. Fokus på pediatrisk primærundersøkelse, luftveishåndtering, HLR på barn og tilpasset akuttbehandling gjennom praktiske caser.',
-    target_group: 'Medisinstudenter i prekliniske og kliniske moduler',
-    sort_order: 6,
-    visible: true
-  },
-  {
-    slug: 'villmarksmedisin',
-    badge: 'Feltmedisin',
-    title: 'Villmarksmedisin',
-    description: 'Akuttmedisinsk behandling i felt og utendørsmiljøer hvor profesjonell hjelp og sykehus er langt unna. Praktisk trening i håndtering av hypotermi, improvisert spjelking, båresikring og pasientevakuering.',
-    target_group: 'Alle medisinstudenter med interesse for prehospitalt arbeid',
-    sort_order: 7,
-    visible: true
-  },
-  {
-    slug: 'tema-kvelder',
-    badge: 'Fagkveld',
-    title: 'Tema-kvelder & Arrangementer',
-    description: 'Faglige og sosiale kvelder med inviterte foredragsholdere, legespesialister og erfarne klinikere som deler innsikt i aktuelle akuttmedisinske problemstillinger og karriereveier.',
-    target_group: 'Åpent for studenter og OAMS-medlemmer',
-    sort_order: 8,
     visible: true
   }
 ];

@@ -11,6 +11,13 @@ let currentDocs = [];
 let deletedRoleIds = [];
 let deletedDocIds = [];
 
+const DEFAULT_ROLES = [
+  { title: 'Leder', member_name: null, email: 'post@oams.no', sort_order: 1, visible: true },
+  { title: 'Nestleder', member_name: null, email: 'post@oams.no', sort_order: 2, visible: true },
+  { title: 'Økonomiansvarlig', member_name: null, email: 'okonomi@oams.no', sort_order: 3, visible: true },
+  { title: 'PR- og webansvarlig', member_name: null, email: 'admin@oams.no', sort_order: 4, visible: true }
+];
+
 async function initEditor() {
   const auth = await requireAdmin();
   if (!auth) return;
@@ -61,9 +68,13 @@ async function loadContent() {
     }
 
     // 2. Roller
-    currentRoles = (rolesRes.data || []).map(r => ({
+    const rawRoles = (Array.isArray(rolesRes.data) && rolesRes.data.length > 0)
+      ? rolesRes.data
+      : DEFAULT_ROLES;
+    currentRoles = rawRoles.map((r, idx) => ({
       ...r,
-      id: r.id || crypto.randomUUID()
+      id: r.id || crypto.randomUUID(),
+      sort_order: r.sort_order ?? idx + 1
     }));
     renderRolesList();
 
