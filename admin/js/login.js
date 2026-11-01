@@ -73,22 +73,40 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  // Sjekk om siden ble åpnet via en tilbakestillingslenke for passord
-  const isRecoveryHash = window.location.hash.includes('type=recovery');
-  if (isRecoveryHash) {
+  // Sjekk om siden ble åpnet via en tilbakestillingslenke eller invitasjonslenke for passord
+  const hash = window.location.hash || '';
+  const isSetupParam = urlParams.get('setup') === '1';
+  const isPasswordFlowHash =
+    hash.includes('type=recovery') ||
+    hash.includes('type=signup') ||
+    hash.includes('type=invite') ||
+    hash.includes('type=magiclink') ||
+    isSetupParam;
+
+  if (isPasswordFlowHash) {
     showView('reset');
-    showAlert('Oppgi et nytt passord nedenfor for å fullføre tilbakestillingen.', 'info');
+    showAlert(
+      isSetupParam || hash.includes('type=signup') || hash.includes('type=invite')
+        ? 'Velkommen som administrator! Velg et passord nedenfor for å aktivere kontoen din.'
+        : 'Oppgi et nytt passord nedenfor for å fullføre tilbakestillingen.',
+      'info'
+    );
   }
 
   supabase.auth.onAuthStateChange(async (event, session) => {
-    if (event === 'PASSWORD_RECOVERY') {
+    if (event === 'PASSWORD_RECOVERY' || (event === 'SIGNED_IN' && isPasswordFlowHash)) {
       showView('reset');
-      showAlert('Oppgi et nytt passord nedenfor for å fullføre tilbakestillingen.', 'info');
+      showAlert(
+        isSetupParam || hash.includes('type=signup') || hash.includes('type=invite')
+          ? 'Velkommen som administrator! Velg et passord nedenfor for å aktivere kontoen din.'
+          : 'Oppgi et nytt passord nedenfor for å fullføre tilbakestillingen.',
+        'info'
+      );
     }
   });
 
-  // Sjekk om brukeren allerede er innlogget (hoppes over ved passord-tilbakestilling)
-  if (!isRecoveryHash) {
+  // Sjekk om brukeren allerede er innlogget (hoppes over ved passord-oppsett / tilbakestilling)
+  if (!isPasswordFlowHash) {
     const { data: { session } } = await supabase.auth.getSession();
     if (session && session.user) {
       const { data: profile } = await supabase

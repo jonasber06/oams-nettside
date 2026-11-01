@@ -3,7 +3,7 @@
 -- Kjør denne filen i Supabase SQL Editor (eller via Supabase CLI)
 -- ==============================================================================
 
--- 1. PROFILES (Koblet til Supabase auth.users)
+-- 1. PROFILES & ADMIN INVITES (Koblet til Supabase auth.users)
 create table if not exists public.profiles (
   id          uuid primary key references auth.users(id) on delete cascade,
   email       text not null,
@@ -11,16 +11,36 @@ create table if not exists public.profiles (
   created_at  timestamptz not null default now()
 );
 
--- Trigger: Automatisk opprett profil når en bruker lages i Auth
+create table if not exists public.admin_invites (
+  email       text primary key,
+  invited_by  uuid references auth.users(id) on delete set null,
+  created_at  timestamptz not null default now()
+);
+
+-- Trigger: Automatisk opprett profil når en bruker lages i Auth (gir ADMIN-rolle hvis invitert)
 create or replace function public.handle_new_user()
 returns trigger
 language plpgsql
 security definer set search_path = public
 as $$
+declare
+  assigned_role text := 'NONE';
 begin
+  if exists (
+    select 1 from public.admin_invites
+    where lower(trim(email)) = lower(trim(coalesce(new.email, '')))
+  ) then
+    assigned_role := 'ADMIN';
+  end if;
+
   insert into public.profiles (id, email, role)
-  values (new.id, coalesce(new.email, ''), 'NONE')
-  on conflict (id) do update set email = excluded.email;
+  values (new.id, lower(trim(coalesce(new.email, ''))), assigned_role)
+  on conflict (id) do update
+    set email = excluded.email,
+        role = case
+          when public.profiles.role = 'ADMIN' then 'ADMIN'
+          else excluded.role
+        end;
   return new;
 end;
 $$;
