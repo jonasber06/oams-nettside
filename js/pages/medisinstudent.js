@@ -1,5 +1,5 @@
 // ==============================================================================
-// OAMS CMS - Frontend Content Loader for kurs.html (og kursoversikten på index.html)
+// OAMS CMS - Frontend Content Loader for medisinstudent.html (og kursoversikten på index.html)
 // Henter dynamisk innhold fra Supabase (site_sections og courses) og oppdaterer DOM-en.
 // ==============================================================================
 
@@ -182,7 +182,7 @@ async function initKurs() {
 
     const activeCourses = coursesList || DEFAULT_COURSES;
 
-    // 1. Hero (på kurs.html)
+    // 1. Hero (på medisinstudent.html)
     const hero = sectionsMap.get('kurs.hero') || DEFAULT_HERO;
     if (hero) {
       const sub = document.querySelector('[data-cms="hero-subheading"]');
@@ -191,7 +191,7 @@ async function initKurs() {
       if (title && hero.title) title.textContent = hero.title;
     }
 
-    // 2. Introduksjon (på kurs.html)
+    // 2. Introduksjon (på medisinstudent.html)
     const intro = sectionsMap.get('kurs.intro') || DEFAULT_INTRO;
     if (intro) {
       const titleEl = document.querySelector('[data-cms="intro-title"]');
@@ -208,7 +208,7 @@ async function initKurs() {
       }
     }
 
-    // 3. Kursportefølje overskrift (på kurs.html)
+    // 3. Kursportefølje overskrift (på medisinstudent.html)
     const portefolje = sectionsMap.get('kurs.portefolje_intro') || DEFAULT_PORTEFOLJE;
     if (portefolje) {
       const pTitle = document.querySelector('[data-cms="portefolje-title"]');
@@ -217,7 +217,7 @@ async function initKurs() {
       if (pText && portefolje.text) pText.textContent = portefolje.text;
     }
 
-    // 4. Detaljerte kurskort på kurs.html ([data-cms-list="courses"])
+    // 4. Detaljerte kurskort på medisinstudent.html ([data-cms-list="courses"])
     const coursesContainer = document.querySelector('[data-cms-list="courses"]');
     if (coursesContainer) {
       coursesContainer.innerHTML = '';
@@ -268,7 +268,7 @@ async function initKurs() {
       });
     }
 
-    // 6. Handlingskort nederst på kurs.html ([data-cms-list="course-actions"])
+    // 6. Handlingskort nederst på medisinstudent.html ([data-cms-list="course-actions"])
     const actions = sectionsMap.get('kurs.actions') || DEFAULT_ACTIONS;
     if (actions) {
       const aTitle = document.querySelector('[data-cms="actions-title"]');
@@ -310,7 +310,7 @@ async function initKurs() {
     }
 
   } catch (err) {
-    console.warn('OAMS CMS: Feil under lasting av kurs-side.', err);
+    console.warn('OAMS CMS: Feil under lasting av medisinstudent-side.', err);
   }
 }
 

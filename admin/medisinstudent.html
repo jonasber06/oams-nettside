@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rediger: Våre kurs - OAMS Admin</title>
+  <title>Rediger: Medisinstudent - OAMS Admin</title>
   <link rel="icon" type="image/png" href="../assets/favicon.png">
 
   <!-- Google Fonts -->
@@ -48,12 +48,12 @@
         <span>Om oss</span>
       </a>
 
-      <a href="kurs.html" class="admin-nav-item active">
+      <a href="medisinstudent.html" class="admin-nav-item active">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
           <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
         </svg>
-        <span>Våre kurs</span>
+        <span>Medisinstudent</span>
       </a>
 
       <a href="kontakt-oss.html" class="admin-nav-item">
@@ -103,13 +103,13 @@
 
     <div class="admin-header">
       <div class="admin-title-wrap">
-        <h1>Rediger: Våre kurs</h1>
-        <p class="admin-subtitle">Innholdet oppdaterer <a href="../kurs.html" target="_blank"
-            style="color: var(--admin-primary); font-weight: 600;">Våre Kurs</a> (og kurskortene på forsiden)
+        <h1>Rediger: Medisinstudent</h1>
+        <p class="admin-subtitle">Innholdet oppdaterer <a href="../medisinstudent.html" target="_blank"
+            style="color: var(--admin-primary); font-weight: 600;">Medisinstudent</a> (og kurskortene på forsiden)
           umiddelbart ved lagring.</p>
       </div>
       <div class="admin-actions">
-        <a href="../kurs.html" target="_blank" class="btn-admin btn-admin-secondary">
+        <a href="../medisinstudent.html" target="_blank" class="btn-admin btn-admin-secondary">
           Vis på nettsiden &nearr;
         </a>
         <button type="button" id="saveTopBtn" class="btn-admin btn-admin-primary">
@@ -125,19 +125,19 @@
         <div class="admin-card-header">
           <div>
             <h2 class="admin-card-title">1. Topp-banner (Hero)</h2>
-            <div class="admin-card-subtitle">Tittel og undertittel over EKG-skillelinjen på kurs.html</div>
+            <div class="admin-card-subtitle">Tittel og undertittel over EKG-skillelinjen på medisinstudent.html</div>
           </div>
         </div>
 
         <div class="form-row">
           <div class="form-group">
+            <label for="heroTitle">Hovedtittel</label>
+            <input type="text" id="heroTitle" class="form-control" placeholder="Våre Kurs">
+          </div>
+          <div class="form-group">
             <label for="heroSubheading">Undertittel</label>
             <input type="text" id="heroSubheading" class="form-control"
               placeholder="Praktisk akuttmedisin og simulering">
-          </div>
-          <div class="form-group">
-            <label for="heroTitle">Hovedtittel</label>
-            <input type="text" id="heroTitle" class="form-control" placeholder="Våre Kurs">
           </div>
         </div>
       </section>
@@ -242,7 +242,8 @@
 
   </main>
 
-  <script type="module" src="js/editors/kurs.js"></script>
+  <script type="module" src="js/editors/medisinstudent.js"></script>
 </body>
 
 </html>
+

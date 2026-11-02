@@ -1,5 +1,5 @@
 // ==============================================================================
-// OAMS CMS - Editor for kurs.html (og kursene på forsiden)
+// OAMS CMS - Editor for medisinstudent.html (og kursene på forsiden)
 // ==============================================================================
 
 import { requireAdmin } from '../auth-guard.js';
