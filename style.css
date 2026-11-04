@@ -21,9 +21,9 @@
 
   --transition-fast: all 0.2s ease-in-out;
   --container-max-width: 1140px;
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-pill: 50px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-pill: 6px;
 }
 
 /* --- Global Reset & Box Sizing --- */

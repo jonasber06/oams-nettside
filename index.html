@@ -2,286 +2,537 @@
 <html lang="no">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OAMS - Oslo Akuttmedisinske Studentforening</title>
-  <meta name="description"
-    content="Oslo Akuttmedisinske Studentforening (OAMS) - Lær akuttmedisin hos oss! Førstehjelpskurs for medisinstudenter, skoler og eksterne.">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAMS - Oslo Akuttmedisinske Studentforening</title>
+    <meta name="description" content="Oslo Akuttmedisinske Studentforening (OAMS) - Lær livreddende førstehjelp av medisinstudenter. Kurs for
+    bedrifter og medisinstudenter.">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="assets/favicon.png">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/favicon.png">
 
-  <!-- Google Fonts: Montserrat & Noto Sans -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
-    rel="stylesheet">
+    <!-- Google Fonts: Montserrat & Noto Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
 
-  <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="style.css">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Page-specific styles for index-ny.html -->
+    <style>
+        .hero-ny {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-image: url('assets/hovedside.jpg');
+            background-position: center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            padding: 150px 24px 90px 24px;
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        .hero-ny .hero-bg-overlay {
+            background: linear-gradient(180deg, rgba(10, 12, 16, 0.68) 0%, rgba(10, 12, 16, 0.78) 100%);
+        }
+
+        .hero-ny-container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 1020px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hero-ny-logo {
+            width: clamp(230px, 32vw, 350px);
+            height: auto;
+            margin-bottom: 18px;
+            filter: drop-shadow(0 6px 24px rgba(0, 0, 0, 0.45));
+        }
+
+        .hero-ny-lead {
+            font-family: var(--font-body);
+            font-size: clamp(1rem, 1.8vw, 1.2rem);
+            font-weight: 400;
+            color: rgba(241, 245, 249, 0.92);
+            max-width: 580px;
+            line-height: 1.6;
+            margin-bottom: 48px;
+        }
+
+        /* 3-Card Grid in Hero */
+        .hero-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+            width: 100%;
+            max-width: 940px;
+            align-items: stretch;
+        }
+
+        .hero-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 24px;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            transition: transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease, border-color 0.22s ease;
+            min-height: 148px;
+        }
+
+        .hero-card-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.92;
+        }
+
+        .hero-card-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .hero-card-title {
+            font-family: var(--font-heading);
+            font-size: 1.08rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 6px;
+            letter-spacing: 0.2px;
+        }
+
+        .hero-card-sub {
+            font-family: var(--font-body);
+            font-size: 0.86rem;
+            line-height: 1.4;
+        }
+
+        /* Side cards: Glass effect, secondary focus */
+        .hero-card--glass {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            color: #ffffff !important;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22);
+        }
+
+        .hero-card--glass .hero-card-icon {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .hero-card--glass .hero-card-sub {
+            color: rgba(226, 232, 240, 0.72);
+        }
+
+        .hero-card--glass:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.34);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Center card: Red, primary focus for businesses */
+        .hero-card--primary {
+            background: linear-gradient(145deg, #e1252b 0%, var(--primary-red) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            color: #ffffff !important;
+            box-shadow: 0 12px 34px rgba(211, 32, 37, 0.45);
+            transform: scale(1.03);
+        }
+
+        .hero-card--primary .hero-card-icon {
+            color: #ffffff;
+        }
+
+        .hero-card--primary .hero-card-title {
+            font-size: 1.15rem;
+        }
+
+        .hero-card--primary .hero-card-sub {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .hero-card--primary:hover {
+            background: linear-gradient(145deg, #eb2a30 0%, var(--primary-red-hover) 100%);
+            transform: scale(1.03) translateY(-4px);
+            box-shadow: 0 16px 40px rgba(211, 32, 37, 0.6);
+        }
+
+        /* Scroll down indicator */
+        .hero-scroll-hint {
+            position: absolute;
+            bottom: 26px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            color: rgba(255, 255, 255, 0.65);
+            font-family: var(--font-heading);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .hero-scroll-hint:hover {
+            color: #ffffff;
+            transform: translateX(-50%) translateY(3px);
+        }
+
+        .hero-scroll-hint svg {
+            width: 20px;
+            height: 20px;
+            animation: bounceDown 2s infinite;
+        }
+
+        @keyframes bounceDown {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(5px);
+            }
+
+            60% {
+                transform: translateY(3px);
+            }
+        }
+
+        /* Short About & Book section */
+        .section-about-book {
+            background-color: #fbfcfd;
+            padding: 95px 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .about-book-box {
+            max-width: 760px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-book-eyebrow {
+            display: inline-block;
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--primary-red);
+            margin-bottom: 12px;
+        }
+
+        .about-book-text {
+            font-size: 1.12rem;
+            color: #334155;
+            line-height: 1.75;
+            margin: 0 auto 32px auto;
+        }
+
+        @media (max-width: 820px) {
+            .hero-cards-grid {
+                grid-template-columns: 1fr;
+                max-width: 420px;
+                gap: 16px;
+            }
+
+            /* Keep red business button prominent on mobile too */
+            .hero-card--primary {
+                order: -1;
+                transform: none;
+            }
+
+            .hero-card--primary:hover {
+                transform: translateY(-3px);
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-  <!-- Top Header / Navigation -->
-  <header class="site-header" id="masthead">
-    <div class="header-container">
+    <!-- Top Header / Navigation -->
+    <header class="site-header" id="masthead">
+        <div class="header-container">
 
-      <!-- Brand Logo -->
-      <div class="site-branding">
-        <a href="#hjem" class="brand-link" aria-label="OAMS Hjem">
-          <img src="assets/logo_hvit.svg" alt="OAMS - Oslo Akuttmedisinske Studentforening" class="header-logo">
-        </a>
-      </div>
+            <!-- Brand Logo -->
+            <div class="site-branding">
+                <a href="#hjem" class="brand-link" aria-label="OAMS Hjem">
+                    <img src="assets/logo_hvit.svg" alt="OAMS - Oslo Akuttmedisinske Studentforening"
+                        class="header-logo">
+                </a>
+            </div>
 
-      <!-- Main Navigation -->
-      <nav class="main-navigation" id="mainNav" aria-label="Hovednavigasjon">
-        <ul class="nav-list">
-          <li class="nav-item">
-            <a href="#hjem" class="nav-link active">Hjem</a>
-          </li>
+            <!-- Main Navigation -->
+            <nav class="main-navigation" id="mainNav" aria-label="Hovednavigasjon">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="#hjem" class="nav-link active">Hjem</a>
+                    </li>
 
-          <li class="nav-item has-dropdown">
-            <a href="om_oss.html" class="nav-link">
-              Om oss
-              <svg class="chevron-down" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd"
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                  clip-rule="evenodd" />
-              </svg>
+                    <li class="nav-item has-dropdown">
+                        <a href="om_oss.html" class="nav-link">
+                            Om oss
+                            <svg class="chevron-down" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="om_oss.html">Om foreningen</a></li>
+                            <li><a href="https://www.facebook.com/OsloAMS" target="_blank"
+                                    rel="noopener noreferrer">Facebook-siden
+                                    vår &nearr;</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item has-dropdown">
+                        <a href="medisinstudent.html" class="nav-link">
+                            For medisinstudenter
+                            <svg class="chevron-down" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="medisinstudent.html#bli-medlem">Bli medlem</a></li>
+                            <li><a href="medisinstudent.html#kursoversikt">Våre kurs</a></li>
+                            <li><a href="medisinstudent.html#merch">Merch</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item has-dropdown">
+                        <a href="kontakt_oss.html" class="nav-link">
+                            Kontakt oss
+                            <svg class="chevron-down" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="bookoss.html">Book oss</a></li>
+                            <li><a href="kontakt_oss.html">Kontaktinformasjon</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item has-dropdown">
+                        <a href="#oams-medlemskap" class="nav-link">
+                            OAMS-Medlemskap
+                            <svg class="chevron-down" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="mailto:post@oams.no?subject=Innlogging%20OAMS">Logg inn</a></li>
+                            <li><a href="mailto:post@oams.no?subject=Nytt%20medlemskap%20OAMS">Registrer ny bruker</a>
+                            </li>
+                            <li><a href="mailto:post@oams.no?subject=Endring%20av%20profil">Rediger profilen din</a>
+                            </li>
+                            <li><a href="medisinstudent.html">Mine kurs</a></li>
+                            <li><a href="kontakt_oss.html">Betaling med VIPPS</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Mobile Menu Toggle Button -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Åpne meny" aria-expanded="false">
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+            </button>
+
+        </div>
+    </header>
+
+    <main id="content">
+
+        <!-- Hero Section -->
+        <section class="hero-ny" id="hjem">
+            <div class="hero-bg-overlay"></div>
+
+            <div class="hero-ny-container">
+
+                <img src="assets/logo_hvit.svg" alt="OAMS - Oslo Akuttmedisinske Studentforening" class="hero-ny-logo">
+
+                <p class="hero-ny-lead">
+                    Vi er Oslo Akuttmedisinske Studentforening.<br>
+                    Lær livreddende førstehjelp av medisinstudenter.
+                </p>
+
+                <!-- 3 Action Cards: Glass (Left) | Red Primary (Center) | Glass (Right) -->
+                <div class="hero-cards-grid">
+
+                    <!-- Left: Om Oss (Glass) -->
+                    <a href="om_oss.html" class="hero-card hero-card--glass">
+                        <span class="hero-card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            </svg>
+                        </span>
+                        <span class="hero-card-title">Om Oss</span>
+                        <span class="hero-card-sub">Hvem er OAMS?</span>
+                    </a>
+
+                    <!-- Center: Book Kurs (Red, Primary Focus) -->
+                    <a href="bookoss.html" class="hero-card hero-card--primary">
+                        <span class="hero-card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                                <line x1="16" y1="2" x2="16" y2="6" />
+                                <line x1="8" y1="2" x2="8" y2="6" />
+                                <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                        </span>
+                        <span class="hero-card-title">Book Kurs</span>
+                        <span class="hero-card-sub">Bestill til din bedrift</span>
+                    </a>
+
+                    <!-- Right: For Medisinstudenter (Glass) -->
+                    <a href="medisinstudent.html" class="hero-card hero-card--glass">
+                        <span class="hero-card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                                <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5" />
+                            </svg>
+                        </span>
+                        <span class="hero-card-title">For Medisinstudenter</span>
+                        <span class="hero-card-sub">Se informasjon for medisinstudenter</span>
+                    </a>
+
+                </div>
+
+            </div>
+
+            <!-- Scroll Down Hint -->
+            <a href="#book-oss" class="hero-scroll-hint" aria-label="Bla ned til mer informasjon">
+                <span>Bla ned</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
             </a>
-            <ul class="dropdown-menu">
-              <li><a href="om_oss.html">Om foreningen</a></li>
-              <li><a href="https://www.facebook.com/OsloAMS" target="_blank" rel="noopener noreferrer">Facebook-siden
-                  vår &nearr;</a></li>
-            </ul>
-          </li>
+        </section>
 
-          <li class="nav-item has-dropdown">
-            <a href="medisinstudent.html" class="nav-link">
-              For medisinstudenter
-              <svg class="chevron-down" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd"
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                  clip-rule="evenodd" />
-              </svg>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a href="medisinstudent.html">Kommende Arrangementer</a></li>
-              <li><a href="medisinstudent.html">AMK 1 - Akuttmedisinkurs 1</a></li>
-              <li><a href="medisinstudent.html">AMK 2 - Akuttmedisinkurs 2</a></li>
-              <li><a href="medisinstudent.html">Instruktørkurs</a></li>
-              <li><a href="medisinstudent.html">eFAST - kurs og traumesimulering</a></li>
-              <li><a href="medisinstudent.html">Mini-StudentBEST</a></li>
-              <li><a href="medisinstudent.html">Akutt Pediatrikurs</a></li>
-              <li><a href="medisinstudent.html">Villmarksmedisin</a></li>
-              <li><a href="medisinstudent.html">Tema-kvelder</a></li>
-            </ul>
-          </li>
+        <!-- Section 2: Kort om OAMS & Book oss -->
+        <section class="section section-about-book" id="book-oss">
+            <div class="container">
+                <div class="about-book-box">
+                    <h2 class="section-title">Førstehjelpskurs av medisinstudenter</h2>
 
-          <li class="nav-item has-dropdown">
-            <a href="kontakt_oss.html" class="nav-link">
-              Kontakt oss
-              <svg class="chevron-down" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd"
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                  clip-rule="evenodd" />
-              </svg>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a href="#book-oss">Book oss</a></li>
-              <li><a href="kontakt_oss.html">Kontaktinformasjon</a></li>
-            </ul>
-          </li>
+                    <p class="about-book-text">
+                        Vi er en faglig studentforening ved medisinstudiet på Universitetet i Oslo. Vi
+                        arrangerer praktiske akuttmedisinske kurs for medisinstudenter, men holder også førstehjelpskurs
+                        for
+                        <strong>bedrifter, skoler og andre eksterne</strong>!
+                    </p>
 
-          <li class="nav-item has-dropdown">
-            <a href="#oams-medlemskap" class="nav-link">
-              OAMS-Medlemskap
-              <svg class="chevron-down" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd"
-                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                  clip-rule="evenodd" />
-              </svg>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a href="mailto:post@oams.no?subject=Innlogging%20OAMS">Logg inn</a></li>
-              <li><a href="mailto:post@oams.no?subject=Nytt%20medlemskap%20OAMS">Registrer ny bruker</a></li>
-              <li><a href="mailto:post@oams.no?subject=Endring%20av%20profil">Rediger profilen din</a></li>
-              <li><a href="medisinstudent.html">Mine kurs</a></li>
-              <li><a href="kontakt_oss.html">Betaling med VIPPS</a></li>
-            </ul>
-          </li>
-        </ul>
-      </nav>
+                    <div class="btn-wrap">
+                        <a href="bookoss.html" class="btn btn-solid-red">
+                            <span>Book oss her</span>
+                            <svg class="btn-arrow" viewBox="0 0 448 512" fill="currentColor">
+                                <path
+                                    d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z" />
+                            </svg>
+                        </a>
+                    </div>
 
-      <!-- Mobile Menu Toggle Button -->
-      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Åpne meny" aria-expanded="false">
-        <span class="hamburger-bar"></span>
-        <span class="hamburger-bar"></span>
-        <span class="hamburger-bar"></span>
-      </button>
+                </div>
+            </div>
+        </section>
 
-    </div>
-  </header>
+        <!-- Section 3: Kontakt oss -->
+        <section class="section section-contact" id="kontakt-oss">
+            <div class="container text-center">
 
-  <main id="content">
+                <h2 class="section-title">Kontakt oss</h2>
 
-    <!-- Hero Section -->
-    <section class="hero-section" id="hjem">
-      <div class="hero-bg-overlay"></div>
+                <p class="section-text">
+                    Har du spørsmål om kurs, booking eller medlemskap? Ta gjerne kontakt med oss på e-post eller
+                    via
+                    sosiale medier.
+                </p>
 
-      <div class="hero-container">
+                <div class="contact-simple-box">
+                    <p>
+                        <strong>Adresse:</strong> Domus Medica, Sognsvannsveien 9, 0372 Oslo
+                    </p>
+                    <p>
+                        <strong>E-post:</strong> <a href="mailto:post@oams.no" class="inline-link">post@oams.no</a>
+                    </p>
+                    <p>
+                        <strong>Facebook:</strong> <a href="https://www.facebook.com/OsloAMS" target="_blank"
+                            rel="noopener noreferrer" class="bold-link">facebook.com/OsloAMS</a>
+                    </p>
+                </div>
 
-        <p class="hero-subheading">Lær akuttmedisin hos oss!</p>
+            </div>
+        </section>
 
-        <!-- Authentic Heartbeat Divider -->
-        <div class="heartbeat-divider" aria-hidden="true">
-          <span class="divider-line"></span>
-          <div class="heartbeat-icon">
-            <svg viewBox="0 0 512 512">
-              <path fill="currentColor"
-                d="M320.2 243.8l-49.7 99.4c-6 12.1-23.4 11.7-28.9-.6l-56.9-126.3-30 71.7c-5.9 14-24.2 16.6-33.7 4.7l-29.2-36.5H16c-8.8 0-16-7.2-16-16s7.2-16 16-16h85.5c5.9 0 11.4 3.3 14.2 8.5l14.7 18.4 34.2-81.8c6.1-14.5 25.1-16.1 33.5-2.9l54.8 121.7 45.4-90.8c5.4-10.9 20.2-12.8 28.2-3.8l56.8 63.9H496c8.8 0 16 7.2 16 16s-7.2 16-16 16h-110c-6.2 0-12-2.8-15.8-7.7l-46-51.8z" />
-            </svg>
-          </div>
-          <span class="divider-line"></span>
+    </main>
+
+    <!-- Site Footer -->
+    <footer class="site-footer" id="colophon">
+        <div class="footer-container">
+
+            <div class="footer-info">
+                Domus Medica, Sognsvannsveien 9, 0372 Oslo &nbsp;|&nbsp; E-post: <a
+                    href="mailto:post@oams.no">post@oams.no</a>
+            </div>
+
+            <nav class="footer-navigation" aria-label="Bunnmeny">
+                <ul class="footer-menu">
+                    <li><a href="#hjem">Hjem</a></li>
+                    <li><a href="om_oss.html">Om oss</a></li>
+                    <li><a href="medisinstudent.html">For medisinstudenter</a></li>
+                    <li><a href="kontakt_oss.html">Kontakt oss</a></li>
+                    <li><a href="mailto:post@oams.no?subject=OAMS-Medlemskap">OAMS-Medlemskap</a></li>
+                </ul>
+            </nav>
+
         </div>
+    </footer>
 
-        <h1 class="hero-title">Oslo Akuttmedisinske Studentforening</h1>
-
-        <div class="hero-cta-wrapper">
-          <a href="om_oss.html" class="btn btn-primary hero-btn">Hvem er vi?</a>
-          <a href="medisinstudent.html" class="btn btn-secondary hero-btn">Våre kurs</a>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- Section 2: Ønsker du å booke oss? -->
-    <section class="section section-book" id="book-oss">
-      <div class="container text-center">
-
-        <h2 class="section-title">
-          <a href="#book-oss">Ønsker du å booke oss?</a>
-        </h2>
-
-        <p class="section-text">
-          Vi er en faglig studentforening som tilbyr både <strong>interne</strong> og <strong>eksterne</strong> <a
-            href="medisinstudent.html" class="inline-link">førstehjelps-kurs</a>.<br>
-          Det vil si at vi underviser akuttmedisin til både medisinstudenter og andre! Er du interessert?
-        </p>
-
-        <div class="btn-wrap">
-          <a href="mailto:post@oams.no?subject=Foresp%C3%B8rsel%20om%20booking" class="btn btn-outline-red">
-            <span>Book oss</span>
-            <svg class="btn-arrow" viewBox="0 0 448 512" fill="currentColor">
-              <path
-                d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z" />
-            </svg>
-          </a>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- Section: Kurs Oversikt -->
-    <section class="section section-courses" id="kurs">
-      <div class="container">
-
-        <div class="section-title-wrap text-center">
-          <h2 class="section-title">Våre Kurs</h2>
-          <p class="section-text">
-            OAMS arrangerer praktiske kurs og workshops for medisinstudenter og eksterne gjennom hele studieåret.
-          </p>
-        </div>
-
-        <div class="courses-clean-grid" data-cms-list="index-courses">
-          <!-- Kurs lastes dynamisk inn fra databasen (tabellen courses) via js/pages/kurs.js -->
-        </div>
-
-      </div>
-    </section>
-
-    <!-- Section 3: Facebook & Forening Info -->
-    <section class="section section-info" id="om-oss">
-      <div class="container text-center">
-
-        <div class="logo-box">
-          <img src="assets/logo_svart.svg" alt="OAMS - Oslo Akuttmedisinske Studentforening" class="center-logo">
-        </div>
-
-        <div class="info-content">
-          <p>
-            Informasjon om kommende kurs vil bli publisert på Facebooksiden vår, <br>
-            <a href="https://www.facebook.com/OsloAMS" target="_blank" rel="noopener noreferrer" class="bold-link">Oslo
-              Akuttmedisinske studentforening</a>
-          </p>
-          <p>
-            Her publiseres fortløpende informasjon om kurs og annet spennende som skjer i foreningen!
-          </p>
-        </div>
-
-      </div>
-    </section>
-
-
-    <!-- Section 5: Skoleprosjektet -->
-    <!-- OAMS har avviklet Skoleprosjektet -->
-
-
-
-    <!-- Section 6: Kontakt oss -->
-    <section class="section section-contact" id="kontakt-oss">
-      <div class="container text-center">
-
-        <h2 class="section-title">Kontakt oss</h2>
-
-        <p class="section-text">
-          Har du spørsmål om kurs, booking eller medlemskap? Ta gjerne kontakt med oss på e-post eller via sosiale
-          medier.
-        </p>
-
-        <div class="contact-simple-box">
-          <p>
-            <strong>Adresse:</strong> Domus Medica, Sognsvannsveien 9, 0372 Oslo
-          </p>
-          <p>
-            <strong>E-post:</strong> <a href="mailto:post@oams.no" class="inline-link">post@oams.no</a>
-          </p>
-          <p>
-            <strong>Facebook:</strong> <a href="https://www.facebook.com/OsloAMS" target="_blank"
-              rel="noopener noreferrer" class="bold-link">facebook.com/OsloAMS</a>
-          </p>
-        </div>
-
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Site Footer -->
-  <footer class="site-footer" id="colophon">
-    <div class="footer-container">
-
-      <div class="footer-info">
-        Domus Medica, Sognsvannsveien 9, 0372 Oslo &nbsp;|&nbsp; E-post: <a href="mailto:post@oams.no">post@oams.no</a>
-      </div>
-
-      <nav class="footer-navigation" aria-label="Bunnmeny">
-        <ul class="footer-menu">
-          <li><a href="#hjem">Hjem</a></li>
-          <li><a href="om_oss.html">Om oss</a></li>
-          <li><a href="medisinstudent.html">For medisinstudenter</a></li>
-          <li><a href="kontakt_oss.html">Kontakt oss</a></li>
-          <li><a href="mailto:post@oams.no?subject=OAMS-Medlemskap">OAMS-Medlemskap</a></li>
-        </ul>
-      </nav>
-
-    </div>
-  </footer>
-
-  <script src="script.js"></script>
-  <script type="module" src="js/pages/medisinstudent.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>
