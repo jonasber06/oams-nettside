@@ -91,7 +91,7 @@ a:focus {
   background: var(--dark-header);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  padding: 16px 0;
+  padding: 14px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   transition: padding 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
 }
@@ -119,12 +119,12 @@ a:focus {
 }
 
 .header-logo {
-  height: 82px;
+  height: 74px;
   width: auto;
-  max-width: 290px;
+  max-width: 260px;
   object-fit: contain;
   display: block;
-  margin-top: 6px;
+  margin-top: 5px;
   transition: height 0.3s ease, margin-top 0.3s ease, opacity 0.2s ease, transform 0.2s ease;
   will-change: height, margin-top;
 }
