@@ -132,50 +132,55 @@
         <div class="form-row">
           <div class="form-group">
             <label for="heroTitle">Hovedtittel</label>
-            <input type="text" id="heroTitle" class="form-control" placeholder="Våre Kurs">
+            <input type="text" id="heroTitle" class="form-control" placeholder="For medisinstudenter">
           </div>
           <div class="form-group">
             <label for="heroSubheading">Undertittel</label>
             <input type="text" id="heroSubheading" class="form-control"
-              placeholder="Praktisk akuttmedisin og simulering">
+              placeholder="Praktisk akuttmedisin, kurs og fellesskap">
           </div>
         </div>
       </section>
 
-      <!-- 2. Om kurstilbudet -->
+      <!-- 2. Medlemskap & Vipps -->
       <section class="admin-card">
         <div class="admin-card-header">
           <div>
-            <h2 class="admin-card-title">2. Om kurstilbudet</h2>
-            <div class="admin-card-subtitle">Introduksjonstekst over kursoversikten</div>
+            <h2 class="admin-card-title">2. Bli medlem &amp; Vipps-knapp</h2>
+            <div class="admin-card-subtitle">Den fremhevede medlemsseksjonen øverst på medisinstudent.html</div>
           </div>
         </div>
 
         <div class="form-group">
-          <label for="introTitle">Seksjonstittel</label>
-          <input type="text" id="introTitle" class="form-control" placeholder="Lær akuttmedisin i praksis">
+          <label for="medlemTitle">Overskrift</label>
+          <input type="text" id="medlemTitle" class="form-control" placeholder="Bli medlem!">
         </div>
 
         <div class="form-group">
-          <label for="introLead">Fremhevet introtekst (Lead)</label>
-          <input type="text" id="introLead" class="form-control"
-            placeholder="OAMS arrangerer praktiske kurs, ferdighetstrening og simuleringer...">
+          <label for="medlemLead">Beskrivelse / Tekst</label>
+          <textarea id="medlemLead" class="form-control" rows="3"
+            placeholder="Som medlem i OAMS får du tilgang til våre populære akuttmedisinske kurs..."></textarea>
         </div>
 
-        <div class="form-group">
-          <label for="introBody">Brødtekst (støtter linjeskift – bruk tom linje for nytt avsnitt)</label>
-          <textarea id="introBody" class="form-control" rows="6"
-            placeholder="Skriv om kurstilbudet her. Trykk Enter én gang for linjeskift, eller to ganger for nytt avsnitt."></textarea>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="medlemBtnLabel">Knappetekst (Vipps-knapp)</label>
+            <input type="text" id="medlemBtnLabel" class="form-control" placeholder="Betal medlemskap på Vipps">
+          </div>
+          <div class="form-group">
+            <label for="medlemBtnUrl">Lenke / URL for Vipps-knappen</label>
+            <input type="text" id="medlemBtnUrl" class="form-control" placeholder="https://... eller #">
+          </div>
         </div>
       </section>
 
-      <!-- 3. Kursportefølje (Tabellen courses) -->
+      <!-- 3. Kursoversikt (Tabellen courses) -->
       <section class="admin-card">
         <div class="admin-card-header">
           <div>
-            <h2 class="admin-card-title">3. Kursportefølje (Databasetabellen courses)</h2>
-            <div class="admin-card-subtitle">Administrer alle kursene i OAMS. Endringer her vises både på Våre
-              kurs-siden og på forsiden.</div>
+            <h2 class="admin-card-title">3. Kursoversikt</h2>
+            <div class="admin-card-subtitle">Administrer kursene som vises på siden. Endringer her vises både på
+              Medisinstudent-siden og på forsiden.</div>
           </div>
           <button type="button" id="addCourseBtn" class="btn-admin btn-admin-secondary" style="font-size: 0.8rem;">
             + Legg til kurs
@@ -185,12 +190,12 @@
         <div class="form-row" style="margin-bottom: 18px;">
           <div class="form-group">
             <label for="portefoljeTitle">Overskrift over kurskortene</label>
-            <input type="text" id="portefoljeTitle" class="form-control" placeholder="Kursportefølje">
+            <input type="text" id="portefoljeTitle" class="form-control" placeholder="Hvilke kurs vi tilbyr">
           </div>
           <div class="form-group">
             <label for="portefoljeText">Undertekst over kurskortene</label>
             <input type="text" id="portefoljeText" class="form-control"
-              placeholder="Her finner du en oversikt over alle våre faste kurs, workshops og faglige arrangementer.">
+              placeholder="En kort oversikt over våre praktiske kurs, simuleringer og arrangementer gjennom studieåret.">
           </div>
         </div>
 
@@ -200,33 +205,92 @@
         </div>
       </section>
 
-      <!-- 4. Påmelding, medlemskap og booking -->
+      <!-- 4. Sosiale medier (SoMe-boks under kursene) -->
       <section class="admin-card">
         <div class="admin-card-header">
           <div>
-            <h2 class="admin-card-title">4. Påmelding, medlemskap og booking</h2>
-            <div class="admin-card-subtitle">Kortene nederst på kurssiden med lenker til Facebook, medlemskap og
-              kursbooking</div>
-          </div>
-          <button type="button" id="addActionBtn" class="btn-admin btn-admin-secondary" style="font-size: 0.8rem;">
-            + Legg til handlingskort
-          </button>
-        </div>
-
-        <div class="form-row" style="margin-bottom: 18px;">
-          <div class="form-group">
-            <label for="actionsTitle">Seksjonstittel</label>
-            <input type="text" id="actionsTitle" class="form-control" placeholder="Påmelding, medlemskap og booking">
-          </div>
-          <div class="form-group">
-            <label for="actionsSubtitle">Undertekst</label>
-            <input type="text" id="actionsSubtitle" class="form-control"
-              placeholder="Slik melder du deg på kommende kurs, blir medlem i OAMS eller bestiller et eksternt førstehjelpskurs.">
+            <h2 class="admin-card-title">4. Sosiale medier (SoMe-boks under kursene)</h2>
+            <div class="admin-card-subtitle">Boksen under kursoversikten med oppfordring om å følge OAMS på Facebook og
+              Instagram</div>
           </div>
         </div>
 
-        <div id="actionsList" class="admin-items-list">
-          <div style="text-align: center; color: var(--admin-text-muted); padding: 20px;">Laster handlingskort...</div>
+        <div class="form-group">
+          <label for="someTitle">Overskrift</label>
+          <input type="text" id="someTitle" class="form-control" placeholder="Interessert? Følg oss!">
+        </div>
+
+        <div class="form-group">
+          <label for="someText">Beskrivelse (støtter linjeskift)</label>
+          <textarea id="someText" class="form-control" rows="3"
+            placeholder="Datoer, påmeldingslenker og fortløpende oppdateringer..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="someFacebookLabel">Facebook-knappetekst</label>
+            <input type="text" id="someFacebookLabel" class="form-control" placeholder="Facebook">
+          </div>
+          <div class="form-group">
+            <label for="someFacebookUrl">Facebook-lenke (URL)</label>
+            <input type="text" id="someFacebookUrl" class="form-control" placeholder="https://www.facebook.com/OsloAMS">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="someInstagramLabel">Instagram-knappetekst</label>
+            <input type="text" id="someInstagramLabel" class="form-control" placeholder="Instagram">
+          </div>
+          <div class="form-group">
+            <label for="someInstagramUrl">Instagram-lenke (URL)</label>
+            <input type="text" id="someInstagramUrl" class="form-control" placeholder="https://www.instagram.com/...">
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. OAMS-Merch -->
+      <section class="admin-card">
+        <div class="admin-card-header">
+          <div>
+            <h2 class="admin-card-title">5. OAMS-Merch</h2>
+            <div class="admin-card-subtitle">Merch-seksjonen nederst på siden med lenke til bestillingsskjema og
+              sjekkliste</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="merchTitle">Overskrift</label>
+          <input type="text" id="merchTitle" class="form-control" placeholder="OAMS-Merch!">
+        </div>
+
+        <div class="form-group">
+          <label for="merchText">Beskrivelse</label>
+          <textarea id="merchText" class="form-control" rows="3"
+            placeholder="Vil du sikre deg OAMS-klær og effekter?..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="merchBtnLabel">Knappetekst (Merch-skjema)</label>
+            <input type="text" id="merchBtnLabel" class="form-control" placeholder="Bestill merch (Gå til skjema)">
+          </div>
+          <div class="form-group">
+            <label for="merchBtnUrl">Lenke / URL til merch-skjema</label>
+            <input type="text" id="merchBtnUrl" class="form-control" placeholder="https://... eller #">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="merchListTitle">Overskrift over sjekklisten</label>
+          <input type="text" id="merchListTitle" class="form-control"
+            placeholder="Dette fyller du ut i merch-skjemaet:">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 0;">
+          <label for="merchItems">Sjekkliste-punkter (ett punkt per linje)</label>
+          <textarea id="merchItems" class="form-control" rows="4"
+            placeholder="Hvilket plagg du ønsker&#10;Hvilken størrelse og farge&#10;Ønsket antall&#10;Kontaktinfo (for svar om ja/nei og avtale om henting)"></textarea>
         </div>
       </section>
 
@@ -246,4 +310,3 @@
 </body>
 
 </html>
-

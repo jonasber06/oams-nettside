@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medisinstudent | OAMS - Oslo Akuttmedisinske Studentforening</title>
-    <meta name="description"
-        content="Oversikt over kurs og arrangementer i Oslo Akuttmedisinske Studentforening (OAMS): AMK 1, AMK 2, Instruktørkurs, eFAST, Mini-StudentBEST, Pediatri og Villmarksmedisin.">
+    <title>For medisinstudenter | OAMS - Oslo Akuttmedisinske Studentforening</title>
+    <meta name="description" content="Informasjon for medisinstudenter i Oslo Akuttmedisinske Studentforening (OAMS): Bli medlem via Vipps, kort
+    oversikt over våre kurs, sosiale medier og bestilling av OAMS-merch.">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/favicon.png">
@@ -70,15 +70,9 @@
                             </svg>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="#kommende-arrangementer">Kommende Arrangementer</a></li>
-                            <li><a href="#amk-1">AMK 1 - Akuttmedisinkurs 1</a></li>
-                            <li><a href="#amk-2">AMK 2 - Akuttmedisinkurs 2</a></li>
-                            <li><a href="#instruktorkurs">Instruktørkurs</a></li>
-                            <li><a href="#efast">eFAST - kurs og traumesimulering</a></li>
-                            <li><a href="#mini-studentbest">Mini-StudentBEST</a></li>
-                            <li><a href="#akutt-pediatrikurs">Akutt Pediatrikurs</a></li>
-                            <li><a href="#villmarksmedisin">Villmarksmedisin</a></li>
-                            <li><a href="#tema-kvelder">Tema-kvelder</a></li>
+                            <li><a href="#bli-medlem">Bli medlem</a></li>
+                            <li><a href="#kursoversikt">Våre kurs</a></li>
+                            <li><a href="#merch">Merch</a></li>
                         </ul>
                     </li>
 
@@ -92,7 +86,7 @@
                             </svg>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a href="index.html#book-oss">Book oss</a></li>
+                            <li><a href="bookoss.html">Book oss</a></li>
                             <li><a href="kontakt_oss.html">Kontaktinformasjon</a></li>
                         </ul>
                     </li>
@@ -136,7 +130,7 @@
             <div class="hero-bg-overlay"></div>
 
             <div class="hero-container">
-                <p class="hero-subheading" data-cms="hero-subheading"></p>
+                <p class="hero-subheading" data-cms="hero-subheading">Praktisk akuttmedisin, kurs og fellesskap</p>
 
                 <!-- Authentic Heartbeat Divider -->
                 <div class="heartbeat-divider" aria-hidden="true">
@@ -150,57 +144,147 @@
                     <span class="divider-line"></span>
                 </div>
 
-                <h1 class="hero-title" data-cms="hero-title"></h1>
+                <h1 class="hero-title" data-cms="hero-title">For medisinstudenter</h1>
             </div>
         </section>
 
-        <!-- Section: Om kurstilbudet -->
-        <section class="section section-about" id="om-kursene">
+        <!-- Section 1 (Øverst): Bli medlem!! + Lenke til Vipps -->
+        <section class="section section-medlem-top" id="bli-medlem">
+            <div class="container">
+                <div class="medlem-hero-card">
+                    <h2 class="section-title" data-cms="medlem-title">Bli medlem!</h2>
+                    <p class="medlem-lead" data-cms="medlem-lead">
+                        Som medlem i OAMS får du tilgang til våre populære akuttmedisinske kurs til medlemspris,
+                        mulighet til å utdanne deg som instruktør (med betalte eksterne kursoppdrag) og bli en del
+                        av et engasjert faglig miljø på medisinstudiet.
+                    </p>
+
+                    <div class="btn-wrap">
+                        <a href="#" class="btn btn-vipps" data-cms-href="medlem-btn-url">
+                            <span data-cms="medlem-btn-label">Betal medlemskap på Vipps</span>
+                            <svg class="btn-arrow" viewBox="0 0 448 512" fill="currentColor">
+                                <path
+                                    d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Hvilke kurs vi tilbyr (kort oversikt) + Mer info på SoMe -->
+        <section class="section section-kurs-kort" id="kursoversikt">
             <div class="container">
 
-                <div class="about-intro-text">
-                    <h2 class="section-title" data-cms="intro-title"></h2>
-                    <p class="about-lead" data-cms="intro-lead"></p>
-                    <div data-cms="intro-paragraphs">
-                        <!-- Avsnitt lastes dynamisk inn fra databasen via js/pages/medisinstudent.js -->
+                <div class="text-center">
+                    <h2 class="section-title" data-cms="portefolje-title">Hvilke kurs vi tilbyr</h2>
+                    <p class="section-text" data-cms="portefolje-text">
+                        En kort oversikt over våre praktiske kurs, simuleringer og arrangementer gjennom
+                        studieåret.
+                    </p>
+                </div>
+
+                <!-- Kort, kompakt kursoversikt (lastes dynamisk fra databasen via js/pages/medisinstudent.js) -->
+                <div class="short-courses-grid" data-cms-list="courses">
+                    <!-- Kurs lastes dynamisk inn fra databasen (tabellen courses) -->
+                </div>
+
+                <!-- Interessert? Mer info på SoMe! -->
+                <div class="some-callout-box">
+                    <h3 class="some-callout-title" data-cms="some-title">Interessert? Følg oss!</h3>
+                    <p class="some-callout-text" data-cms="some-text">
+                        Datoer, påmeldingslenker og fortløpende oppdateringer om alle kommende kurs og
+                        arrangementer legges ut på våre sosiale medier.<br>Følg oss for å sikre deg plass!
+                    </p>
+
+                    <div class="some-buttons-wrap">
+                        <a href="#" class="contact-social-btn" data-cms-href="some-facebook-url">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" />
+                            </svg>
+                            <span data-cms="some-facebook-label">Facebook</span>
+                        </a>
+
+                        <a href="#" class="contact-social-btn" data-cms-href="some-instagram-url">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                            <span data-cms="some-instagram-label">Instagram</span>
+                        </a>
                     </div>
                 </div>
 
             </div>
         </section>
 
-        <!-- Section: Kursoversikt -->
-        <section class="section section-board" id="kurs">
+        <!-- Section 3: Merch! -->
+        <section class="section section-merch" id="merch">
             <div class="container">
 
-                <div class="text-center">
-                    <h2 class="section-title" data-cms="portefolje-title">Kursportefølje</h2>
-                    <p class="section-text" data-cms="portefolje-text">
-                        Her finner du en oversikt over alle våre faste kurs, workshops og faglige arrangementer.
+                <div class="merch-card">
+                    <div class="merch-icon-circle" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />
+                        </svg>
+                    </div>
+
+                    <h2 class="section-title" data-cms="merch-title">OAMS-Merch!</h2>
+                    <p class="section-text" data-cms="merch-text">
+                        Vil du sikre deg OAMS-klær og effekter? Send inn en forespørsel via vårt
+                        merch-skjema, så sjekker materialansvarlig lagerstatus og tar kontakt med deg om tilgjengelighet
+                        og hvor det kan hentes.
                     </p>
-                </div>
 
-                <div class="kurs-detail-grid" data-cms-list="courses">
-                    <!-- Kurs lastes dynamisk inn fra databasen (tabellen courses) via js/pages/medisinstudent.js -->
-                </div>
+                    <div class="merch-cta-wrap">
+                        <a href="#" class="btn btn-solid-red" data-cms-href="merch-btn-url">
+                            <span data-cms="merch-btn-label">Bestill merch</span>
+                            <svg class="btn-arrow" viewBox="0 0 448 512" fill="currentColor">
+                                <path
+                                    d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z" />
+                            </svg>
+                        </a>
+                    </div>
 
-            </div>
-        </section>
-
-        <!-- Section: Kommende arrangementer, Medlemskap & Booking -->
-        <section class="section section-docs" id="kommende-arrangementer">
-            <div class="container">
-
-                <div class="text-center">
-                    <h2 class="section-title" data-cms="actions-title">Påmelding, medlemskap og booking</h2>
-                    <p class="section-text" data-cms="actions-subtitle">
-                        Slik melder du deg på kommende kurs, blir medlem i OAMS eller bestiller et eksternt
-                        førstehjelpskurs.
-                    </p>
-                </div>
-
-                <div class="docs-grid" data-cms-list="course-actions">
-                    <!-- Handlingskort lastes dynamisk inn fra databasen via js/pages/medisinstudent.js -->
+                    <div class="merch-info-box">
+                        <h4 class="merch-info-title" data-cms="merch-list-title">Dette fyller du ut i merch-skjemaet:
+                        </h4>
+                        <ul class="merch-checklist" data-cms-list="merch-items">
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                <span>Hvilket plagg du ønsker</span>
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                <span>Hvilken størrelse og farge</span>
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                <span>Ønsket antall</span>
+                            </li>
+                            <li>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12" />
+                                </svg>
+                                <span>Kontaktinfo (for svar om ja/nei og avtale om henting)</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
             </div>
@@ -235,4 +319,3 @@
 </body>
 
 </html>
-

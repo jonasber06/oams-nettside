@@ -5,56 +5,21 @@
 
 import { getSupabase } from '../supabase-client.js';
 
-const ACTION_ICONS = {
-  calendar: `
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-      <line x1="16" y1="2" x2="16" y2="6"></line>
-      <line x1="8" y1="2" x2="8" y2="6"></line>
-      <line x1="3" y1="10" x2="21" y2="10"></line>
-    </svg>
-  `,
-  'user-plus': `
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-      <circle cx="8.5" cy="7" r="4"></circle>
-      <line x1="20" y1="8" x2="20" y2="14"></line>
-      <line x1="23" y1="11" x2="17" y2="11"></line>
-    </svg>
-  `,
-  mail: `
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-    </svg>
-  `,
-  doc: `
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-      <polyline points="14 2 14 8 20 8"></polyline>
-      <line x1="16" y1="13" x2="8" y2="13"></line>
-      <line x1="16" y1="17" x2="8" y2="17"></line>
-    </svg>
-  `
-};
-
 const DEFAULT_HERO = {
-  subheading: 'Praktisk akuttmedisin og simulering',
-  title: 'Våre Kurs'
+  subheading: 'Praktisk akuttmedisin, kurs og fellesskap',
+  title: 'For medisinstudenter'
 };
 
-const DEFAULT_INTRO = {
-  title: 'Lær akuttmedisin i praksis',
-  lead: 'OAMS arrangerer praktiske kurs, ferdighetstrening og simuleringer for medisinstudenter og eksterne gjennom hele studieåret.',
-  paragraphs: [
-    'Kurstilbudet vårt spenner fra grunnleggende førstehjelp og skadestedsledelse på AMK 1 til avansert casetrening med anestesilege på AMK 2 og spesialiserte kurs innen ultralyd (eFAST), traumeteam-trening (Mini-StudentBEST), akutt pediatri og villmarksmedisin.',
-    'Har du fullført AMK 1, kan du også ta vårt Instruktørkurs for å bli godkjent OAMS-instruktør. Som instruktør får du verdifull undervisningserfaring på interne kurs og mulighet til å holde betalte førstehjelpskurs for eksterne bedrifter, skoler og organisasjoner.'
-  ]
+const DEFAULT_MEDLEMSKAP = {
+  title: 'Bli medlem!',
+  lead: 'Som medlem i OAMS får du tilgang til våre populære akuttmedisinske kurs til medlemspris, mulighet til å utdanne deg som instruktør (med betalte eksterne kursoppdrag) og bli en del av et engasjert faglig miljø på medisinstudiet.',
+  button_label: 'Betal medlemskap på Vipps',
+  button_url: '#'
 };
 
 const DEFAULT_PORTEFOLJE = {
-  title: 'Kursportefølje',
-  text: 'Her finner du en oversikt over alle våre faste kurs, workshops og faglige arrangementer.'
+  title: 'Hvilke kurs vi tilbyr',
+  text: 'En kort oversikt over våre praktiske kurs, simuleringer og arrangementer gjennom studieåret.'
 };
 
 const DEFAULT_COURSES = [
@@ -81,36 +46,34 @@ const DEFAULT_COURSES = [
   }
 ];
 
-const DEFAULT_ACTIONS = {
-  title: 'Påmelding, medlemskap og booking',
-  subtitle: 'Slik melder du deg på kommende kurs, blir medlem i OAMS eller bestiller et eksternt førstehjelpskurs.',
+const DEFAULT_SOME = {
+  title: 'Interessert? Følg oss!',
+  text: 'Datoer, påmeldingslenker og fortløpende oppdateringer om alle kommende kurs og arrangementer legges ut på våre sosiale medier.\nFølg oss for å sikre deg plass!',
+  facebook_label: 'Facebook',
+  facebook_url: 'https://www.facebook.com/OsloAMS',
+  instagram_label: 'Instagram',
+  instagram_url: '#'
+};
+
+const DEFAULT_MERCH = {
+  title: 'OAMS-Merch!',
+  text: 'Vil du sikre deg OAMS-klær og effekter? Send inn en forespørsel via vårt merch-skjema, så sjekker materialansvarlig lagerstatus og tar kontakt med deg om tilgjengelighet og hvor det kan hentes.',
+  button_label: 'Bestill merch (Gå til skjema)',
+  button_url: '#',
+  list_title: 'Dette fyller du ut i merch-skjemaet:',
   items: [
-    {
-      title: 'Kommende arrangementer',
-      description: 'Datoer og påmeldingslenker for kommende kurs og temakvelder publiseres fortløpende på vår offisielle Facebook-side.',
-      button_label: 'Følg oss på Facebook',
-      url: 'https://www.facebook.com/OsloAMS',
-      icon: 'calendar',
-      visible: true
-    },
-    {
-      title: 'Bli medlem i OAMS',
-      description: 'Livstidsmedlemskap koster 200 kr (Vipps til OAMS, merk med navn og kull) og gir rabatterte kurspriser og tilgang til instruktørkurs.',
-      button_label: 'Registrer medlemskap',
-      url: 'mailto:post@oams.no?subject=Nytt%20medlemskap%20OAMS',
-      icon: 'user-plus',
-      visible: true
-    },
-    {
-      title: 'Book et førstehjelpskurs',
-      description: 'Vi holder skreddersydde, praktiske førstehjelps- og HLR-kurs for bedrifter, idrettslag, skoler og organisasjoner.',
-      button_label: 'Send bookingforespørsel',
-      url: 'mailto:post@oams.no?subject=Foresp%C3%B8rsel%20om%20booking',
-      icon: 'mail',
-      visible: true
-    }
+    'Hvilket plagg du ønsker',
+    'Hvilken størrelse og farge',
+    'Ønsket antall',
+    'Kontaktinfo (for svar om ja/nei og avtale om henting)'
   ]
 };
+
+const CHECK_ICON_SVG = `
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12" />
+  </svg>
+`;
 
 function sanitizeHref(rawHref) {
   if (!rawHref) return '#';
@@ -120,11 +83,26 @@ function sanitizeHref(rawHref) {
     trimmed.startsWith('http://') ||
     trimmed.startsWith('mailto:') ||
     trimmed.startsWith('tel:') ||
-    trimmed.startsWith('#')
+    trimmed.startsWith('#') ||
+    /^[a-zA-Z0-9_./-]+(\?.*)?(#.*)?$/.test(trimmed)
   ) {
     return trimmed;
   }
   return '#';
+}
+
+function applyLinkHref(selector, rawUrl) {
+  const linkEl = document.querySelector(selector);
+  if (!linkEl) return;
+  const safeUrl = sanitizeHref(rawUrl);
+  linkEl.setAttribute('href', safeUrl);
+  if (safeUrl.startsWith('http://') || safeUrl.startsWith('https://')) {
+    linkEl.setAttribute('target', '_blank');
+    linkEl.setAttribute('rel', 'noopener noreferrer');
+  } else {
+    linkEl.removeAttribute('target');
+    linkEl.removeAttribute('rel');
+  }
 }
 
 function setMultilineText(el, text) {
@@ -137,29 +115,6 @@ function setMultilineText(el, text) {
   });
 }
 
-function renderParagraphsWithBreaks(container, bodyOrParagraphs) {
-  if (!container) return;
-  container.innerHTML = '';
-
-  let blocks = [];
-  if (typeof bodyOrParagraphs === 'string' && bodyOrParagraphs.trim()) {
-    blocks = bodyOrParagraphs.replace(/\r\n/g, '\n').split(/\n\s*\n/);
-  } else if (Array.isArray(bodyOrParagraphs)) {
-    blocks = bodyOrParagraphs.flatMap(item =>
-      String(item || '').replace(/\r\n/g, '\n').split(/\n\s*\n/)
-    );
-  }
-
-  blocks
-    .map(b => b.trim())
-    .filter(Boolean)
-    .forEach(block => {
-      const p = document.createElement('p');
-      setMultilineText(p, block);
-      container.appendChild(p);
-    });
-}
-
 async function initKurs() {
   try {
     const supabase = await getSupabase();
@@ -168,7 +123,7 @@ async function initKurs() {
 
     if (supabase) {
       const [sectionsRes, coursesRes] = await Promise.all([
-        supabase.from('site_sections').select('key, content').eq('page', 'kurs'),
+        supabase.from('site_sections').select('key, content').in('page', ['student', 'kurs']),
         supabase.from('courses').select('*').eq('visible', true).order('sort_order', { ascending: true })
       ]);
 
@@ -183,7 +138,7 @@ async function initKurs() {
     const activeCourses = coursesList || DEFAULT_COURSES;
 
     // 1. Hero (på medisinstudent.html)
-    const hero = sectionsMap.get('kurs.hero') || DEFAULT_HERO;
+    const hero = sectionsMap.get('student.hero') || sectionsMap.get('kurs.hero') || DEFAULT_HERO;
     if (hero) {
       const sub = document.querySelector('[data-cms="hero-subheading"]');
       const title = document.querySelector('[data-cms="hero-title"]');
@@ -191,39 +146,35 @@ async function initKurs() {
       if (title && hero.title) title.textContent = hero.title;
     }
 
-    // 2. Introduksjon (på medisinstudent.html)
-    const intro = sectionsMap.get('kurs.intro') || DEFAULT_INTRO;
-    if (intro) {
-      const titleEl = document.querySelector('[data-cms="intro-title"]');
-      const leadEl = document.querySelector('[data-cms="intro-lead"]');
-      const paragraphsContainer = document.querySelector('[data-cms="intro-paragraphs"]');
+    // 2. Medlemskap & Vipps (på medisinstudent.html)
+    const medlemskap = sectionsMap.get('student.medlemskap') || sectionsMap.get('kurs.medlemskap') || DEFAULT_MEDLEMSKAP;
+    if (medlemskap) {
+      const mTitle = document.querySelector('[data-cms="medlem-title"]');
+      const mLead = document.querySelector('[data-cms="medlem-lead"]');
+      const mBtnLabel = document.querySelector('[data-cms="medlem-btn-label"]');
 
-      if (titleEl && intro.title) titleEl.textContent = intro.title;
-      if (leadEl && intro.lead) leadEl.textContent = intro.lead;
-      if (paragraphsContainer) {
-        const source = typeof intro.body === 'string' && intro.body.trim()
-          ? intro.body
-          : intro.paragraphs;
-        renderParagraphsWithBreaks(paragraphsContainer, source);
-      }
+      if (mTitle && medlemskap.title) mTitle.textContent = medlemskap.title;
+      if (mLead && medlemskap.lead) setMultilineText(mLead, medlemskap.lead);
+      if (mBtnLabel && medlemskap.button_label) mBtnLabel.textContent = medlemskap.button_label;
+      applyLinkHref('[data-cms-href="medlem-btn-url"]', medlemskap.button_url || DEFAULT_MEDLEMSKAP.button_url);
     }
 
-    // 3. Kursportefølje overskrift (på medisinstudent.html)
-    const portefolje = sectionsMap.get('kurs.portefolje_intro') || DEFAULT_PORTEFOLJE;
+    // 3. Kursoversikt overskrift (på medisinstudent.html)
+    const portefolje = sectionsMap.get('student.portefolje_intro') || sectionsMap.get('kurs.portefolje_intro') || DEFAULT_PORTEFOLJE;
     if (portefolje) {
       const pTitle = document.querySelector('[data-cms="portefolje-title"]');
       const pText = document.querySelector('[data-cms="portefolje-text"]');
       if (pTitle && portefolje.title) pTitle.textContent = portefolje.title;
-      if (pText && portefolje.text) pText.textContent = portefolje.text;
+      if (pText && portefolje.text) setMultilineText(pText, portefolje.text);
     }
 
-    // 4. Detaljerte kurskort på medisinstudent.html ([data-cms-list="courses"])
+    // 4. Kurskort på medisinstudent.html ([data-cms-list="courses"])
     const coursesContainer = document.querySelector('[data-cms-list="courses"]');
     if (coursesContainer) {
       coursesContainer.innerHTML = '';
       activeCourses.forEach(course => {
-        const card = document.createElement('article');
-        card.className = 'kurs-detail-card';
+        const card = document.createElement('div');
+        card.className = 'short-course-card';
         if (course.slug) {
           card.id = String(course.slug).trim().replace(/[^a-zA-Z0-9_-]/g, '');
         }
@@ -232,16 +183,16 @@ async function initKurs() {
 
         card.innerHTML = `
           <div>
-            <h3 class="role-title"></h3>
-            <p class="kurs-detail-desc"></p>
+            <h3 class="short-course-title"></h3>
+            <p class="short-course-desc"></p>
           </div>
-          ${hasTarget ? '<div class="kurs-detail-meta">Målgruppe: <span class="kurs-target-text"></span></div>' : ''}
+          ${hasTarget ? '<div class="short-course-target">Målgruppe: <span class="short-course-target-text"></span></div>' : ''}
         `;
 
-        card.querySelector('.role-title').textContent = course.title || '';
-        setMultilineText(card.querySelector('.kurs-detail-desc'), course.description || '');
+        card.querySelector('.short-course-title').textContent = course.title || '';
+        setMultilineText(card.querySelector('.short-course-desc'), course.description || '');
         if (hasTarget) {
-          card.querySelector('.kurs-target-text').textContent = course.target_group.trim();
+          card.querySelector('.short-course-target-text').textContent = course.target_group.trim();
         }
 
         coursesContainer.appendChild(card);
@@ -268,43 +219,51 @@ async function initKurs() {
       });
     }
 
-    // 6. Handlingskort nederst på medisinstudent.html ([data-cms-list="course-actions"])
-    const actions = sectionsMap.get('kurs.actions') || DEFAULT_ACTIONS;
-    if (actions) {
-      const aTitle = document.querySelector('[data-cms="actions-title"]');
-      const aSub = document.querySelector('[data-cms="actions-subtitle"]');
-      if (aTitle && actions.title) aTitle.textContent = actions.title;
-      if (aSub && actions.subtitle) aSub.textContent = actions.subtitle;
+    // 6. SoMe-boks (på medisinstudent.html)
+    const some = sectionsMap.get('student.some') || sectionsMap.get('kurs.some') || DEFAULT_SOME;
+    if (some) {
+      const sTitle = document.querySelector('[data-cms="some-title"]');
+      const sText = document.querySelector('[data-cms="some-text"]');
+      const fbLabel = document.querySelector('[data-cms="some-facebook-label"]');
+      const igLabel = document.querySelector('[data-cms="some-instagram-label"]');
 
-      const actionsContainer = document.querySelector('[data-cms-list="course-actions"]');
-      if (actionsContainer && Array.isArray(actions.items)) {
-        const visibleActions = actions.items.filter(item => item.visible !== false);
-        actionsContainer.innerHTML = '';
+      if (sTitle && some.title) sTitle.textContent = some.title;
+      if (sText && some.text) setMultilineText(sText, some.text);
+      if (fbLabel && some.facebook_label) fbLabel.textContent = some.facebook_label;
+      if (igLabel && some.instagram_label) igLabel.textContent = some.instagram_label;
 
-        visibleActions.forEach(item => {
-          const card = document.createElement('div');
-          card.className = 'doc-card';
+      applyLinkHref('[data-cms-href="some-facebook-url"]', some.facebook_url || DEFAULT_SOME.facebook_url);
+      applyLinkHref('[data-cms-href="some-instagram-url"]', some.instagram_url || DEFAULT_SOME.instagram_url);
+    }
 
-          const iconSvg = ACTION_ICONS[item.icon] || ACTION_ICONS.calendar;
-          const safeUrl = sanitizeHref(item.url);
-          const isExternal = safeUrl.startsWith('http');
+    // 7. Merch-seksjon (på medisinstudent.html)
+    const merch = sectionsMap.get('student.merch') || sectionsMap.get('kurs.merch') || DEFAULT_MERCH;
+    if (merch) {
+      const mTitle = document.querySelector('[data-cms="merch-title"]');
+      const mText = document.querySelector('[data-cms="merch-text"]');
+      const mBtnLabel = document.querySelector('[data-cms="merch-btn-label"]');
+      const mListTitle = document.querySelector('[data-cms="merch-list-title"]');
+      const mItemsContainer = document.querySelector('[data-cms-list="merch-items"]');
 
-          card.innerHTML = `
-            <div>
-              <div class="doc-icon-wrap" aria-hidden="true">${iconSvg}</div>
-              <h3 class="doc-card-title"></h3>
-              <p class="doc-card-desc"></p>
-            </div>
-            <a href="${safeUrl}" ${isExternal ? 'target="_blank" rel="noopener noreferrer"' : ''} class="btn btn-outline-red">
-              <span class="action-btn-text"></span>
-            </a>
-          `;
+      if (mTitle && merch.title) mTitle.textContent = merch.title;
+      if (mText && merch.text) setMultilineText(mText, merch.text);
+      if (mBtnLabel && merch.button_label) mBtnLabel.textContent = merch.button_label;
+      if (mListTitle && merch.list_title) mListTitle.textContent = merch.list_title;
 
-          card.querySelector('.doc-card-title').textContent = item.title || '';
-          card.querySelector('.doc-card-desc').textContent = item.description || '';
-          card.querySelector('.action-btn-text').textContent = item.button_label || 'Les mer';
+      applyLinkHref('[data-cms-href="merch-btn-url"]', merch.button_url || DEFAULT_MERCH.button_url);
 
-          actionsContainer.appendChild(card);
+      if (mItemsContainer) {
+        const items = Array.isArray(merch.items) && merch.items.length > 0
+          ? merch.items
+          : DEFAULT_MERCH.items;
+        mItemsContainer.innerHTML = '';
+        items.forEach(itemText => {
+          const trimmed = String(itemText || '').trim();
+          if (!trimmed) return;
+          const li = document.createElement('li');
+          li.innerHTML = `${CHECK_ICON_SVG}<span class="merch-item-text"></span>`;
+          li.querySelector('.merch-item-text').textContent = trimmed;
+          mItemsContainer.appendChild(li);
         });
       }
     }
@@ -319,4 +278,3 @@ if (document.readyState === 'loading') {
 } else {
   initKurs();
 }
-

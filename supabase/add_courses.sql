@@ -46,20 +46,20 @@ create policy "Admin kan slette kurs"
   on public.courses for delete
   using (public.is_admin());
 
--- 3. Seed site_sections for kurs.html
+-- 3. Seed site_sections for medisinstudent.html
 insert into public.site_sections (key, page, content)
 values
   (
-    'kurs.hero',
-    'kurs',
+    'student.hero',
+    'student',
     '{
       "subheading": "Praktisk akuttmedisin og simulering",
       "title": "Våre Kurs"
     }'::jsonb
   ),
   (
-    'kurs.intro',
-    'kurs',
+    'student.intro',
+    'student',
     '{
       "title": "Lær akuttmedisin i praksis",
       "lead": "OAMS arrangerer praktiske kurs, ferdighetstrening og simuleringer for medisinstudenter og eksterne gjennom hele studieåret.",
@@ -70,16 +70,16 @@ values
     }'::jsonb
   ),
   (
-    'kurs.portefolje_intro',
-    'kurs',
+    'student.portefolje_intro',
+    'student',
     '{
       "title": "Kursportefølje",
       "text": "Her finner du en oversikt over alle våre faste kurs, workshops og faglige arrangementer."
     }'::jsonb
   ),
   (
-    'kurs.actions',
-    'kurs',
+    'student.actions',
+    'student',
     '{
       "title": "Påmelding, medlemskap og booking",
       "subtitle": "Slik melder du deg på kommende kurs, blir medlem i OAMS eller bestiller et eksternt førstehjelpskurs.",
