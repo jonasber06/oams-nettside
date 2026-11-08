@@ -60,7 +60,6 @@ const DEFAULT_MERCH = {
   text: 'Vil du sikre deg OAMS-klær og effekter? Send inn en forespørsel via vårt merch-skjema, så sjekker materialansvarlig lagerstatus og tar kontakt med deg om tilgjengelighet og hvor det kan hentes.',
   button_label: 'Bestill merch (Gå til skjema)',
   button_url: '#',
-  note: 'Forespørselen sendes på e-post til materialansvarlig',
   list_title: 'Dette fyller du ut i merch-skjemaet:',
   items: [
     'Hvilket plagg du ønsker',
@@ -124,7 +123,7 @@ async function initKurs() {
 
     if (supabase) {
       const [sectionsRes, coursesRes] = await Promise.all([
-        supabase.from('site_sections').select('key, content').eq('page', 'kurs'),
+        supabase.from('site_sections').select('key, content').in('page', ['student', 'kurs']),
         supabase.from('courses').select('*').eq('visible', true).order('sort_order', { ascending: true })
       ]);
 
@@ -139,7 +138,7 @@ async function initKurs() {
     const activeCourses = coursesList || DEFAULT_COURSES;
 
     // 1. Hero (på medisinstudent.html)
-    const hero = sectionsMap.get('kurs.hero') || DEFAULT_HERO;
+    const hero = sectionsMap.get('student.hero') || sectionsMap.get('kurs.hero') || DEFAULT_HERO;
     if (hero) {
       const sub = document.querySelector('[data-cms="hero-subheading"]');
       const title = document.querySelector('[data-cms="hero-title"]');
@@ -148,7 +147,7 @@ async function initKurs() {
     }
 
     // 2. Medlemskap & Vipps (på medisinstudent.html)
-    const medlemskap = sectionsMap.get('kurs.medlemskap') || DEFAULT_MEDLEMSKAP;
+    const medlemskap = sectionsMap.get('student.medlemskap') || sectionsMap.get('kurs.medlemskap') || DEFAULT_MEDLEMSKAP;
     if (medlemskap) {
       const mTitle = document.querySelector('[data-cms="medlem-title"]');
       const mLead = document.querySelector('[data-cms="medlem-lead"]');
@@ -161,7 +160,7 @@ async function initKurs() {
     }
 
     // 3. Kursoversikt overskrift (på medisinstudent.html)
-    const portefolje = sectionsMap.get('kurs.portefolje_intro') || DEFAULT_PORTEFOLJE;
+    const portefolje = sectionsMap.get('student.portefolje_intro') || sectionsMap.get('kurs.portefolje_intro') || DEFAULT_PORTEFOLJE;
     if (portefolje) {
       const pTitle = document.querySelector('[data-cms="portefolje-title"]');
       const pText = document.querySelector('[data-cms="portefolje-text"]');
@@ -221,7 +220,7 @@ async function initKurs() {
     }
 
     // 6. SoMe-boks (på medisinstudent.html)
-    const some = sectionsMap.get('kurs.some') || DEFAULT_SOME;
+    const some = sectionsMap.get('student.some') || sectionsMap.get('kurs.some') || DEFAULT_SOME;
     if (some) {
       const sTitle = document.querySelector('[data-cms="some-title"]');
       const sText = document.querySelector('[data-cms="some-text"]');
@@ -238,19 +237,17 @@ async function initKurs() {
     }
 
     // 7. Merch-seksjon (på medisinstudent.html)
-    const merch = sectionsMap.get('kurs.merch') || DEFAULT_MERCH;
+    const merch = sectionsMap.get('student.merch') || sectionsMap.get('kurs.merch') || DEFAULT_MERCH;
     if (merch) {
       const mTitle = document.querySelector('[data-cms="merch-title"]');
       const mText = document.querySelector('[data-cms="merch-text"]');
       const mBtnLabel = document.querySelector('[data-cms="merch-btn-label"]');
-      const mNote = document.querySelector('[data-cms="merch-note"]');
       const mListTitle = document.querySelector('[data-cms="merch-list-title"]');
       const mItemsContainer = document.querySelector('[data-cms-list="merch-items"]');
 
       if (mTitle && merch.title) mTitle.textContent = merch.title;
       if (mText && merch.text) setMultilineText(mText, merch.text);
       if (mBtnLabel && merch.button_label) mBtnLabel.textContent = merch.button_label;
-      if (mNote && merch.note) mNote.textContent = merch.note;
       if (mListTitle && merch.list_title) mListTitle.textContent = merch.list_title;
 
       applyLinkHref('[data-cms-href="merch-btn-url"]', merch.button_url || DEFAULT_MERCH.button_url);

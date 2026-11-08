@@ -40,7 +40,6 @@ const DEFAULT_MERCH = {
   text: 'Vil du sikre deg OAMS-klær og effekter? Send inn en forespørsel via vårt merch-skjema, så sjekker materialansvarlig lagerstatus og tar kontakt med deg om tilgjengelighet og hvor det kan hentes.',
   button_label: 'Bestill merch (Gå til skjema)',
   button_url: '#',
-  note: 'Forespørselen sendes på e-post til materialansvarlig',
   list_title: 'Dette fyller du ut i merch-skjemaet:',
   items: [
     'Hvilket plagg du ønsker',
@@ -101,26 +100,26 @@ if (document.readyState === 'loading') {
 async function loadContent() {
   try {
     const [sectionsRes, coursesRes] = await Promise.all([
-      supabaseClient.from('site_sections').select('key, content').eq('page', 'kurs'),
+      supabaseClient.from('site_sections').select('key, content').in('page', ['student', 'kurs']),
       supabaseClient.from('courses').select('*').order('sort_order', { ascending: true })
     ]);
 
     const map = new Map((sectionsRes.data || []).map(s => [s.key, s.content]));
 
     // 1. Hero
-    const hero = map.get('kurs.hero') || DEFAULT_HERO;
+    const hero = map.get('student.hero') || map.get('kurs.hero') || DEFAULT_HERO;
     document.getElementById('heroSubheading').value = hero.subheading ?? DEFAULT_HERO.subheading;
     document.getElementById('heroTitle').value = hero.title ?? DEFAULT_HERO.title;
 
     // 2. Medlemskap & Vipps
-    const medlemskap = map.get('kurs.medlemskap') || DEFAULT_MEDLEMSKAP;
+    const medlemskap = map.get('student.medlemskap') || map.get('kurs.medlemskap') || DEFAULT_MEDLEMSKAP;
     document.getElementById('medlemTitle').value = medlemskap.title ?? DEFAULT_MEDLEMSKAP.title;
     document.getElementById('medlemLead').value = medlemskap.lead ?? DEFAULT_MEDLEMSKAP.lead;
     document.getElementById('medlemBtnLabel').value = medlemskap.button_label ?? DEFAULT_MEDLEMSKAP.button_label;
     document.getElementById('medlemBtnUrl').value = medlemskap.button_url ?? DEFAULT_MEDLEMSKAP.button_url;
 
     // 3. Kursoversikt-overskrift + Kursliste
-    const portefolje = map.get('kurs.portefolje_intro') || DEFAULT_PORTEFOLJE;
+    const portefolje = map.get('student.portefolje_intro') || map.get('kurs.portefolje_intro') || DEFAULT_PORTEFOLJE;
     document.getElementById('portefoljeTitle').value = portefolje.title ?? DEFAULT_PORTEFOLJE.title;
     document.getElementById('portefoljeText').value = portefolje.text ?? DEFAULT_PORTEFOLJE.text;
 
@@ -141,7 +140,7 @@ async function loadContent() {
     renderCoursesList();
 
     // 4. Sosiale medier (SoMe-boks under kursene)
-    const some = map.get('kurs.some') || DEFAULT_SOME;
+    const some = map.get('student.some') || map.get('kurs.some') || DEFAULT_SOME;
     document.getElementById('someTitle').value = some.title ?? DEFAULT_SOME.title;
     document.getElementById('someText').value = some.text ?? DEFAULT_SOME.text;
     document.getElementById('someFacebookLabel').value = some.facebook_label ?? DEFAULT_SOME.facebook_label;
@@ -150,12 +149,11 @@ async function loadContent() {
     document.getElementById('someInstagramUrl').value = some.instagram_url ?? DEFAULT_SOME.instagram_url;
 
     // 5. OAMS-Merch
-    const merch = map.get('kurs.merch') || DEFAULT_MERCH;
+    const merch = map.get('student.merch') || map.get('kurs.merch') || DEFAULT_MERCH;
     document.getElementById('merchTitle').value = merch.title ?? DEFAULT_MERCH.title;
     document.getElementById('merchText').value = merch.text ?? DEFAULT_MERCH.text;
     document.getElementById('merchBtnLabel').value = merch.button_label ?? DEFAULT_MERCH.button_label;
     document.getElementById('merchBtnUrl').value = merch.button_url ?? DEFAULT_MERCH.button_url;
-    document.getElementById('merchNote').value = merch.note ?? DEFAULT_MERCH.note;
     document.getElementById('merchListTitle').value = merch.list_title ?? DEFAULT_MERCH.list_title;
 
     const merchItemsArr = Array.isArray(merch.items) && merch.items.length > 0
@@ -356,35 +354,34 @@ async function saveAll(e, triggerBtn) {
       text: document.getElementById('merchText').value.replace(/\r\n/g, '\n').trim(),
       button_label: document.getElementById('merchBtnLabel').value.trim(),
       button_url: document.getElementById('merchBtnUrl').value.trim() || '#',
-      note: document.getElementById('merchNote').value.trim(),
       list_title: document.getElementById('merchListTitle').value.trim(),
       items: merchItemsList
     };
 
     const sectionUpserts = [
       supabaseClient.from('site_sections').upsert({
-        key: 'kurs.hero',
-        page: 'kurs',
+        key: 'student.hero',
+        page: 'student',
         content: heroContent
       }, { onConflict: 'key' }),
       supabaseClient.from('site_sections').upsert({
-        key: 'kurs.medlemskap',
-        page: 'kurs',
+        key: 'student.medlemskap',
+        page: 'student',
         content: medlemskapContent
       }, { onConflict: 'key' }),
       supabaseClient.from('site_sections').upsert({
-        key: 'kurs.portefolje_intro',
-        page: 'kurs',
+        key: 'student.portefolje_intro',
+        page: 'student',
         content: portefoljeContent
       }, { onConflict: 'key' }),
       supabaseClient.from('site_sections').upsert({
-        key: 'kurs.some',
-        page: 'kurs',
+        key: 'student.some',
+        page: 'student',
         content: someContent
       }, { onConflict: 'key' }),
       supabaseClient.from('site_sections').upsert({
-        key: 'kurs.merch',
-        page: 'kurs',
+        key: 'student.merch',
+        page: 'student',
         content: merchContent
       }, { onConflict: 'key' })
     ];

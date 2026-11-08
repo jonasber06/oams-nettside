@@ -480,6 +480,88 @@
             </div>
         </section>
 
+        <!-- Section 2.5: Bilde-slideshow (Glimt fra våre kurs og aktiviteter) -->
+        <section class="section section-slideshow" id="bildegalleri">
+            <div class="container">
+                <div class="slideshow-header text-center">
+                    <h2 class="section-title" data-cms="slideshow-title">Glimt fra våre kurs</h2>
+                    <p class="section-text" data-cms="slideshow-subtitle">
+                        Praktisk trening, simulering og livreddende førstehjelp i aksjon.
+                    </p>
+                </div>
+
+                <div class="slideshow-wrapper" id="frontpageSlideshow" aria-roledescription="carousel"
+                    aria-label="Bildegalleri fra OAMS">
+                    <div class="slideshow-viewport">
+                        <div class="slideshow-track" data-cms-list="slideshow-slides">
+                            <!-- Slide 1 -->
+                            <div class="slideshow-slide is-active" role="group" aria-roledescription="slide"
+                                aria-label="Bilde 1 av 4">
+                                <div class="slideshow-media">
+                                    <img src="" alt="" class="slideshow-img">
+                                    <div class="slideshow-placeholder" aria-hidden="true">
+                                        <span>Bilde 1 (styres fra admin-panelet)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slide 2 -->
+                            <div class="slideshow-slide" role="group" aria-roledescription="slide"
+                                aria-label="Bilde 2 av 4">
+                                <div class="slideshow-media">
+                                    <img src="" alt="" class="slideshow-img">
+                                    <div class="slideshow-placeholder" aria-hidden="true">
+                                        <span>Bilde 2 (styres fra admin-panelet)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slide 3 -->
+                            <div class="slideshow-slide" role="group" aria-roledescription="slide"
+                                aria-label="Bilde 3 av 4">
+                                <div class="slideshow-media">
+                                    <img src="" alt="" class="slideshow-img">
+                                    <div class="slideshow-placeholder" aria-hidden="true">
+                                        <span>Bilde 3 (styres fra admin-panelet)</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slide 4 -->
+                            <div class="slideshow-slide" role="group" aria-roledescription="slide"
+                                aria-label="Bilde 4 av 4">
+                                <div class="slideshow-media">
+                                    <img src="" alt="" class="slideshow-img">
+                                    <div class="slideshow-placeholder" aria-hidden="true">
+                                        <span>Bilde 4 (styres fra admin-panelet)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Navigation Arrows -->
+                        <button type="button" class="slideshow-nav slideshow-nav--prev" id="slideshowPrev"
+                            aria-label="Forrige bilde">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                        </button>
+                        <button type="button" class="slideshow-nav slideshow-nav--next" id="slideshowNext"
+                            aria-label="Neste bilde">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Dots / Indicators (genereres dynamisk ut fra antall bilder) -->
+                    <div class="slideshow-dots" id="slideshowDots" role="tablist" aria-label="Velg bilde"></div>
+                </div>
+            </div>
+        </section>
+
         <!-- Section 3: Kontakt oss -->
         <section class="section section-contact" id="kontakt-oss">
             <div class="container text-center">
