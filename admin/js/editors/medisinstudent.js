@@ -3,9 +3,10 @@
 // ==============================================================================
 
 import { requireAdmin } from '../auth-guard.js';
-import { showToast, setButtonSaving } from '../ui.js';
+import { showToast, setButtonSaving, createAutoSaver } from '../ui.js';
 
 let supabaseClient = null;
+let autoSaver = null;
 let currentCourses = [];
 let deletedCourseIds = [];
 
@@ -84,11 +85,22 @@ async function initEditor() {
 
   await loadContent();
 
+  const form = document.getElementById('kursForm');
+  autoSaver = createAutoSaver({
+    form,
+    onSave: ({ isAuto, triggerBtn }) => saveAll({ isAuto, triggerBtn })
+  });
+
   document.getElementById('addCourseBtn').addEventListener('click', addCourseRow);
 
-  const form = document.getElementById('kursForm');
-  form.addEventListener('submit', (e) => saveAll(e, document.getElementById('saveBottomBtn')));
-  document.getElementById('saveTopBtn').addEventListener('click', (e) => saveAll(e, document.getElementById('saveTopBtn')));
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    autoSaver.saveNow(document.getElementById('saveBottomBtn'));
+  });
+  document.getElementById('saveTopBtn').addEventListener('click', (e) => {
+    e.preventDefault();
+    autoSaver.saveNow(document.getElementById('saveTopBtn'));
+  });
 }
 
 if (document.readyState === 'loading') {
@@ -208,6 +220,7 @@ function moveCourse(fromIndex, delta) {
   });
 
   renderCoursesList();
+  autoSaver?.trigger(250);
 }
 
 function renderCoursesList() {
@@ -276,6 +289,7 @@ function renderCoursesList() {
         if (course.id) deletedCourseIds.push(course.id);
         currentCourses.splice(index, 1);
         renderCoursesList();
+        autoSaver?.trigger(100);
       }
     });
 
@@ -295,6 +309,7 @@ function addCourseRow() {
     sort_order: currentCourses.length + 1
   });
   renderCoursesList();
+  autoSaver?.trigger(300);
 
   const lastCard = document.querySelector('#coursesList > .course-editor-card:last-child');
   if (lastCard) {
@@ -309,9 +324,8 @@ function addCourseRow() {
 // LAGRING TIL SUPABASE
 // ==============================================================================
 
-async function saveAll(e, triggerBtn) {
-  if (e) e.preventDefault();
-  setButtonSaving(triggerBtn, true);
+async function saveAll({ isAuto = false, triggerBtn = null } = {}) {
+  if (triggerBtn) setButtonSaving(triggerBtn, true);
 
   syncCoursesFromDom();
 
@@ -435,15 +449,18 @@ async function saveAll(e, triggerBtn) {
       }
     }
 
-    setButtonSaving(triggerBtn, false, 'Lagret ✓');
-    showToast('Endringene er lagret og publisert på nettsiden! ✓', 'success');
-
-    await loadContent();
+    if (triggerBtn) setButtonSaving(triggerBtn, false, 'Lagret ✓');
+    if (!isAuto) {
+      showToast('Endringene er lagret og publisert på nettsiden! ✓', 'success');
+    }
 
   } catch (err) {
     console.error('Lagringsfeil:', err);
-    setButtonSaving(triggerBtn, false, 'Feil ved lagring');
-    showToast(err.message || 'Det oppstod en feil under lagring. Sjekk konsollen.', 'error');
+    if (triggerBtn) setButtonSaving(triggerBtn, false, 'Feil ved lagring');
+    if (!isAuto) {
+      showToast(err.message || 'Det oppstod en feil under lagring. Sjekk konsollen.', 'error');
+    }
+    throw err;
   }
 }
 

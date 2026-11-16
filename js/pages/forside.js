@@ -334,3 +334,4 @@ if (document.readyState === 'loading') {
 } else {
   initForside();
 }
+

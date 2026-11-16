@@ -3,9 +3,10 @@
 // ==============================================================================
 
 import { requireAdmin } from '../auth-guard.js';
-import { showToast, setButtonSaving } from '../ui.js';
+import { showToast, setButtonSaving, createAutoSaver } from '../ui.js';
 
 let supabaseClient = null;
+let autoSaver = null;
 let currentContactItems = [];
 let currentSocials = [];
 
@@ -71,15 +72,26 @@ async function initEditor() {
 
   await loadContent();
 
-  document.getElementById('addContactItemBtn').addEventListener('click', addContactItemRow);
-  document.getElementById('addSocialBtn').addEventListener('click', addSocialRow);
-
   const form = document.getElementById('kontaktOssForm');
   const saveTopBtn = document.getElementById('saveTopBtn');
   const saveBottomBtn = document.getElementById('saveBottomBtn');
 
-  form.addEventListener('submit', (e) => saveAll(e, saveBottomBtn));
-  saveTopBtn.addEventListener('click', (e) => saveAll(e, saveTopBtn));
+  autoSaver = createAutoSaver({
+    form,
+    onSave: ({ isAuto, triggerBtn }) => saveAll({ isAuto, triggerBtn })
+  });
+
+  document.getElementById('addContactItemBtn').addEventListener('click', addContactItemRow);
+  document.getElementById('addSocialBtn').addEventListener('click', addSocialRow);
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    autoSaver.saveNow(saveBottomBtn);
+  });
+  saveTopBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    autoSaver.saveNow(saveTopBtn);
+  });
 }
 
 if (document.readyState === 'loading') {
@@ -158,6 +170,7 @@ function moveContactItem(fromIndex, delta) {
   const [moved] = currentContactItems.splice(fromIndex, 1);
   currentContactItems.splice(toIndex, 0, moved);
   renderContactItemsList();
+  autoSaver?.trigger(250);
 }
 
 function renderContactItemsList() {
@@ -238,6 +251,7 @@ function renderContactItemsList() {
       if (confirm(`Er du sikker på at du vil slette "${item.title || 'dette kontaktpunktet'}"?`)) {
         currentContactItems.splice(index, 1);
         renderContactItemsList();
+        autoSaver?.trigger(100);
       }
     });
 
@@ -256,6 +270,7 @@ function addContactItemRow() {
     visible: true
   });
   renderContactItemsList();
+  autoSaver?.trigger(300);
 
   const lastCard = document.querySelector('#contactItemsList > .contact-editor-card:last-child');
   if (lastCard) {
@@ -290,6 +305,7 @@ function moveSocial(fromIndex, delta) {
   const [moved] = currentSocials.splice(fromIndex, 1);
   currentSocials.splice(toIndex, 0, moved);
   renderSocialsList();
+  autoSaver?.trigger(250);
 }
 
 function renderSocialsList() {
@@ -362,6 +378,7 @@ function renderSocialsList() {
       if (confirm(`Er du sikker på at du vil fjerne "${soc.label || 'denne kanalen'}"?`)) {
         currentSocials.splice(index, 1);
         renderSocialsList();
+        autoSaver?.trigger(100);
       }
     });
 
@@ -379,6 +396,7 @@ function addSocialRow() {
     visible: true
   });
   renderSocialsList();
+  autoSaver?.trigger(300);
 
   const lastCard = document.querySelector('#socialsList > .social-editor-card:last-child');
   if (lastCard) {
@@ -393,9 +411,8 @@ function addSocialRow() {
 // LAGRING TIL SUPABASE
 // ==============================================================================
 
-async function saveAll(e, triggerBtn) {
-  if (e) e.preventDefault();
-  setButtonSaving(triggerBtn, true);
+async function saveAll({ isAuto = false, triggerBtn = null } = {}) {
+  if (triggerBtn) setButtonSaving(triggerBtn, true);
 
   syncContactItemsFromDom();
   syncSocialsFromDom();
@@ -454,12 +471,17 @@ async function saveAll(e, triggerBtn) {
       if (res.error) throw res.error;
     }
 
-    showToast('Endringene er lagret og publisert!', 'success');
+    if (triggerBtn) setButtonSaving(triggerBtn, false, 'Lagret ✓');
+    if (!isAuto) {
+      showToast('Endringene er lagret og publisert!', 'success');
+    }
   } catch (err) {
     console.error('Feil ved lagring av Kontakt oss:', err);
-    showToast(err.message || 'Kunne ikke lagre endringene. Sjekk konsollen.', 'error');
-  } finally {
-    setButtonSaving(triggerBtn, false);
+    if (triggerBtn) setButtonSaving(triggerBtn, false, 'Feil ved lagring');
+    if (!isAuto) {
+      showToast(err.message || 'Kunne ikke lagre endringene. Sjekk konsollen.', 'error');
+    }
+    throw err;
   }
 }
 

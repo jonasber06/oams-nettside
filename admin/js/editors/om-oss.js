@@ -3,9 +3,10 @@
 // ==============================================================================
 
 import { requireAdmin } from '../auth-guard.js';
-import { showToast, setButtonSaving } from '../ui.js';
+import { showToast, setButtonSaving, createAutoSaver } from '../ui.js';
 
 let supabaseClient = null;
+let autoSaver = null;
 let currentRoles = [];
 let currentDocs = [];
 let deletedRoleIds = [];
@@ -27,13 +28,24 @@ async function initEditor() {
   // Last data fra databasen
   await loadContent();
 
+  const form = document.getElementById('omOssForm');
+  autoSaver = createAutoSaver({
+    form,
+    onSave: ({ isAuto, triggerBtn }) => saveAll({ isAuto, triggerBtn })
+  });
+
   // Hendelseslyttere
   document.getElementById('addRoleBtn').addEventListener('click', addRoleRow);
   document.getElementById('addDocBtn').addEventListener('click', addDocRow);
 
-  const form = document.getElementById('omOssForm');
-  form.addEventListener('submit', (e) => saveAll(e, document.getElementById('saveBottomBtn')));
-  document.getElementById('saveTopBtn').addEventListener('click', (e) => saveAll(e, document.getElementById('saveTopBtn')));
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    autoSaver.saveNow(document.getElementById('saveBottomBtn'));
+  });
+  document.getElementById('saveTopBtn').addEventListener('click', (e) => {
+    e.preventDefault();
+    autoSaver.saveNow(document.getElementById('saveTopBtn'));
+  });
 }
 
 if (document.readyState === 'loading') {
@@ -251,6 +263,7 @@ function renderRolesList() {
 
         draggedRoleIndex = null;
         renderRolesList();
+        autoSaver?.trigger(250);
       });
     }
 
@@ -261,6 +274,7 @@ function renderRolesList() {
         if (role.id) deletedRoleIds.push(role.id);
         currentRoles.splice(index, 1);
         renderRolesList();
+        autoSaver?.trigger(100);
       }
     });
 
@@ -275,7 +289,8 @@ function renderRolesList() {
         syncRolesFromDom();
         role.image_url = null;
         renderRolesList();
-        showToast('Bilde fjernet fra vervet. Husk å lagre endringene.', 'success');
+        autoSaver?.trigger(100);
+        showToast('Bilde fjernet og lagret automatisk.', 'success');
       });
     }
 
@@ -317,7 +332,8 @@ function renderRolesList() {
         syncRolesFromDom();
         role.image_url = publicUrlData.publicUrl;
         renderRolesList();
-        showToast(`Bilde lastet opp for ${role.title || 'vervet'}! Husk å lagre alle endringer.`, 'success');
+        autoSaver?.trigger(100);
+        showToast(`Bilde lastet opp og lagret automatisk for ${role.title || 'vervet'}! ✓`, 'success');
       } catch (err) {
         console.error('Feil under bildeopplasting:', err);
         showToast(err.message || 'Feil ved opplasting av bilde.', 'error');
@@ -343,6 +359,7 @@ function moveRole(fromIndex, delta) {
   });
 
   renderRolesList();
+  autoSaver?.trigger(250);
 }
 
 function addRoleRow() {
@@ -357,6 +374,7 @@ function addRoleRow() {
     sort_order: currentRoles.length + 1
   });
   renderRolesList();
+  autoSaver?.trigger(300);
 
   const lastRow = document.querySelector('#rolesList .admin-item-row:last-child');
   if (lastRow) {
@@ -450,6 +468,7 @@ function renderDocsList() {
         if (doc.id) deletedDocIds.push(doc.id);
         currentDocs.splice(index, 1);
         renderDocsList();
+        autoSaver?.trigger(100);
       }
     });
 
@@ -470,6 +489,7 @@ function addDocRow() {
     sort_order: currentDocs.length + 1
   });
   renderDocsList();
+  autoSaver?.trigger(300);
 
   const lastCard = document.querySelector('#docsList > div:last-child');
   if (lastCard) {
@@ -480,9 +500,8 @@ function addDocRow() {
   }
 }
 
-async function saveAll(e, triggerBtn) {
-  if (e) e.preventDefault();
-  setButtonSaving(triggerBtn, true);
+async function saveAll({ isAuto = false, triggerBtn = null } = {}) {
+  if (triggerBtn) setButtonSaving(triggerBtn, true);
 
   // Synkroniser alle felter fra DOM-en
   syncRolesFromDom();
@@ -537,6 +556,13 @@ async function saveAll(e, triggerBtn) {
     }
 
     // 3. Lagre gjenværende roller (hver rad har garantert en gyldig UUID)
+    for (const role of currentRoles) {
+      const trimmedEmail = role.email ? role.email.trim() : '';
+      if (trimmedEmail && !trimmedEmail.toLowerCase().endsWith('@oams.no')) {
+        throw new Error('E-post må slutte på @oams.no');
+      }
+    }
+
     const rolesToUpsert = currentRoles.map((role, idx) => {
       const roleId = (role.id && role.id.length > 10) ? role.id : crypto.randomUUID();
       role.id = roleId;
@@ -613,16 +639,18 @@ async function saveAll(e, triggerBtn) {
       }
     }
 
-    setButtonSaving(triggerBtn, false, 'Lagret ✓');
-    showToast('Endringene er lagret og publisert på nettsiden! ✓', 'success');
-
-    // Last inn ferske data
-    await loadContent();
+    if (triggerBtn) setButtonSaving(triggerBtn, false, 'Lagret ✓');
+    if (!isAuto) {
+      showToast('Endringene er lagret og publisert på nettsiden! ✓', 'success');
+    }
 
   } catch (err) {
     console.error('Lagringsfeil:', err);
-    setButtonSaving(triggerBtn, false, 'Feil ved lagring');
-    showToast(err.message || 'Det oppstod en feil under lagring. Sjekk konsollen.', 'error');
+    if (triggerBtn) setButtonSaving(triggerBtn, false, 'Feil ved lagring');
+    if (!isAuto) {
+      showToast(err.message || 'Det oppstod en feil under lagring. Sjekk konsollen.', 'error');
+    }
+    throw err;
   }
 }
 
