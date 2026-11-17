@@ -191,7 +191,7 @@ a:focus {
 
 .nav-link:hover::after,
 .nav-link:focus-visible::after,
-.nav-item:hover > .nav-link::after,
+.nav-item:hover>.nav-link::after,
 .nav-link.active::after {
   transform: scaleX(1);
 }
@@ -1171,7 +1171,12 @@ a:focus {
   line-height: 1.5;
 }
 
+.doc-card .btn-wrap {
+  width: 50%;
+}
+
 .doc-card .btn {
+  width: 100%;
   text-align: center;
   line-height: 1.4;
   padding: 10px 24px;
@@ -1390,12 +1395,15 @@ a:focus {
     grid-template-columns: 1fr;
     gap: 32px;
   }
+
   .subpage-hero {
     padding: 150px 16px 70px 16px;
   }
+
   .contact-page-card {
     padding: 32px 20px;
   }
+
   .kurs-detail-grid {
     grid-template-columns: 1fr;
   }
@@ -1640,6 +1648,7 @@ a:focus {
 }
 
 @media (max-width: 720px) {
+
   .medlem-hero-card,
   .merch-card {
     padding: 32px 20px;
@@ -1969,8 +1978,8 @@ a:focus {
   margin-bottom: 0;
 }
 
-.form-grid-2 + .form-group,
-.form-grid-2 + .form-grid-2 {
+.form-grid-2+.form-group,
+.form-grid-2+.form-grid-2 {
   margin-top: 20px;
 }
 
@@ -2132,6 +2141,11 @@ select.form-control {
   border: none;
 }
 
+.btn-submit-booking:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
 .form-recipient-note {
   display: inline-flex;
   align-items: center;
@@ -2165,6 +2179,12 @@ select.form-control {
 
 .booking-feedback.visible {
   display: block;
+}
+
+.booking-feedback.error {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #991b1b;
 }
 
 .booking-feedback strong {
@@ -2572,8 +2592,8 @@ select.form-control {
   font-weight: 600;
 }
 
-.slideshow-img[src=""] + .slideshow-placeholder,
-.slideshow-img:not([src]) + .slideshow-placeholder {
+.slideshow-img[src=""]+.slideshow-placeholder,
+.slideshow-img:not([src])+.slideshow-placeholder {
   display: flex;
 }
 

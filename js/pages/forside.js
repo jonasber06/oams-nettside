@@ -191,8 +191,7 @@ async function initForside() {
       const introBtnLinkEl = document.querySelector('[data-cms-href="intro-btn-url"]');
 
       if (introTitleEl && intro.title) introTitleEl.textContent = intro.title;
-      // Bare overskriv brødtekst hvis den er lagret i databasen, slik at fet skrift i statisk HTML beholdes ved standardtekst
-      if (introTextEl && sectionsMap.has('forside.intro') && typeof intro.text === 'string' && intro.text.trim()) {
+      if (introTextEl && typeof intro.text === 'string' && intro.text.trim()) {
         setMultilineText(introTextEl, intro.text);
       }
       if (introBtnLabelEl && intro.button_label) introBtnLabelEl.textContent = intro.button_label;
@@ -220,13 +219,17 @@ async function initForside() {
         slideSubEl.style.display = slideshow.subtitle.trim() ? '' : 'none';
       }
 
-      if (Array.isArray(slideshow.items)) {
-        const visibleSlides = slideshow.items
-          .filter(item => item && item.visible !== false)
-          .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
+      const visibleSlides = Array.isArray(slideshow.items)
+        ? slideshow.items
+            .filter(item => item && item.visible !== false)
+            .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
+        : [];
 
-        if (visibleSlides.length > 0 && typeof window.setFrontpageSlideshowImages === 'function') {
+      if (typeof window.setFrontpageSlideshowImages === 'function') {
+        if (visibleSlides.length > 0) {
           window.setFrontpageSlideshowImages(visibleSlides);
+        } else {
+          window.setFrontpageSlideshowImages([{ url: '', caption: 'Bilder styres fra admin-panelet' }]);
         }
       }
     }

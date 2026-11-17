@@ -77,7 +77,7 @@
                     </li>
 
                     <li class="nav-item has-dropdown">
-                        <a href="kontakt_oss.html" class="nav-link active" aria-current="page">
+                        <a href="kontakt_oss.html" class="nav-link">
                             Kontakt oss
                             <svg class="chevron-down" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd"
@@ -166,7 +166,7 @@
                         <div class="bookform-header">
                             <h2 class="section-title">Bestill førstehjelpskurs</h2>
                             <p class="section-text">
-                                Fyll ut skjemaet nedenfor, så tar vår eksternansvarlig kontakt med deg for å skreddersy
+                                Fyll ut skjemaet nedenfor, så tar eksternansvarlig kontakt for å skreddersy
                                 kurset og bekrefte oppdraget.
                             </p>
                         </div>
@@ -360,8 +360,8 @@
 
                                 <div id="bookingFeedback" class="booking-feedback" role="status" aria-live="polite">
                                     <strong>Takk for din forespørsel!</strong>
-                                    E-postklienten din åpnes nå med ferdigutfylt kursforespørsel til eksternansvarlig
-                                    (<code>post@oams.no</code>). Vi tar kontakt så raskt som mulig!
+                                    Forespørselen er nå sendt til OAMS. Vi tar kontakt så raskt som
+                                    mulig!
                                 </div>
                             </div>
 
@@ -427,59 +427,93 @@
             });
 
             if (form) {
-                form.addEventListener('submit', function (e) {
+                const submitBtn = form.querySelector('.btn-submit-booking');
+                const submitLabel = submitBtn ? submitBtn.querySelector('span') : null;
+                const defaultLabelText = submitLabel ? submitLabel.textContent : 'Send forespørsel';
+
+                form.addEventListener('submit', async function (e) {
                     e.preventDefault();
 
                     const data = new FormData(form);
-                    const contactName = data.get('contactName') || '';
-                    const orgNumber = data.get('orgNumber') || '';
-                    const phone = data.get('phone') || '';
-                    const email = data.get('email') || '';
-                    const participantsGroup = data.get('participantsGroup') || '';
-                    const participantsCount = data.get('participantsCount') || '';
-                    const participantsDetails = data.get('participantsDetails') || 'Ingen ekstra kommentar';
-                    const dateFlexibility = data.get('dateFlexibility') || '';
-                    const preferredDate = data.get('preferredDate') || 'Ikke oppgitt';
-                    const dateComment = data.get('dateComment') || '';
-                    const location = data.get('location') || '';
-                    const duration = data.get('duration') || '';
-                    const additionalNotes = data.get('additionalNotes') || 'Ingen';
+                    const contactName = (data.get('contactName') || '').toString().trim();
+                    const orgNumber = (data.get('orgNumber') || '').toString().trim();
+                    const phone = (data.get('phone') || '').toString().trim();
+                    const email = (data.get('email') || '').toString().trim();
+                    const participantsGroup = (data.get('participantsGroup') || '').toString().trim();
+                    const participantsCount = (data.get('participantsCount') || '').toString().trim();
+                    const participantsDetails = (data.get('participantsDetails') || '').toString().trim() || 'Ingen ekstra kommentar';
+                    const dateFlexibility = (data.get('dateFlexibility') || '').toString().trim();
+                    const preferredDate = (data.get('preferredDate') || '').toString().trim() || 'Ikke oppgitt';
+                    const dateComment = (data.get('dateComment') || '').toString().trim();
+                    const location = (data.get('location') || '').toString().trim();
+                    const duration = (data.get('duration') || '').toString().trim();
+                    const additionalNotes = (data.get('additionalNotes') || '').toString().trim() || 'Ingen';
 
-                    const subject = encodeURIComponent(`Kursbooking OAMS – ${contactName} (Org.nr: ${orgNumber})`);
-                    const bodyLines = [
-                        'Hei Eksternansvarlig i OAMS,',
-                        '',
-                        'Vi ønsker å booke et førstehjelpskurs:',
-                        '',
-                        '1. KONTAKT- OG BEDRIFTSINFORMASJON',
-                        `• Kontaktperson: ${contactName}`,
-                        `• Telefonnummer: ${phone}`,
-                        `• E-post: ${email}`,
-                        `• Organisasjonsnummer: ${orgNumber}`,
-                        '',
-                        '2. OM DELTAKERNE',
-                        `• Deltakermasse: ${participantsGroup}`,
-                        `• Antall deltakere: ${participantsCount}`,
-                        `• Mer om deltakerne: ${participantsDetails}`,
-                        '',
-                        '3. TID, STED OG VARIGHET',
-                        `• Dato-type: ${dateFlexibility}`,
-                        `• Ønsket dato: ${preferredDate}`,
-                        `• Tidspunkt / detaljer: ${dateComment}`,
-                        `• Sted: ${location}`,
-                        `• Ønsket varighet: ${duration}`,
-                        `• Annet å legge til: ${additionalNotes}`,
-                        '',
-                        '4. FAKTURERING',
-                        '• Bekreftet: Jeg er inneforstått med at dette oppdraget faktureres.'
-                    ];
+                    const payload = {
+                        'Kontaktperson': contactName,
+                        'Organisasjonsnummer': orgNumber,
+                        'Telefonnummer': phone,
+                        'E-post': email,
+                        'Deltakermasse': participantsGroup,
+                        'Antall deltakere': participantsCount,
+                        'Mer om deltakerne': participantsDetails,
+                        'Dato-type': dateFlexibility,
+                        'Ønsket dato': preferredDate,
+                        'Tidspunkt / detaljer': dateComment,
+                        'Sted': location,
+                        'Ønsket varighet': duration,
+                        'Annet å legge til': additionalNotes,
+                        'Fakturering': 'Bekreftet: Jeg er inneforstått med at dette oppdraget faktureres.',
+                        _subject: `Kursbooking OAMS – ${contactName} (Org.nr: ${orgNumber})`,
+                        _replyto: email,
+                        _template: 'table',
+                        _captcha: 'false'
+                    };
 
                     if (feedback) {
-                        feedback.classList.add('visible');
-                        feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        feedback.classList.remove('visible', 'error');
                     }
 
-                    window.location.href = `mailto:post@oams.no?subject=${subject}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
+                    if (submitBtn) submitBtn.disabled = true;
+                    if (submitLabel) submitLabel.textContent = 'Sender forespørsel...';
+
+                    try {
+                        const response = await fetch('https://formsubmit.co/ajax/jonas.bergersen06@gmail.com', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify(payload)
+                        });
+
+                        const result = await response.json().catch(() => null);
+                        if (!response.ok || (result && (result.success === false || result.success === 'false'))) {
+                            throw new Error(result?.message || 'Kunne ikke sende forespørselen.');
+                        }
+
+                        form.reset();
+                        if (preferredDateLabel) {
+                            preferredDateLabel.textContent = 'Ønsket dato';
+                        }
+
+                        if (feedback) {
+                            feedback.classList.remove('error');
+                            feedback.innerHTML = '<strong>Takk for din forespørsel!</strong>Forespørselen er nå sendt direkte til OAMS. Vi tar kontakt så raskt som mulig!';
+                            feedback.classList.add('visible');
+                            feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }
+                    } catch (err) {
+                        console.error('Feil ved sending av booking-skjema:', err);
+                        if (feedback) {
+                            feedback.classList.add('error', 'visible');
+                            feedback.innerHTML = '<strong>Noe gikk galt under sendingen</strong>Kunne ikke sende forespørselen automatisk akkurat nå. Vennligst prøv igjen, eller bruk e-postknappen nedenfor.';
+                            feedback.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                        }
+                    } finally {
+                        if (submitBtn) submitBtn.disabled = false;
+                        if (submitLabel) submitLabel.textContent = defaultLabelText;
+                    }
                 });
             }
         })();
