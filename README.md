@@ -20,7 +20,6 @@ Offisiell nettside og innebygd innholdssystem (CMS) for **Oslo Akuttmedisinske S
 - **Rediger Om oss (`admin/om-oss.html`)** – Redigering av hero, brødtekst, styreverv (inkl. profilbilder og rekkefølge) og dokumenter.
 - **Rediger Medisinstudent (`admin/medisinstudent.html`)** – Redigering av medlemskap, kursportefølje (`courses`), sosiale medier og merch-boks.
 - **Rediger Kontakt oss (`admin/kontakt-oss.html`)** – Redigering av kontaktpunkter og sosiale medier-kanaler (oppdaterer både `kontakt_oss.html` og kontaktboksen på forsiden).
-- **Brukeradministrasjon (`admin/brukere.html`)** – Administrering og invitering av administratorer via `admin_invites`.
 - **Automatisk lagring (Auto-Save)** – Endringer lagres automatisk til Supabase (`createAutoSaver` i `admin/js/ui.js`) med debounce ved skriving, rask lagring ved valg/flytting/bildeopplasting og sanntids statusindikator øverst i panelet (`Cmd+S` / `Ctrl+S` støttes også for umiddelbar lagring).
 
 ---
