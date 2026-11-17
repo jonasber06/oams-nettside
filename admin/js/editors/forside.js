@@ -196,7 +196,7 @@ function renderSlidesList() {
         </div>
         <div class="form-group">
           <label style="font-size: 0.78rem; color: var(--admin-text-muted); margin-bottom: 4px;">Bildetekst / beskrivelse (valgfritt)</label>
-          <input type="text" class="form-control slide-caption-input" placeholder="F.eks. Fra høstens AMK 1-kurs" value="${escapeHtml(slide.caption || '')}">
+          <input type="text" class="form-control slide-caption-input" value="${escapeHtml(slide.caption || '')}">
         </div>
       </div>
 
