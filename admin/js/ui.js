@@ -151,6 +151,9 @@ export function createAutoSaver({ form, onSave, debounceMs = 1000 }) {
         scheduleSave(350);
       }
     });
+
+    // Aktiver støtte for **fet tekst** (B Fet-knapp, Cmd/Ctrl+B og forhåndsvisning) på alle tekstfelt
+    initBoldFormatting(form);
   }
 
   // Hurtigtast Cmd+S / Ctrl+S for umiddelbar lagring
@@ -187,4 +190,190 @@ export function createAutoSaver({ form, onSave, debounceMs = 1000 }) {
       return executeSave({ isAuto: false, triggerBtn });
     }
   };
+}
+
+// ==============================================================================
+// Global støtte for **fet skrift** i alle tekstfelt i admin-panelet
+// ==============================================================================
+
+function isBoldEligibleField(el) {
+  if (!el) return false;
+  if (el.readOnly || el.disabled) return false;
+  if (el.dataset && el.dataset.noBold === 'true') return false;
+
+  const tag = el.tagName;
+  if (tag !== 'TEXTAREA' && tag !== 'INPUT') return false;
+  if (tag === 'INPUT') {
+    const type = (el.type || 'text').toLowerCase();
+    if (type !== 'text') return false;
+  }
+
+  const meta = `${el.id || ''} ${el.name || ''} ${el.className || ''} ${el.placeholder || ''}`;
+  if (/\b(url|link|href|email|e-post|epost|slug)\b|url$|link$|email$|https?:\/\//i.test(meta)) {
+    return false;
+  }
+  return true;
+}
+
+export function applyBoldToField(field) {
+  if (!field) return;
+  const start = field.selectionStart ?? 0;
+  const end = field.selectionEnd ?? 0;
+  const value = field.value;
+  const selected = value.slice(start, end);
+
+  if (selected) {
+    const replacement = (selected.startsWith('**') && selected.endsWith('**') && selected.length > 4)
+      ? selected.slice(2, -2)
+      : `**${selected}**`;
+    field.value = value.slice(0, start) + replacement + value.slice(end);
+    field.focus();
+    field.setSelectionRange(start, start + replacement.length);
+  } else {
+    const placeholder = '**fet tekst**';
+    field.value = value.slice(0, start) + placeholder + value.slice(end);
+    field.focus();
+    field.setSelectionRange(start + 2, start + placeholder.length - 2);
+  }
+
+  field.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
+function renderInlineBoldPreview(el, rawText) {
+  el.textContent = '';
+  const lines = String(rawText || '').replace(/\r\n/g, '\n').split('\n');
+  lines.forEach((line, lineIdx) => {
+    if (lineIdx > 0) el.appendChild(document.createElement('br'));
+    const parts = line.split(/(\*\*[^*]+\*\*)/g);
+    parts.forEach((part) => {
+      if (!part) return;
+      if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
+        const strong = document.createElement('strong');
+        strong.textContent = part.slice(2, -2);
+        el.appendChild(strong);
+      } else {
+        el.appendChild(document.createTextNode(part));
+      }
+    });
+  });
+}
+
+function syncFieldBoldPreview(field) {
+  if (!isBoldEligibleField(field)) return;
+  // Ikke legg til duplikat forhåndsvisning hvis feltet allerede har egen forhåndsvisning
+  if (field.closest('.practical-item-card')) return;
+
+  const hasBold = /\*\*[^*]+\*\*/.test(field.value || '');
+  let preview = field.nextElementSibling;
+  const isExistingPreview = preview && preview.classList.contains('admin-bold-preview');
+
+  if (!hasBold) {
+    if (isExistingPreview) preview.remove();
+    return;
+  }
+
+  if (!isExistingPreview) {
+    preview = document.createElement('div');
+    preview.className = 'admin-bold-preview';
+    preview.innerHTML = '<span class="admin-bold-preview-label">Forhåndsvisning:</span><span class="admin-bold-preview-content"></span>';
+    field.insertAdjacentElement('afterend', preview);
+  }
+
+  renderInlineBoldPreview(preview.querySelector('.admin-bold-preview-content'), field.value);
+}
+
+function initBoldFormatting(form) {
+  if (!form || form.dataset.boldFormattingInit === 'true') return;
+  form.dataset.boldFormattingInit = 'true';
+
+  let activeField = null;
+
+  // Flytende «B Fet»-knapp som dukker opp øverst til høyre for aktivt tekstfelt
+  let floatBtn = document.getElementById('adminBoldFloatBtn');
+  if (!floatBtn) {
+    floatBtn = document.createElement('button');
+    floatBtn.id = 'adminBoldFloatBtn';
+    floatBtn.type = 'button';
+    floatBtn.className = 'admin-bold-float-btn';
+    floatBtn.title = 'Gjør markert tekst fet (**tekst**) – hurtigtast Cmd/Ctrl+B';
+    floatBtn.innerHTML = '<strong>B</strong> Fet';
+    floatBtn.hidden = true;
+    document.body.appendChild(floatBtn);
+  }
+
+  function positionFloatBtn() {
+    if (!activeField || !document.body.contains(activeField)) {
+      floatBtn.hidden = true;
+      return;
+    }
+    const rect = activeField.getBoundingClientRect();
+    if (rect.width === 0 && rect.height === 0) {
+      floatBtn.hidden = true;
+      return;
+    }
+    floatBtn.hidden = false;
+    const btnWidth = floatBtn.offsetWidth || 62;
+    const top = Math.max(8, rect.top + window.scrollY - 30);
+    const left = Math.max(8, rect.right + window.scrollX - btnWidth);
+    floatBtn.style.top = `${top}px`;
+    floatBtn.style.left = `${left}px`;
+  }
+
+  floatBtn.addEventListener('mousedown', (e) => {
+    // Hindre at tekstmarkeringen i feltet mistes når brukeren trykker på knappen
+    e.preventDefault();
+    if (activeField) {
+      applyBoldToField(activeField);
+      syncFieldBoldPreview(activeField);
+      positionFloatBtn();
+    }
+  });
+
+  form.addEventListener('focusin', (e) => {
+    const target = e.target;
+    if (isBoldEligibleField(target) && !target.closest('.practical-item-card')) {
+      activeField = target;
+      syncFieldBoldPreview(target);
+      positionFloatBtn();
+    } else {
+      activeField = null;
+      floatBtn.hidden = true;
+    }
+  });
+
+  form.addEventListener('focusout', () => {
+    setTimeout(() => {
+      if (document.activeElement !== activeField && document.activeElement !== floatBtn) {
+        activeField = null;
+        floatBtn.hidden = true;
+      }
+    }, 0);
+  });
+
+  form.addEventListener('input', (e) => {
+    if (isBoldEligibleField(e.target)) {
+      syncFieldBoldPreview(e.target);
+      if (e.target === activeField) positionFloatBtn();
+    }
+  });
+
+  // Hurtigtast Cmd+B / Ctrl+B i alle tekstfelt
+  form.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && !e.altKey && e.key.toLowerCase() === 'b') {
+      if (isBoldEligibleField(e.target)) {
+        e.preventDefault();
+        applyBoldToField(e.target);
+        syncFieldBoldPreview(e.target);
+      }
+    }
+  });
+
+  window.addEventListener('scroll', positionFloatBtn, { passive: true });
+  window.addEventListener('resize', positionFloatBtn, { passive: true });
+
+  // Vis forhåndsvisning for felt som allerede har **fet tekst** ved lasting
+  const refreshAllPreviews = () => {
+    form.querySelectorAll('input[type="text"], textarea').forEach(syncFieldBoldPreview);
+  };
+  setTimeout(refreshAllPreviews, 300);
 }

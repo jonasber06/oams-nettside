@@ -4,6 +4,7 @@
 // ==============================================================================
 
 import { getSupabase } from '../supabase-client.js';
+import { renderFormattedText } from '../text-format.js';
 
 const DEFAULT_HERO = {
   subheading: 'Praktisk akuttmedisin, kurs og fellesskap',
@@ -106,13 +107,7 @@ function applyLinkHref(selector, rawUrl) {
 }
 
 function setMultilineText(el, text) {
-  if (!el) return;
-  el.innerHTML = '';
-  const lines = String(text || '').replace(/\r\n/g, '\n').split('\n');
-  lines.forEach((line, idx) => {
-    if (idx > 0) el.appendChild(document.createElement('br'));
-    el.appendChild(document.createTextNode(line));
-  });
+  renderFormattedText(el, text, { multiline: true });
 }
 
 async function initKurs() {
@@ -142,8 +137,8 @@ async function initKurs() {
     if (hero) {
       const sub = document.querySelector('[data-cms="hero-subheading"]');
       const title = document.querySelector('[data-cms="hero-title"]');
-      if (sub && hero.subheading) sub.textContent = hero.subheading;
-      if (title && hero.title) title.textContent = hero.title;
+      if (sub && hero.subheading) renderFormattedText(sub, hero.subheading, { multiline: false });
+      if (title && hero.title) renderFormattedText(title, hero.title, { multiline: false });
     }
 
     // 2. Medlemskap & Vipps (på medisinstudent.html)
@@ -153,9 +148,9 @@ async function initKurs() {
       const mLead = document.querySelector('[data-cms="medlem-lead"]');
       const mBtnLabel = document.querySelector('[data-cms="medlem-btn-label"]');
 
-      if (mTitle && medlemskap.title) mTitle.textContent = medlemskap.title;
+      if (mTitle && medlemskap.title) renderFormattedText(mTitle, medlemskap.title, { multiline: false });
       if (mLead && medlemskap.lead) setMultilineText(mLead, medlemskap.lead);
-      if (mBtnLabel && medlemskap.button_label) mBtnLabel.textContent = medlemskap.button_label;
+      if (mBtnLabel && medlemskap.button_label) renderFormattedText(mBtnLabel, medlemskap.button_label, { multiline: false });
       applyLinkHref('[data-cms-href="medlem-btn-url"]', medlemskap.button_url || DEFAULT_MEDLEMSKAP.button_url);
     }
 
@@ -164,7 +159,7 @@ async function initKurs() {
     if (portefolje) {
       const pTitle = document.querySelector('[data-cms="portefolje-title"]');
       const pText = document.querySelector('[data-cms="portefolje-text"]');
-      if (pTitle && portefolje.title) pTitle.textContent = portefolje.title;
+      if (pTitle && portefolje.title) renderFormattedText(pTitle, portefolje.title, { multiline: false });
       if (pText && portefolje.text) setMultilineText(pText, portefolje.text);
     }
 
@@ -189,10 +184,10 @@ async function initKurs() {
           ${hasTarget ? '<div class="short-course-target">Målgruppe: <span class="short-course-target-text"></span></div>' : ''}
         `;
 
-        card.querySelector('.short-course-title').textContent = course.title || '';
+        renderFormattedText(card.querySelector('.short-course-title'), course.title || '', { multiline: false });
         setMultilineText(card.querySelector('.short-course-desc'), course.description || '');
         if (hasTarget) {
-          card.querySelector('.short-course-target-text').textContent = course.target_group.trim();
+          renderFormattedText(card.querySelector('.short-course-target-text'), course.target_group.trim(), { multiline: false });
         }
 
         coursesContainer.appendChild(card);
@@ -212,7 +207,7 @@ async function initKurs() {
           <p class="course-clean-desc"></p>
         `;
 
-        card.querySelector('.course-clean-title').textContent = course.title || '';
+        renderFormattedText(card.querySelector('.course-clean-title'), course.title || '', { multiline: false });
         setMultilineText(card.querySelector('.course-clean-desc'), course.description || '');
 
         indexCoursesContainer.appendChild(card);
@@ -227,10 +222,10 @@ async function initKurs() {
       const fbLabel = document.querySelector('[data-cms="some-facebook-label"]');
       const igLabel = document.querySelector('[data-cms="some-instagram-label"]');
 
-      if (sTitle && some.title) sTitle.textContent = some.title;
+      if (sTitle && some.title) renderFormattedText(sTitle, some.title, { multiline: false });
       if (sText && some.text) setMultilineText(sText, some.text);
-      if (fbLabel && some.facebook_label) fbLabel.textContent = some.facebook_label;
-      if (igLabel && some.instagram_label) igLabel.textContent = some.instagram_label;
+      if (fbLabel && some.facebook_label) renderFormattedText(fbLabel, some.facebook_label, { multiline: false });
+      if (igLabel && some.instagram_label) renderFormattedText(igLabel, some.instagram_label, { multiline: false });
 
       applyLinkHref('[data-cms-href="some-facebook-url"]', some.facebook_url || DEFAULT_SOME.facebook_url);
       applyLinkHref('[data-cms-href="some-instagram-url"]', some.instagram_url || DEFAULT_SOME.instagram_url);
@@ -245,10 +240,10 @@ async function initKurs() {
       const mListTitle = document.querySelector('[data-cms="merch-list-title"]');
       const mItemsContainer = document.querySelector('[data-cms-list="merch-items"]');
 
-      if (mTitle && merch.title) mTitle.textContent = merch.title;
+      if (mTitle && merch.title) renderFormattedText(mTitle, merch.title, { multiline: false });
       if (mText && merch.text) setMultilineText(mText, merch.text);
-      if (mBtnLabel && merch.button_label) mBtnLabel.textContent = merch.button_label;
-      if (mListTitle && merch.list_title) mListTitle.textContent = merch.list_title;
+      if (mBtnLabel && merch.button_label) renderFormattedText(mBtnLabel, merch.button_label, { multiline: false });
+      if (mListTitle && merch.list_title) renderFormattedText(mListTitle, merch.list_title, { multiline: false });
 
       const merchBtnUrl = merch.button_url && String(merch.button_url).trim() !== '' && String(merch.button_url).trim() !== '#'
         ? merch.button_url
@@ -265,7 +260,7 @@ async function initKurs() {
           if (!trimmed) return;
           const li = document.createElement('li');
           li.innerHTML = `${CHECK_ICON_SVG}<span class="merch-item-text"></span>`;
-          li.querySelector('.merch-item-text').textContent = trimmed;
+          renderFormattedText(li.querySelector('.merch-item-text'), trimmed, { multiline: false });
           mItemsContainer.appendChild(li);
         });
       }

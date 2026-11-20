@@ -256,7 +256,17 @@ function setFrontpageSlideshowImages(items) {
     if (caption && url) {
       const capEl = document.createElement('div');
       capEl.className = 'slideshow-caption';
-      capEl.textContent = caption;
+      const parts = String(caption).split(/(\*\*[^*]+\*\*)/g);
+      parts.forEach((part) => {
+        if (!part) return;
+        if (part.startsWith('**') && part.endsWith('**') && part.length > 4) {
+          const strong = document.createElement('strong');
+          strong.textContent = part.slice(2, -2);
+          capEl.appendChild(strong);
+        } else {
+          capEl.appendChild(document.createTextNode(part));
+        }
+      });
       media.appendChild(capEl);
     }
 

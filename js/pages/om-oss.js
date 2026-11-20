@@ -5,6 +5,7 @@
 // ==============================================================================
 
 import { getSupabase } from '../supabase-client.js';
+import { renderFormattedText } from '../text-format.js';
 
 // SVG-ikoner for dokumenter
 const ICONS = {
@@ -50,13 +51,7 @@ const DEFAULT_ROLES = [
 ];
 
 function setMultilineText(el, text) {
-  if (!el) return;
-  el.innerHTML = '';
-  const lines = String(text || '').replace(/\r\n/g, '\n').split('\n');
-  lines.forEach((line, idx) => {
-    if (idx > 0) el.appendChild(document.createElement('br'));
-    el.appendChild(document.createTextNode(line));
-  });
+  renderFormattedText(el, text, { multiline: true });
 }
 
 function renderParagraphsWithBreaks(container, bodyOrParagraphs) {
@@ -103,8 +98,8 @@ async function initOmOss() {
       if (hero) {
         const sub = document.querySelector('[data-cms="hero-subheading"]');
         const title = document.querySelector('[data-cms="hero-title"]');
-        if (sub && hero.subheading) sub.textContent = hero.subheading;
-        if (title && hero.title) title.textContent = hero.title;
+        if (sub && hero.subheading) renderFormattedText(sub, hero.subheading, { multiline: false });
+        if (title && hero.title) renderFormattedText(title, hero.title, { multiline: false });
       }
 
       // Hvem er vi
@@ -114,8 +109,8 @@ async function initOmOss() {
         const lead = document.querySelector('[data-cms="about-lead"]');
         const bodyContainer = document.querySelector('[data-cms="about-paragraphs"]');
 
-        if (title && hvem.title) title.textContent = hvem.title;
-        if (lead && hvem.lead) lead.textContent = hvem.lead;
+        if (title && hvem.title) renderFormattedText(title, hvem.title, { multiline: false });
+        if (lead && hvem.lead) renderFormattedText(lead, hvem.lead);
         if (bodyContainer) {
           const source = typeof hvem.body === 'string' && hvem.body.trim()
             ? hvem.body
@@ -161,9 +156,9 @@ async function initOmOss() {
             </a>
           `;
 
-          // Bruk textContent for XSS-sikkerhet på tekstfeltene
-          card.querySelector('.role-title').textContent = role.title;
-          card.querySelector('.role-member-notice').textContent = memberDisplay;
+          // Bruk XSS-sikker formatering (støtter **fet tekst**)
+          renderFormattedText(card.querySelector('.role-title'), role.title, { multiline: false });
+          renderFormattedText(card.querySelector('.role-member-notice'), memberDisplay, { multiline: false });
           card.querySelector('.role-contact-link span').textContent = role.email;
 
         rolesContainer.appendChild(card);
@@ -195,9 +190,9 @@ async function initOmOss() {
             </div>
           `;
 
-          card.querySelector('.doc-card-title').textContent = doc.title;
-          card.querySelector('.doc-card-desc').textContent = doc.description || '';
-          card.querySelector('.btn-doc-text').textContent = doc.button_label;
+          renderFormattedText(card.querySelector('.doc-card-title'), doc.title, { multiline: false });
+          renderFormattedText(card.querySelector('.doc-card-desc'), doc.description || '');
+          renderFormattedText(card.querySelector('.btn-doc-text'), doc.button_label, { multiline: false });
 
           docsContainer.appendChild(card);
         });

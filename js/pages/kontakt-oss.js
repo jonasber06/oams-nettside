@@ -5,6 +5,7 @@
 // ==============================================================================
 
 import { getSupabase } from '../supabase-client.js';
+import { renderFormattedText } from '../text-format.js';
 
 const CONTACT_ICONS = {
   location: `
@@ -168,8 +169,8 @@ async function initKontaktOss() {
     if (hero) {
       const sub = document.querySelector('[data-cms="hero-subheading"]');
       const title = document.querySelector('[data-cms="hero-title"]');
-      if (sub && hero.subheading) sub.textContent = hero.subheading;
-      if (title && hero.title) title.textContent = hero.title;
+      if (sub && hero.subheading) renderFormattedText(sub, hero.subheading, { multiline: false });
+      if (title && hero.title) renderFormattedText(title, hero.title, { multiline: false });
     }
 
     // 2. Kontaktinfo (Tittel, introtekst og kontaktpunkter)
@@ -178,10 +179,10 @@ async function initKontaktOss() {
       const titleEl = document.querySelector('[data-cms="contact-title"]');
       const subEl = document.querySelector('[data-cms="contact-subtitle"]');
 
-      if (titleEl && info.title) titleEl.textContent = info.title;
+      if (titleEl && info.title) renderFormattedText(titleEl, info.title, { multiline: false });
       if (subEl) {
         if (typeof info.subtitle === 'string') {
-          subEl.textContent = info.subtitle;
+          renderFormattedText(subEl, info.subtitle);
           subEl.style.display = info.subtitle.trim() ? '' : 'none';
         }
       }
@@ -207,7 +208,7 @@ async function initKontaktOss() {
               </div>
             `;
 
-            box.querySelector('.contact-item-title').textContent = item.title || '';
+            renderFormattedText(box.querySelector('.contact-item-title'), item.title || '', { multiline: false });
             const descEl = box.querySelector('.contact-item-desc');
 
             if (safeHref) {
@@ -218,15 +219,11 @@ async function initKontaktOss() {
                 a.target = '_blank';
                 a.rel = 'noopener noreferrer';
               }
-              a.textContent = item.text || safeHref.replace(/^mailto:/, '');
+              renderFormattedText(a, item.text || safeHref.replace(/^mailto:/, ''), { multiline: false });
               descEl.appendChild(a);
             } else {
-              // Støtt linjeskift i adresse/tekst på en XSS-sikker måte
-              const lines = String(item.text || '').split('\n');
-              lines.forEach((line, idx) => {
-                if (idx > 0) descEl.appendChild(document.createElement('br'));
-                descEl.appendChild(document.createTextNode(line));
-              });
+              // Støtt linjeskift og **fet skrift** på en XSS-sikker måte
+              renderFormattedText(descEl, item.text || '');
             }
 
             itemsContainer.appendChild(box);

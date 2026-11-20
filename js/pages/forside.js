@@ -5,6 +5,7 @@
 // ==============================================================================
 
 import { getSupabase } from '../supabase-client.js';
+import { renderFormattedText } from '../text-format.js';
 
 const CONTACT_ICONS = {
   location: `
@@ -157,13 +158,7 @@ function sanitizeHref(rawHref) {
 }
 
 function setMultilineText(el, text) {
-  if (!el) return;
-  el.textContent = '';
-  const lines = String(text || '').split('\n');
-  lines.forEach((line, idx) => {
-    if (idx > 0) el.appendChild(document.createElement('br'));
-    el.appendChild(document.createTextNode(line));
-  });
+  renderFormattedText(el, text, { multiline: true });
 }
 
 async function initForside() {
@@ -190,11 +185,11 @@ async function initForside() {
       const introBtnLabelEl = document.querySelector('[data-cms="intro-btn-label"]');
       const introBtnLinkEl = document.querySelector('[data-cms-href="intro-btn-url"]');
 
-      if (introTitleEl && intro.title) introTitleEl.textContent = intro.title;
+      if (introTitleEl && intro.title) renderFormattedText(introTitleEl, intro.title, { multiline: false });
       if (introTextEl && typeof intro.text === 'string' && intro.text.trim()) {
         setMultilineText(introTextEl, intro.text);
       }
-      if (introBtnLabelEl && intro.button_label) introBtnLabelEl.textContent = intro.button_label;
+      if (introBtnLabelEl && intro.button_label) renderFormattedText(introBtnLabelEl, intro.button_label, { multiline: false });
       if (introBtnLinkEl) {
         const safeUrl = sanitizeHref(intro.button_url || DEFAULT_INTRO.button_url);
         if (safeUrl) {
@@ -213,9 +208,9 @@ async function initForside() {
       const slideTitleEl = document.querySelector('[data-cms="slideshow-title"]');
       const slideSubEl = document.querySelector('[data-cms="slideshow-subtitle"]');
 
-      if (slideTitleEl && slideshow.title) slideTitleEl.textContent = slideshow.title;
+      if (slideTitleEl && slideshow.title) renderFormattedText(slideTitleEl, slideshow.title, { multiline: false });
       if (slideSubEl && typeof slideshow.subtitle === 'string') {
-        slideSubEl.textContent = slideshow.subtitle;
+        renderFormattedText(slideSubEl, slideshow.subtitle);
         slideSubEl.style.display = slideshow.subtitle.trim() ? '' : 'none';
       }
 
@@ -240,9 +235,9 @@ async function initForside() {
       const titleEl = document.querySelector('[data-cms="contact-title"]');
       const subEl = document.querySelector('[data-cms="contact-subtitle"]');
 
-      if (titleEl && info.title) titleEl.textContent = info.title;
+      if (titleEl && info.title) renderFormattedText(titleEl, info.title, { multiline: false });
       if (subEl && typeof info.subtitle === 'string') {
-        subEl.textContent = info.subtitle;
+        renderFormattedText(subEl, info.subtitle);
         subEl.style.display = info.subtitle.trim() ? '' : 'none';
       }
 
@@ -267,7 +262,7 @@ async function initForside() {
               </div>
             `;
 
-            box.querySelector('.contact-item-title').textContent = item.title || '';
+            renderFormattedText(box.querySelector('.contact-item-title'), item.title || '', { multiline: false });
             const descEl = box.querySelector('.contact-item-desc');
 
             if (safeHref) {
@@ -278,14 +273,10 @@ async function initForside() {
                 a.target = '_blank';
                 a.rel = 'noopener noreferrer';
               }
-              a.textContent = item.text || safeHref.replace(/^mailto:/, '');
+              renderFormattedText(a, item.text || safeHref.replace(/^mailto:/, ''), { multiline: false });
               descEl.appendChild(a);
             } else {
-              const lines = String(item.text || '').split('\n');
-              lines.forEach((line, idx) => {
-                if (idx > 0) descEl.appendChild(document.createElement('br'));
-                descEl.appendChild(document.createTextNode(line));
-              });
+              renderFormattedText(descEl, item.text || '');
             }
 
             itemsContainer.appendChild(box);

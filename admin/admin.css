@@ -955,3 +955,117 @@ textarea.form-control {
     width: 100%;
   }
 }
+
+/* Medlemskap Editor Helpers (admin/medlemskap.html) */
+.benefit-icon-select-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.benefit-icon-preview {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(211, 32, 37, 0.08);
+  color: var(--admin-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 1px solid rgba(211, 32, 37, 0.18);
+}
+
+.benefit-icon-preview svg {
+  width: 20px;
+  height: 20px;
+}
+
+.practical-item-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-format-bold {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--admin-text);
+  background: #ffffff;
+  border: 1px solid var(--admin-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.btn-format-bold:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.practical-item-preview {
+  font-size: 0.84rem;
+  color: #475569;
+  background: #ffffff;
+  border: 1px dashed var(--admin-border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  line-height: 1.5;
+}
+
+.practical-preview-label {
+  font-weight: 600;
+  color: var(--admin-text-muted);
+  margin-right: 6px;
+}
+
+/* Global floating «B Fet»-knapp og forhåndsvisning for alle tekstfelt */
+.admin-bold-float-btn {
+  position: absolute;
+  z-index: 950;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--admin-text);
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.admin-bold-float-btn:hover {
+  background: var(--admin-primary);
+  border-color: var(--admin-primary);
+  color: #ffffff;
+}
+
+.admin-bold-float-btn[hidden] {
+  display: none;
+}
+
+.admin-bold-preview {
+  margin-top: 6px;
+  font-size: 0.83rem;
+  color: #475569;
+  background: #f8fafc;
+  border: 1px dashed var(--admin-border);
+  border-radius: var(--radius-sm);
+  padding: 7px 11px;
+  line-height: 1.5;
+}
+
+.admin-bold-preview-label {
+  font-weight: 600;
+  color: var(--admin-text-muted);
+  margin-right: 6px;
+}
