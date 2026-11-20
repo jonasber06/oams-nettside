@@ -123,8 +123,6 @@
         <p class="admin-subtitle">
           Innholdet oppdaterer <a href="../medlemskap.html" target="_blank"
             style="color: var(--admin-primary); font-weight: 600;">medlemskap.html</a> umiddelbart ved lagring.
-          «Bli medlem!»- og Vipps-boksen redigeres under <a href="medisinstudent.html"
-            style="color: var(--admin-primary); font-weight: 600;">Medisinstudent</a>.
         </p>
       </div>
       <div class="admin-actions">
@@ -222,30 +220,26 @@
           </div>
         </div>
 
-        <div id="practicalItemsList" class="admin-items-list" style="margin-bottom: 22px;">
+        <div id="practicalItemsList" class="admin-items-list" style="margin-bottom: 26px;">
           <div style="text-align: center; color: var(--admin-text-muted); padding: 20px;">Laster punkter fra
             databasen...</div>
         </div>
 
-        <div class="form-row">
-          <div class="form-group">
-            <label for="primaryBtnLabel">Hovedknapp – tekst</label>
-            <input type="text" id="primaryBtnLabel" class="form-control" placeholder="Se våre kurs">
+        <div style="border-top: 1px solid var(--admin-border); padding-top: 20px;">
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px;">
+            <div>
+              <h3 style="font-size: 1rem; font-weight: 700; margin: 0 0 4px 0; color: var(--admin-text);">Knapper</h3>
+              <div class="admin-card-subtitle">Legg til, endre rekkefølge på eller fjern handlingsknapper nederst på
+                medlemskapssiden.</div>
+            </div>
+            <button type="button" id="addPracticalBtn" class="btn-admin btn-admin-secondary" style="font-size: 0.8rem;">
+              + Legg til knapp
+            </button>
           </div>
-          <div class="form-group">
-            <label for="primaryBtnUrl">Hovedknapp – lenke</label>
-            <input type="text" id="primaryBtnUrl" class="form-control" placeholder="medisinstudent.html#kursoversikt">
-          </div>
-        </div>
 
-        <div class="form-row" style="margin-bottom: 0;">
-          <div class="form-group" style="margin-bottom: 0;">
-            <label for="secondaryBtnLabel">Sekundærknapp – tekst</label>
-            <input type="text" id="secondaryBtnLabel" class="form-control" placeholder="Kontakt oss">
-          </div>
-          <div class="form-group" style="margin-bottom: 0;">
-            <label for="secondaryBtnUrl">Sekundærknapp – lenke</label>
-            <input type="text" id="secondaryBtnUrl" class="form-control" placeholder="kontakt_oss.html">
+          <div id="practicalButtonsList" class="admin-items-list">
+            <div style="text-align: center; color: var(--admin-text-muted); padding: 16px;">Laster knapper...</div>
           </div>
         </div>
       </section>

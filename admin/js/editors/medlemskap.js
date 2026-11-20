@@ -9,6 +9,14 @@ let supabaseClient = null;
 let autoSaver = null;
 let currentBenefits = [];
 let currentPracticalItems = [];
+let currentPracticalButtons = [];
+
+const BUTTON_STYLES = {
+  'outline-arrow': 'Rød ramme (med pil)',
+  outline: 'Rød ramme (uten pil)',
+  solid: 'Rød fylt knapp (med pil)',
+  vipps: 'Oransje knapp (Vipps-farge med pil)'
+};
 
 const BENEFIT_ICONS = {
   pulse: {
@@ -110,11 +118,45 @@ const DEFAULT_PRACTICAL = {
       text: '**Spørsmål eller endringer?** Ta gjerne kontakt med styret på **post@oams.no** dersom du lurer på noe om medlemskapet.'
     }
   ],
-  primary_btn_label: 'Se våre kurs',
-  primary_btn_url: 'medisinstudent.html#kursoversikt',
-  secondary_btn_label: 'Kontakt oss',
-  secondary_btn_url: 'kontakt_oss.html'
+  buttons: [
+    {
+      id: 'kurs-btn',
+      label: 'Se våre kurs',
+      url: 'medisinstudent.html#kursoversikt',
+      style: 'outline-arrow'
+    },
+    {
+      id: 'kontakt-btn',
+      label: 'Kontakt oss',
+      url: 'kontakt_oss.html',
+      style: 'outline'
+    }
+  ]
 };
+
+function resolvePracticalButtons(practical) {
+  if (Array.isArray(practical?.buttons)) {
+    return practical.buttons;
+  }
+  const legacy = [];
+  if (practical?.primary_btn_label) {
+    legacy.push({
+      id: 'kurs-btn',
+      label: practical.primary_btn_label,
+      url: practical.primary_btn_url || 'medisinstudent.html#kursoversikt',
+      style: 'outline-arrow'
+    });
+  }
+  if (practical?.secondary_btn_label) {
+    legacy.push({
+      id: 'kontakt-btn',
+      label: practical.secondary_btn_label,
+      url: practical.secondary_btn_url || 'kontakt_oss.html',
+      style: 'outline'
+    });
+  }
+  return legacy.length > 0 ? legacy : DEFAULT_PRACTICAL.buttons;
+}
 
 async function initEditor() {
   const auth = await requireAdmin();
@@ -132,6 +174,7 @@ async function initEditor() {
 
   document.getElementById('addBenefitBtn').addEventListener('click', addBenefitRow);
   document.getElementById('addPracticalItemBtn').addEventListener('click', addPracticalItemRow);
+  document.getElementById('addPracticalBtn').addEventListener('click', addPracticalButtonRow);
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -183,10 +226,6 @@ async function loadContent() {
     const practical = map.get('medlemskap.practical') || DEFAULT_PRACTICAL;
     document.getElementById('practicalTitle').value = practical.title ?? DEFAULT_PRACTICAL.title;
     document.getElementById('practicalIntro').value = practical.intro ?? DEFAULT_PRACTICAL.intro;
-    document.getElementById('primaryBtnLabel').value = practical.primary_btn_label ?? DEFAULT_PRACTICAL.primary_btn_label;
-    document.getElementById('primaryBtnUrl').value = practical.primary_btn_url ?? DEFAULT_PRACTICAL.primary_btn_url;
-    document.getElementById('secondaryBtnLabel').value = practical.secondary_btn_label ?? DEFAULT_PRACTICAL.secondary_btn_label;
-    document.getElementById('secondaryBtnUrl').value = practical.secondary_btn_url ?? DEFAULT_PRACTICAL.secondary_btn_url;
 
     const rawItems = Array.isArray(practical.items) ? practical.items : DEFAULT_PRACTICAL.items;
     currentPracticalItems = rawItems.map(item => ({
@@ -194,6 +233,15 @@ async function loadContent() {
       text: typeof item === 'string' ? item : (item?.text || '')
     }));
     renderPracticalItemsList();
+
+    const rawButtons = resolvePracticalButtons(practical);
+    currentPracticalButtons = rawButtons.map(btn => ({
+      id: btn.id || crypto.randomUUID(),
+      label: btn.label || '',
+      url: btn.url || '',
+      style: BUTTON_STYLES[btn.style] ? btn.style : 'solid'
+    }));
+    renderPracticalButtonsList();
 
   } catch (err) {
     console.error('Feil ved lasting av medlemskap-innhold:', err);
@@ -506,6 +554,129 @@ function addPracticalItemRow() {
 }
 
 // ==============================================================================
+// KNAPPER NEDERST I MEDLEMSKAP
+// ==============================================================================
+
+function syncPracticalButtonsFromDom() {
+  const cards = document.querySelectorAll('#practicalButtonsList > .practical-btn-card');
+  cards.forEach((card, idx) => {
+    if (currentPracticalButtons[idx]) {
+      currentPracticalButtons[idx].label = card.querySelector('.practical-btn-label-input')?.value.trim() || '';
+      currentPracticalButtons[idx].url = card.querySelector('.practical-btn-url-input')?.value.trim() || '';
+      const styleVal = card.querySelector('.practical-btn-style-select')?.value || 'solid';
+      currentPracticalButtons[idx].style = BUTTON_STYLES[styleVal] ? styleVal : 'solid';
+    }
+  });
+}
+
+function movePracticalButton(fromIndex, delta) {
+  syncPracticalButtonsFromDom();
+  const toIndex = fromIndex + delta;
+  if (toIndex < 0 || toIndex >= currentPracticalButtons.length) return;
+
+  const [moved] = currentPracticalButtons.splice(fromIndex, 1);
+  currentPracticalButtons.splice(toIndex, 0, moved);
+
+  renderPracticalButtonsList();
+  autoSaver?.trigger(250);
+}
+
+function renderPracticalButtonsList() {
+  const container = document.getElementById('practicalButtonsList');
+  if (!container) return;
+  container.innerHTML = '';
+
+  if (currentPracticalButtons.length === 0) {
+    container.innerHTML = '<div style="color: var(--admin-text-muted); padding: 12px;">Ingen knapper lagt inn. Trykk «+ Legg til knapp» for å opprette en knapp.</div>';
+    return;
+  }
+
+  const styleOptionsHtml = (selectedStyle) => Object.entries(BUTTON_STYLES)
+    .map(([key, label]) => `<option value="${key}" ${key === selectedStyle ? 'selected' : ''}>${escapeHtml(label)}</option>`)
+    .join('');
+
+  currentPracticalButtons.forEach((btn, index) => {
+    if (!btn.id) btn.id = crypto.randomUUID();
+    const styleKey = BUTTON_STYLES[btn.style] ? btn.style : 'solid';
+
+    const card = document.createElement('div');
+    card.className = 'practical-btn-card';
+    card.style.cssText = 'background: #f8fafc; border: 1px solid var(--admin-border); border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 12px;';
+
+    card.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="role-reorder-wrap" style="flex-direction: row; gap: 4px;">
+            <button type="button" class="btn-reorder btn-move-up" title="Flytt opp" aria-label="Flytt opp" ${index === 0 ? 'disabled' : ''}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            </button>
+            <button type="button" class="btn-reorder btn-move-down" title="Flytt ned" aria-label="Flytt ned" ${index === currentPracticalButtons.length - 1 ? 'disabled' : ''}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+          </div>
+          <strong style="font-size: 0.9rem;">Knapp ${index + 1}</strong>
+        </div>
+
+        <button type="button" class="btn-admin btn-admin-danger delete-practical-btn-item" style="padding: 4px 8px; font-size: 0.75rem;">
+          Slett
+        </button>
+      </div>
+
+      <div class="form-row" style="margin-bottom: 0;">
+        <div class="form-group" style="margin-bottom: 0;">
+          <label>Knappetekst</label>
+          <input type="text" class="form-control practical-btn-label-input" value="${escapeHtml(btn.label || '')}" placeholder="F.eks. Se våre kurs">
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label>Lenke / URL</label>
+          <input type="text" class="form-control practical-btn-url-input" value="${escapeHtml(btn.url || '')}" placeholder="F.eks. medisinstudent.html#kursoversikt">
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+          <label>Utseende</label>
+          <select class="form-control practical-btn-style-select">
+            ${styleOptionsHtml(styleKey)}
+          </select>
+        </div>
+      </div>
+    `;
+
+    card.querySelector('.btn-move-up').addEventListener('click', () => movePracticalButton(index, -1));
+    card.querySelector('.btn-move-down').addEventListener('click', () => movePracticalButton(index, 1));
+
+    card.querySelector('.delete-practical-btn-item').addEventListener('click', () => {
+      syncPracticalButtonsFromDom();
+      if (confirm(`Er du sikker på at du vil slette knappen "${btn.label || `Knapp ${index + 1}`}"?`)) {
+        currentPracticalButtons.splice(index, 1);
+        renderPracticalButtonsList();
+        autoSaver?.trigger(100);
+      }
+    });
+
+    container.appendChild(card);
+  });
+}
+
+function addPracticalButtonRow() {
+  syncPracticalButtonsFromDom();
+  currentPracticalButtons.push({
+    id: crypto.randomUUID(),
+    label: '',
+    url: '',
+    style: currentPracticalButtons.length === 0 ? 'solid' : 'outline'
+  });
+  renderPracticalButtonsList();
+  autoSaver?.trigger(300);
+
+  const lastCard = document.querySelector('#practicalButtonsList > .practical-btn-card:last-child');
+  if (lastCard) {
+    lastCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => {
+      lastCard.querySelector('.practical-btn-label-input')?.focus({ preventScroll: true });
+    }, 300);
+  }
+}
+
+// ==============================================================================
 // LAGRING TIL SUPABASE
 // ==============================================================================
 
@@ -514,6 +685,7 @@ async function saveAll({ isAuto = false, triggerBtn = null } = {}) {
 
   syncBenefitsFromDom();
   syncPracticalItemsFromDom();
+  syncPracticalButtonsFromDom();
 
   try {
     const heroContent = {
@@ -541,10 +713,14 @@ async function saveAll({ isAuto = false, triggerBtn = null } = {}) {
           id: item.id || crypto.randomUUID(),
           text: item.text.trim()
         })),
-      primary_btn_label: document.getElementById('primaryBtnLabel').value.trim(),
-      primary_btn_url: document.getElementById('primaryBtnUrl').value.trim() || DEFAULT_PRACTICAL.primary_btn_url,
-      secondary_btn_label: document.getElementById('secondaryBtnLabel').value.trim(),
-      secondary_btn_url: document.getElementById('secondaryBtnUrl').value.trim() || DEFAULT_PRACTICAL.secondary_btn_url
+      buttons: currentPracticalButtons
+        .filter(btn => btn.label && btn.label.trim() !== '')
+        .map(btn => ({
+          id: btn.id || crypto.randomUUID(),
+          label: btn.label.trim(),
+          url: btn.url.trim() || '#',
+          style: BUTTON_STYLES[btn.style] ? btn.style : 'solid'
+        }))
     };
 
     const sectionUpserts = [

@@ -45,6 +45,12 @@ const CHECK_ICON_SVG = `
   </svg>
 `;
 
+const ARROW_ICON_SVG = `
+  <svg class="btn-arrow" viewBox="0 0 448 512" fill="currentColor">
+    <path d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z" />
+  </svg>
+`;
+
 const DEFAULT_HERO = {
   subheading: 'Bli en del av Oslo Akuttmedisinske Studentforening',
   title: 'OAMS-Medlemskap'
@@ -109,11 +115,45 @@ const DEFAULT_PRACTICAL = {
       text: '**Spørsmål eller endringer?** Ta gjerne kontakt med styret på **post@oams.no** dersom du lurer på noe om medlemskapet.'
     }
   ],
-  primary_btn_label: 'Se våre kurs',
-  primary_btn_url: 'medisinstudent.html#kursoversikt',
-  secondary_btn_label: 'Kontakt oss',
-  secondary_btn_url: 'kontakt_oss.html'
+  buttons: [
+    {
+      id: 'kurs-btn',
+      label: 'Se våre kurs',
+      url: 'medisinstudent.html#kursoversikt',
+      style: 'outline-arrow'
+    },
+    {
+      id: 'kontakt-btn',
+      label: 'Kontakt oss',
+      url: 'kontakt_oss.html',
+      style: 'outline'
+    }
+  ]
 };
+
+function resolvePracticalButtons(practical) {
+  if (Array.isArray(practical?.buttons)) {
+    return practical.buttons;
+  }
+  const legacy = [];
+  if (practical?.primary_btn_label) {
+    legacy.push({
+      id: 'kurs-btn',
+      label: practical.primary_btn_label,
+      url: practical.primary_btn_url || 'medisinstudent.html#kursoversikt',
+      style: 'outline-arrow'
+    });
+  }
+  if (practical?.secondary_btn_label) {
+    legacy.push({
+      id: 'kontakt-btn',
+      label: practical.secondary_btn_label,
+      url: practical.secondary_btn_url || 'kontakt_oss.html',
+      style: 'outline'
+    });
+  }
+  return legacy.length > 0 ? legacy : DEFAULT_PRACTICAL.buttons;
+}
 
 function sanitizeHref(rawHref) {
   if (!rawHref) return '#';
@@ -211,16 +251,9 @@ async function initMedlemskap() {
     const practical = sectionsMap.get('medlemskap.practical') || DEFAULT_PRACTICAL;
     const pTitle = document.querySelector('[data-cms="practical-title"]');
     const pIntro = document.querySelector('[data-cms="practical-intro"]');
-    const pPrimaryLabel = document.querySelector('[data-cms="practical-primary-btn-label"]');
-    const pSecondaryLabel = document.querySelector('[data-cms="practical-secondary-btn-label"]');
 
     if (pTitle && practical.title) renderFormattedText(pTitle, practical.title, { multiline: false });
     if (pIntro && practical.intro) renderFormattedText(pIntro, practical.intro);
-    if (pPrimaryLabel && practical.primary_btn_label) renderFormattedText(pPrimaryLabel, practical.primary_btn_label, { multiline: false });
-    if (pSecondaryLabel && practical.secondary_btn_label) renderFormattedText(pSecondaryLabel, practical.secondary_btn_label, { multiline: false });
-
-    applyLinkHref('[data-cms-href="practical-primary-btn-url"]', practical.primary_btn_url || DEFAULT_PRACTICAL.primary_btn_url);
-    applyLinkHref('[data-cms-href="practical-secondary-btn-url"]', practical.secondary_btn_url || DEFAULT_PRACTICAL.secondary_btn_url);
 
     const itemsContainer = document.querySelector('[data-cms-list="membership-practical-items"]');
     if (itemsContainer) {
@@ -236,6 +269,46 @@ async function initMedlemskap() {
         renderFormattedText(li.querySelector('.membership-practical-text'), rawText);
         itemsContainer.appendChild(li);
       });
+    }
+
+    const buttonsContainer = document.querySelector('[data-cms-list="membership-practical-buttons"]');
+    if (buttonsContainer) {
+      const buttons = resolvePracticalButtons(practical).filter(b => b && String(b.label || '').trim() !== '');
+      buttonsContainer.innerHTML = '';
+
+      if (buttons.length === 0) {
+        buttonsContainer.style.display = 'none';
+      } else {
+        buttonsContainer.style.display = '';
+        buttons.forEach(btn => {
+          const a = document.createElement('a');
+          const safeUrl = sanitizeHref(btn.url || '#');
+          a.setAttribute('href', safeUrl);
+          if (safeUrl.startsWith('http://') || safeUrl.startsWith('https://')) {
+            a.setAttribute('target', '_blank');
+            a.setAttribute('rel', 'noopener noreferrer');
+          }
+
+          const style = btn.style || 'outline';
+          if (style === 'outline' || style === 'outline-arrow') {
+            a.className = 'btn btn-outline-red';
+          } else if (style === 'vipps') {
+            a.className = 'btn btn-vipps';
+          } else {
+            a.className = 'btn btn-solid-red';
+          }
+
+          const span = document.createElement('span');
+          renderFormattedText(span, btn.label || '', { multiline: false });
+          a.appendChild(span);
+
+          if (style !== 'outline') {
+            a.insertAdjacentHTML('beforeend', ARROW_ICON_SVG);
+          }
+
+          buttonsContainer.appendChild(a);
+        });
+      }
     }
 
   } catch (err) {

@@ -71,10 +71,20 @@ VALUES
           "text": "**Spørsmål eller endringer?** Ta gjerne kontakt med styret på **post@oams.no** dersom du lurer på noe om medlemskapet."
         }
       ],
-      "primary_btn_label": "Se våre kurs",
-      "primary_btn_url": "medisinstudent.html#kursoversikt",
-      "secondary_btn_label": "Kontakt oss",
-      "secondary_btn_url": "kontakt_oss.html"
+      "buttons": [
+        {
+          "id": "kurs-btn",
+          "label": "Se våre kurs",
+          "url": "medisinstudent.html#kursoversikt",
+          "style": "outline-arrow"
+        },
+        {
+          "id": "kontakt-btn",
+          "label": "Kontakt oss",
+          "url": "kontakt_oss.html",
+          "style": "outline"
+        }
+      ]
     }'::jsonb
   )
 ON CONFLICT (key) DO NOTHING;
