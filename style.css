@@ -409,13 +409,11 @@ a:focus {
   color: #ffffff !important;
   border: 1px solid transparent;
   padding: 14px 38px;
-  box-shadow: 0 4px 14px rgba(211, 32, 37, 0.3);
 }
 
 .btn-primary:hover {
   background-color: var(--primary-red-hover);
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(211, 32, 37, 0.45);
 }
 
 .btn-secondary {
@@ -437,14 +435,12 @@ a:focus {
   color: var(--primary-red) !important;
   border: 1px solid rgba(211, 32, 37, 0.3);
   padding: 14px 34px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
 }
 
 .btn-outline-red:hover {
   background-color: var(--primary-red-subtle);
   border-color: var(--primary-red);
   transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(211, 32, 37, 0.15);
 }
 
 .btn-solid-red {
@@ -452,13 +448,11 @@ a:focus {
   color: #ffffff !important;
   padding: 14px 34px;
   border: none;
-  box-shadow: 0 4px 14px rgba(211, 32, 37, 0.3);
 }
 
 .btn-solid-red:hover {
   background-color: var(--primary-red-hover);
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(211, 32, 37, 0.45);
 }
 
 /* --- Section General Styling --- */
@@ -1326,7 +1320,6 @@ a:focus {
   border-color: var(--primary-red);
   color: #ffffff !important;
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(227, 24, 55, 0.25);
 }
 
 .contact-social-btn:hover svg {
@@ -1444,13 +1437,11 @@ a:focus {
   padding: 15px 38px;
   font-size: 0.9rem;
   border: none;
-  box-shadow: 0 6px 20px rgba(255, 91, 36, 0.32);
 }
 
 .btn-vipps:hover {
   background-color: #e64d19;
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(255, 91, 36, 0.42);
 }
 
 /* Section 2: Kort kursoversikt + SoMe */
@@ -1733,7 +1724,6 @@ a:focus {
 .btn-booking-large {
   padding: 16px 42px;
   font-size: 0.92rem;
-  box-shadow: 0 8px 22px rgba(211, 32, 37, 0.32);
 }
 
 .booking-meta-note {
@@ -2433,7 +2423,6 @@ select.form-control {
   background: linear-gradient(145deg, #e1252b 0%, var(--primary-red) 100%);
   border: 1px solid rgba(255, 255, 255, 0.22);
   color: #ffffff !important;
-  box-shadow: 0 12px 34px rgba(211, 32, 37, 0.45);
   transform: scale(1.03);
 }
 
@@ -2452,7 +2441,6 @@ select.form-control {
 .hero-card--primary:hover {
   background: linear-gradient(145deg, #eb2a30 0%, var(--primary-red-hover) 100%);
   transform: scale(1.03) translateY(-4px);
-  box-shadow: 0 16px 40px rgba(211, 32, 37, 0.6);
 }
 
 /* Scroll down indicator */
@@ -2689,7 +2677,6 @@ select.form-control {
 .slideshow-nav:focus-visible {
   background: var(--primary-red);
   border-color: var(--primary-red);
-  box-shadow: 0 6px 18px rgba(211, 32, 37, 0.35);
   outline: none;
 }
 
