@@ -59,7 +59,7 @@ const DEFAULT_MERCH = {
   title: 'OAMS-Merch!',
   text: 'Vil du sikre deg OAMS-klær og effekter? Send inn en forespørsel via vårt merch-skjema, så sjekker materialansvarlig lagerstatus og tar kontakt med deg om tilgjengelighet og hvor det kan hentes.',
   button_label: 'Bestill merch (Gå til skjema)',
-  button_url: '#',
+  button_url: 'merchForm.html',
   list_title: 'Dette fyller du ut i merch-skjemaet:',
   items: [
     'Hvilket plagg du ønsker',
@@ -250,7 +250,10 @@ async function initKurs() {
       if (mBtnLabel && merch.button_label) mBtnLabel.textContent = merch.button_label;
       if (mListTitle && merch.list_title) mListTitle.textContent = merch.list_title;
 
-      applyLinkHref('[data-cms-href="merch-btn-url"]', merch.button_url || DEFAULT_MERCH.button_url);
+      const merchBtnUrl = merch.button_url && String(merch.button_url).trim() !== '' && String(merch.button_url).trim() !== '#'
+        ? merch.button_url
+        : DEFAULT_MERCH.button_url;
+      applyLinkHref('[data-cms-href="merch-btn-url"]', merchBtnUrl);
 
       if (mItemsContainer) {
         const items = Array.isArray(merch.items) && merch.items.length > 0

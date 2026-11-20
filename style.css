@@ -2223,6 +2223,66 @@ select.form-control {
   margin: 0;
 }
 
+/* Merch Form Multi-Item Boxes */
+.merch-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 16px;
+}
+
+.merch-item-box {
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+
+.merch-item-box-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.merch-item-box-title {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.merch-item-remove-btn {
+  background: #fee2e2;
+  color: var(--primary-red);
+  border: 1px solid #fecaca;
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.merch-item-remove-btn:hover {
+  background: var(--primary-red);
+  border-color: var(--primary-red);
+  color: #ffffff;
+}
+
+.merch-add-item-btn {
+  width: 100%;
+  padding: 12px 20px;
+  font-size: 0.84rem;
+  border-style: dashed;
+}
+
+.merch-add-item-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
 @media (max-width: 720px) {
   .bookform-card {
     padding: 30px 20px;

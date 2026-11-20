@@ -40,7 +40,7 @@ const DEFAULT_MERCH = {
   title: 'OAMS-Merch!',
   text: 'Vil du sikre deg OAMS-klær og effekter? Send inn en forespørsel via vårt merch-skjema, så sjekker materialansvarlig lagerstatus og tar kontakt med deg om tilgjengelighet og hvor det kan hentes.',
   button_label: 'Bestill merch (Gå til skjema)',
-  button_url: '#',
+  button_url: 'merchForm.html',
   list_title: 'Dette fyller du ut i merch-skjemaet:',
   items: [
     'Hvilket plagg du ønsker',
@@ -165,7 +165,9 @@ async function loadContent() {
     document.getElementById('merchTitle').value = merch.title ?? DEFAULT_MERCH.title;
     document.getElementById('merchText').value = merch.text ?? DEFAULT_MERCH.text;
     document.getElementById('merchBtnLabel').value = merch.button_label ?? DEFAULT_MERCH.button_label;
-    document.getElementById('merchBtnUrl').value = merch.button_url ?? DEFAULT_MERCH.button_url;
+    document.getElementById('merchBtnUrl').value = (merch.button_url && merch.button_url !== '#')
+      ? merch.button_url
+      : DEFAULT_MERCH.button_url;
     document.getElementById('merchListTitle').value = merch.list_title ?? DEFAULT_MERCH.list_title;
 
     const merchItemsArr = Array.isArray(merch.items) && merch.items.length > 0
@@ -367,7 +369,7 @@ async function saveAll({ isAuto = false, triggerBtn = null } = {}) {
       title: document.getElementById('merchTitle').value.trim(),
       text: document.getElementById('merchText').value.replace(/\r\n/g, '\n').trim(),
       button_label: document.getElementById('merchBtnLabel').value.trim(),
-      button_url: document.getElementById('merchBtnUrl').value.trim() || '#',
+      button_url: document.getElementById('merchBtnUrl').value.trim() || DEFAULT_MERCH.button_url,
       list_title: document.getElementById('merchListTitle').value.trim(),
       items: merchItemsList
     };
