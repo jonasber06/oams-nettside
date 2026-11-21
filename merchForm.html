@@ -187,7 +187,6 @@
                                                         class="form-required">*</span>
                                                 </label>
                                                 <input type="text" id="merchItem-1" class="form-control merch-item-name"
-                                                    placeholder="F.eks. hettegenser, t-skjorte, fleecegenser..."
                                                     required>
                                             </div>
 
@@ -223,8 +222,7 @@
                                                     Farge / variant <span class="form-required">*</span>
                                                 </label>
                                                 <input type="text" id="merchColor-1"
-                                                    class="form-control merch-item-color"
-                                                    placeholder="F.eks. burgunder, sort, marineblå..." required>
+                                                    class="form-control merch-item-color" required>
                                             </div>
                                         </div>
                                     </div>
@@ -263,69 +261,69 @@
                                     </div>
                                 </div>
 
-                                <div class="form-grid-2">
-                                    <div class="form-group">
-                                        <label for="studentEmail" class="form-label">
-                                            E-postadresse <span class="form-required">*</span>
-                                        </label>
-                                        <input type="email" id="studentEmail" name="studentEmail" class="form-control"
-                                            required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="studentCohort" class="form-label">
-                                            Kull / modul (valgfritt)
-                                        </label>
-                                        <input type="text" id="studentCohort" name="studentCohort" class="form-control"
-                                            placeholder="F.eks. H24 / Modul 2">
-                                    </div>
-                                </div>
-
+                                <!-- <div class="form-grid-2"> -->
                                 <div class="form-group">
-                                    <label for="merchNotes" class="form-label">
-                                        Kommentar (valgfritt)
+                                    <label for="studentEmail" class="form-label">
+                                        E-postadresse <span class="form-required">*</span>
                                     </label>
-                                    <span class="form-hint">
-                                        Eventuelle spørsmål, ønsker om hentested eller annen praktisk informasjon.
-                                    </span>
-                                    <textarea id="merchNotes" name="merchNotes" class="form-control"
-                                        placeholder="Skriv inn eventuelle spørsmål eller kommentarer..."></textarea>
+                                    <input type="email" id="studentEmail" name="studentEmail" class="form-control"
+                                        required>
                                 </div>
+
+                                <!-- <div class="form-group"> -->
+                                <!-- <label for="studentCohort" class="form-label"> -->
+                                <!-- Kull / modul (valgfritt) -->
+                                <!-- </label> -->
+                                <!-- <input type="text" id="studentCohort" name="studentCohort" class="form-control" -->
+                                <!-- placeholder="F.eks. H24 / Modul 2"> -->
+                                <!-- </div> -->
                             </div>
 
-                            <!-- Send-knapp -->
-                            <div class="form-submit-area">
-                                <button type="submit" class="btn btn-solid-red btn-submit-booking">
-                                    <span>Send merch-bestilling</span>
-                                    <svg class="btn-arrow" viewBox="0 0 448 512" fill="currentColor">
-                                        <path
-                                            d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z" />
-                                    </svg>
-                                </button>
-
-                                <div id="merchFeedback" class="booking-feedback" role="status" aria-live="polite">
-                                    <strong>Takk for din bestilling!</strong>
-                                    Merch-forespørselen er nå sendt til OAMS. Materialansvarlig sjekker lagerstatus og
-                                    tar kontakt med deg så raskt som mulig!
-                                </div>
+                            <div class="form-group">
+                                <label for="merchNotes" class="form-label">
+                                    Kommentar (valgfritt)
+                                </label>
+                                <span class="form-hint">
+                                    Eventuelle spørsmål, ønsker om hentested eller annen praktisk informasjon.
+                                </span>
+                                <textarea id="merchNotes" name="merchNotes" class="form-control"
+                                    placeholder="Skriv inn eventuelle spørsmål eller kommentarer..."></textarea>
                             </div>
-
-                        </form>
                     </div>
 
-                    <!-- Alternativ e-postboks under skjemaet -->
-                    <div class="bookform-email-fallback">
-                        <div class="bookform-email-fallback-text">
-                            <h3>Har du andre spørsmål om OAMS-merch?</h3>
-                            <p>Send oss gjerne en e-post dersom du lurer på tilgjengelighet, priser eller henting.</p>
+                    <!-- Send-knapp -->
+                    <div class="form-submit-area">
+                        <button type="submit" class="btn btn-solid-red btn-submit-booking">
+                            <span>Send merch-bestilling</span>
+                            <svg class="btn-arrow" viewBox="0 0 448 512" fill="currentColor">
+                                <path
+                                    d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382 25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373 9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971 16.971V216z" />
+                            </svg>
+                        </button>
+
+                        <div id="merchFeedback" class="booking-feedback" role="status" aria-live="polite">
+                            <strong>Takk for din bestilling!</strong>
+                            Merch-forespørselen er nå sendt til OAMS. Materialansvarlig sjekker lagerstatus og
+                            tar kontakt med deg så raskt som mulig!
                         </div>
-                        <a href="mailto:post@oams.no?subject=Sp%C3%B8rsm%C3%A5l%20om%20OAMS-merch"
-                            class="btn btn-outline-red">
-                            <span>Send e-post til post@oams.no</span>
-                        </a>
                     </div>
 
+                    </form>
                 </div>
+
+                <!-- Alternativ e-postboks under skjemaet -->
+                <div class="bookform-email-fallback">
+                    <div class="bookform-email-fallback-text">
+                        <h3>Har du andre spørsmål om OAMS-merch?</h3>
+                        <p>Send oss gjerne en e-post dersom du lurer på tilgjengelighet, priser eller henting.</p>
+                    </div>
+                    <a href="mailto:post@oams.no?subject=Sp%C3%B8rsm%C3%A5l%20om%20OAMS-merch"
+                        class="btn btn-outline-red">
+                        <span>Send e-post til post@oams.no</span>
+                    </a>
+                </div>
+
+            </div>
             </div>
         </section>
 
@@ -395,10 +393,9 @@
                     <div class="form-grid-2">
                         <div class="form-group">
                             <label for="merchItem-${uid}" class="form-label">
-                                Hvilket plagg / effekt ønsker du? <span class="form-required">*</span>
+                                Hvilket plagg ønsker du? <span class="form-required">*</span>
                             </label>
-                            <input type="text" id="merchItem-${uid}" class="form-control merch-item-name"
-                                placeholder="F.eks. hettegenser, t-skjorte, fleecegenser..." required>
+                            <input type="text" id="merchItem-${uid}" class="form-control merch-item-name" required>
                         </div>
 
                         <div class="form-group">
