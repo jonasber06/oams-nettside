@@ -446,7 +446,7 @@ function renderDocsList() {
 
       <div class="form-row">
         <div class="form-group">
-          <label>URL (lenke til Google Doc/Drive)</label>
+          <label>URL</label>
           <input type="url" class="form-control doc-url-input" value="${escapeHtml(doc.url || '')}" placeholder="https://..." required>
         </div>
         <div class="form-group">
