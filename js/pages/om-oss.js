@@ -185,7 +185,8 @@ async function initOmOss() {
             <p class="doc-card-desc"></p>
             <div class="btn-wrap">
               <a href="${safeUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-red">
-                <span><span class="btn-doc-text"></span><br>&nearr;</span>
+                <span class="btn-doc-text"></span>
+                <span class="btn-doc-arrow" aria-hidden="true">&nearr;</span>
               </a>
             </div>
           `;
