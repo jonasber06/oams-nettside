@@ -273,7 +273,7 @@ async function initForside() {
                 a.target = '_blank';
                 a.rel = 'noopener noreferrer';
               }
-              renderFormattedText(a, item.text || safeHref.replace(/^mailto:/, ''), { multiline: false });
+              renderFormattedText(a, item.text || safeHref.replace(/^mailto:/, ''));
               descEl.appendChild(a);
             } else {
               renderFormattedText(descEl, item.text || '');
