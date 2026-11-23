@@ -201,27 +201,31 @@
       <section class="admin-card">
         <div class="admin-card-header">
           <div>
-            <h2 class="admin-card-title">3. Kontaktinfo &amp; Sosiale medier</h2>
+            <h2 class="admin-card-title">3. Kontaktinfo</h2>
             <div class="admin-card-subtitle">
-              Kontaktboksen på forsiden er synkronisert med <strong>Kontakt oss</strong>-siden, slik at adresse, e-post
-              og sosiale medier alltid er like begge steder.
+              Delt boks som vises både på forsiden og på Kontakt oss-siden. Endringer her synkroniseres automatisk med
+              <a href="kontakt-oss.html" style="color: var(--admin-primary); font-weight: 600;">Kontakt oss-editoren</a>.
             </div>
           </div>
-          <a href="kontakt-oss.html" class="btn-admin btn-admin-secondary" style="font-size: 0.8rem;">
-            Rediger innhold &rarr;
-          </a>
+          <button type="button" id="addContactItemBtn" class="btn-admin btn-admin-secondary" style="font-size: 0.8rem;">
+            + Legg til kontaktpunkt
+          </button>
         </div>
 
         <div class="form-row">
-          <div class="form-group" style="margin-bottom: 0;">
+          <div class="form-group">
             <label for="contactTitle">Overskrift i kontaktboksen</label>
             <input type="text" id="contactTitle" class="form-control" placeholder="Kontaktinfo">
           </div>
-          <div class="form-group" style="margin-bottom: 0;">
+          <div class="form-group">
             <label for="contactSubtitle">Introtekst under overskriften</label>
             <input type="text" id="contactSubtitle" class="form-control"
               placeholder="Har du spørsmål om kurs, booking eller medlemskap?...">
           </div>
+        </div>
+
+        <div id="contactItemsList" class="admin-items-list" style="margin-top: 12px;">
+          <div style="text-align: center; color: var(--admin-text-muted); padding: 20px;">Laster kontaktpunkter...</div>
         </div>
       </section>
 

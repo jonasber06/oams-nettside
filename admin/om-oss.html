@@ -220,6 +220,51 @@
         </div>
       </section>
 
+      <!-- 5. Sosiale medier (SoMe-boks) -->
+      <section class="admin-card">
+        <div class="admin-card-header">
+          <div>
+            <h2 class="admin-card-title">5. Sosiale medier (SoMe-boks)</h2>
+            <div class="admin-card-subtitle">Delt boks som vises både på Om oss-siden og på Medisinstudent-siden.
+              Endringer her synkroniseres automatisk med <a href="medisinstudent.html"
+                style="color: var(--admin-primary); font-weight: 600;">Medisinstudent-editoren</a>.</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="someTitle">Overskrift</label>
+          <input type="text" id="someTitle" class="form-control" placeholder="Interessert? Følg oss!">
+        </div>
+
+        <div class="form-group">
+          <label for="someText">Beskrivelse (støtter linjeskift)</label>
+          <textarea id="someText" class="form-control" rows="3"
+            placeholder="Datoer, påmeldingslenker og fortløpende oppdateringer..."></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="someFacebookLabel">Facebook-knappetekst</label>
+            <input type="text" id="someFacebookLabel" class="form-control" placeholder="Facebook">
+          </div>
+          <div class="form-group">
+            <label for="someFacebookUrl">Facebook-lenke (URL)</label>
+            <input type="text" id="someFacebookUrl" class="form-control" placeholder="https://www.facebook.com/OsloAMS">
+          </div>
+        </div>
+
+        <div class="form-row" style="margin-bottom: 0;">
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="someInstagramLabel">Instagram-knappetekst</label>
+            <input type="text" id="someInstagramLabel" class="form-control" placeholder="Instagram">
+          </div>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="someInstagramUrl">Instagram-lenke (URL)</label>
+            <input type="text" id="someInstagramUrl" class="form-control" placeholder="https://www.instagram.com/...">
+          </div>
+        </div>
+      </section>
+
       <!-- Lagre knapp bunn -->
       <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
         <button type="submit" id="saveBottomBtn" class="btn-admin btn-admin-primary"

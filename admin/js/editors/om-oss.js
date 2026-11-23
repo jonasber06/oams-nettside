@@ -19,6 +19,15 @@ const DEFAULT_ROLES = [
   { title: 'PR- og webansvarlig', member_name: null, email: 'admin@oams.no', sort_order: 4, visible: true }
 ];
 
+const DEFAULT_SOME = {
+  title: 'Interessert? Følg oss!',
+  text: 'Datoer, påmeldingslenker og fortløpende oppdateringer om alle kommende kurs og arrangementer legges ut på våre sosiale medier.\nFølg oss for å sikre deg plass!',
+  facebook_label: 'Facebook',
+  facebook_url: 'https://www.facebook.com/OsloAMS',
+  instagram_label: 'Instagram',
+  instagram_url: '#'
+};
+
 async function initEditor() {
   const auth = await requireAdmin();
   if (!auth) return;
@@ -57,27 +66,34 @@ if (document.readyState === 'loading') {
 async function loadContent() {
   try {
     const [sectionsRes, rolesRes, docsRes] = await Promise.all([
-      supabaseClient.from('site_sections').select('key, content').eq('page', 'om_oss'),
+      supabaseClient.from('site_sections').select('key, content').in('page', ['om_oss', 'student', 'kurs']),
       supabaseClient.from('board_roles').select('*').order('sort_order', { ascending: true }),
       supabaseClient.from('documents').select('*').order('sort_order', { ascending: true })
     ]);
 
     // 1. Seksjoner
-    if (sectionsRes.data) {
-      const map = new Map(sectionsRes.data.map(s => [s.key, s.content]));
+    const map = new Map((sectionsRes.data || []).map(s => [s.key, s.content]));
 
-      const hero = map.get('om_oss.hero') || {};
-      document.getElementById('heroSubheading').value = hero.subheading || '';
-      document.getElementById('heroTitle').value = hero.title || '';
+    const hero = map.get('om_oss.hero') || {};
+    document.getElementById('heroSubheading').value = hero.subheading || '';
+    document.getElementById('heroTitle').value = hero.title || '';
 
-      const hvem = map.get('om_oss.hvem_er_vi') || {};
-      document.getElementById('aboutTitle').value = hvem.title || '';
-      document.getElementById('aboutLead').value = hvem.lead || '';
-      const p = Array.isArray(hvem.paragraphs) ? hvem.paragraphs : [];
-      document.getElementById('aboutBody').value = typeof hvem.body === 'string'
-        ? hvem.body
-        : p.join('\n\n');
-    }
+    const hvem = map.get('om_oss.hvem_er_vi') || {};
+    document.getElementById('aboutTitle').value = hvem.title || '';
+    document.getElementById('aboutLead').value = hvem.lead || '';
+    const p = Array.isArray(hvem.paragraphs) ? hvem.paragraphs : [];
+    document.getElementById('aboutBody').value = typeof hvem.body === 'string'
+      ? hvem.body
+      : p.join('\n\n');
+
+    // SoMe-boks (delt med Medisinstudent)
+    const some = map.get('student.some') || map.get('kurs.some') || DEFAULT_SOME;
+    document.getElementById('someTitle').value = some.title ?? DEFAULT_SOME.title;
+    document.getElementById('someText').value = some.text ?? DEFAULT_SOME.text;
+    document.getElementById('someFacebookLabel').value = some.facebook_label ?? DEFAULT_SOME.facebook_label;
+    document.getElementById('someFacebookUrl').value = some.facebook_url ?? DEFAULT_SOME.facebook_url;
+    document.getElementById('someInstagramLabel').value = some.instagram_label ?? DEFAULT_SOME.instagram_label;
+    document.getElementById('someInstagramUrl').value = some.instagram_url ?? DEFAULT_SOME.instagram_url;
 
     // 2. Roller
     const rawRoles = (Array.isArray(rolesRes.data) && rolesRes.data.length > 0)
@@ -526,6 +542,15 @@ async function saveAll({ isAuto = false, triggerBtn = null } = {}) {
       paragraphs
     };
 
+    const someContent = {
+      title: document.getElementById('someTitle').value.trim(),
+      text: document.getElementById('someText').value.replace(/\r\n/g, '\n').trim(),
+      facebook_label: document.getElementById('someFacebookLabel').value.trim() || 'Facebook',
+      facebook_url: document.getElementById('someFacebookUrl').value.trim() || '#',
+      instagram_label: document.getElementById('someInstagramLabel').value.trim() || 'Instagram',
+      instagram_url: document.getElementById('someInstagramUrl').value.trim() || '#'
+    };
+
     const sectionUpserts = [
       supabaseClient.from('site_sections').upsert({
         key: 'om_oss.hero',
@@ -536,7 +561,12 @@ async function saveAll({ isAuto = false, triggerBtn = null } = {}) {
         key: 'om_oss.hvem_er_vi',
         page: 'om_oss',
         content: hvemContent
-      })
+      }),
+      supabaseClient.from('site_sections').upsert({
+        key: 'student.some',
+        page: 'student',
+        content: someContent
+      }, { onConflict: 'key' })
     ];
 
     await Promise.all(sectionUpserts);

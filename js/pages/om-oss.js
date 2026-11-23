@@ -50,6 +50,45 @@ const DEFAULT_ROLES = [
   { title: 'PR- og webansvarlig', member_name: null, email: 'admin@oams.no', sort_order: 4, visible: true }
 ];
 
+const DEFAULT_SOME = {
+  title: 'Interessert? Følg oss!',
+  text: 'Datoer, påmeldingslenker og fortløpende oppdateringer om alle kommende kurs og arrangementer legges ut på våre sosiale medier.\nFølg oss for å sikre deg plass!',
+  facebook_label: 'Facebook',
+  facebook_url: 'https://www.facebook.com/OsloAMS',
+  instagram_label: 'Instagram',
+  instagram_url: '#'
+};
+
+function sanitizeHref(rawHref) {
+  if (!rawHref) return '#';
+  const trimmed = String(rawHref).trim();
+  if (
+    trimmed.startsWith('https://') ||
+    trimmed.startsWith('http://') ||
+    trimmed.startsWith('mailto:') ||
+    trimmed.startsWith('tel:') ||
+    trimmed.startsWith('#') ||
+    /^[a-zA-Z0-9_./-]+(\?.*)?(#.*)?$/.test(trimmed)
+  ) {
+    return trimmed;
+  }
+  return '#';
+}
+
+function applyLinkHref(selector, rawUrl) {
+  const linkEl = document.querySelector(selector);
+  if (!linkEl) return;
+  const safeUrl = sanitizeHref(rawUrl);
+  linkEl.setAttribute('href', safeUrl);
+  if (safeUrl.startsWith('http://') || safeUrl.startsWith('https://')) {
+    linkEl.setAttribute('target', '_blank');
+    linkEl.setAttribute('rel', 'noopener noreferrer');
+  } else {
+    linkEl.removeAttribute('target');
+    linkEl.removeAttribute('rel');
+  }
+}
+
 function setMultilineText(el, text) {
   renderFormattedText(el, text, { multiline: true });
 }
@@ -82,9 +121,9 @@ async function initOmOss() {
     const supabase = await getSupabase();
     if (!supabase) return; // Fallback forblir urørt
 
-    // Hent all data for siden parallelt
+    // Hent all data for siden parallelt (inkl. delt SoMe-boks fra student/kurs)
     const [sectionsRes, rolesRes, docsRes] = await Promise.all([
-      supabase.from('site_sections').select('key, content').eq('page', 'om_oss'),
+      supabase.from('site_sections').select('key, content').in('page', ['om_oss', 'student', 'kurs']),
       supabase.from('board_roles').select('*').eq('visible', true).order('sort_order', { ascending: true }),
       supabase.from('documents').select('*').eq('visible', true).order('sort_order', { ascending: true })
     ]);
@@ -117,6 +156,23 @@ async function initOmOss() {
             : hvem.paragraphs;
           renderParagraphsWithBreaks(bodyContainer, source);
         }
+      }
+
+      // SoMe-boks (delt med medisinstudent.html)
+      const some = sectionsMap.get('student.some') || sectionsMap.get('kurs.some') || DEFAULT_SOME;
+      if (some) {
+        const sTitle = document.querySelector('[data-cms="some-title"]');
+        const sText = document.querySelector('[data-cms="some-text"]');
+        const fbLabel = document.querySelector('[data-cms="some-facebook-label"]');
+        const igLabel = document.querySelector('[data-cms="some-instagram-label"]');
+
+        if (sTitle && some.title) renderFormattedText(sTitle, some.title, { multiline: false });
+        if (sText && some.text) setMultilineText(sText, some.text);
+        if (fbLabel && some.facebook_label) renderFormattedText(fbLabel, some.facebook_label, { multiline: false });
+        if (igLabel && some.instagram_label) renderFormattedText(igLabel, some.instagram_label, { multiline: false });
+
+        applyLinkHref('[data-cms-href="some-facebook-url"]', some.facebook_url || DEFAULT_SOME.facebook_url);
+        applyLinkHref('[data-cms-href="some-instagram-url"]', some.instagram_url || DEFAULT_SOME.instagram_url);
       }
     }
 

@@ -54,12 +54,19 @@ document.addEventListener('DOMContentLoaded', () => {
     if (link) {
       link.addEventListener('click', (e) => {
         if (window.innerWidth <= 860) {
-          e.preventDefault();
-          const wasOpen = item.classList.contains('dropdown-open');
-          // Close other open dropdowns
-          dropdownItems.forEach((other) => other.classList.remove('dropdown-open'));
-          if (!wasOpen) {
-            item.classList.add('dropdown-open');
+          const isOpen = item.classList.contains('dropdown-open');
+          const clickedChevron = Boolean(e.target.closest('.chevron-down'));
+
+          if (!isOpen || clickedChevron) {
+            e.preventDefault();
+            dropdownItems.forEach((other) => other.classList.remove('dropdown-open'));
+            if (!isOpen) {
+              item.classList.add('dropdown-open');
+            }
+          } else {
+            // Dropdown er allerede åpen: la trykk på lenken navigere til hovedsiden
+            if (mainNav) mainNav.classList.remove('is-open');
+            if (mobileMenuBtn) mobileMenuBtn.setAttribute('aria-expanded', 'false');
           }
         }
       });

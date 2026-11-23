@@ -3,7 +3,7 @@
 // Håndterer redigering av:
 //   - forside.intro (Førstehjelpskurs av medisinstudenter + Book oss-knapp)
 //   - forside.slideshow (Overskrift, undertittel og dynamisk bildeliste med opplasting)
-//   - kontakt_oss.kontaktinfo (Overskrift og introtekst i kontaktboksen nederst)
+//   - kontakt_oss.kontaktinfo (Overskrift, introtekst og kontaktpunkter nederst)
 // ==============================================================================
 
 import { requireAdmin } from '../auth-guard.js';
@@ -12,7 +12,7 @@ import { showToast, setButtonSaving, createAutoSaver } from '../ui.js';
 let supabaseClient = null;
 let autoSaver = null;
 let currentSlides = [];
-let cachedContactInfo = null;
+let currentContactItems = [];
 let draggedSlideIndex = null;
 
 const DEFAULT_INTRO = {
@@ -69,6 +69,7 @@ async function initEditor() {
   });
 
   document.getElementById('addSlideBtn').addEventListener('click', addSlideRow);
+  document.getElementById('addContactItemBtn').addEventListener('click', addContactItemRow);
   document.getElementById('saveTopBtn').addEventListener('click', (e) => {
     e.preventDefault();
     autoSaver.saveNow(document.getElementById('saveTopBtn'));
@@ -121,10 +122,18 @@ async function loadContent() {
     }));
     renderSlidesList();
 
-    // 3. Kontaktinfo-tittel & undertittel
-    cachedContactInfo = map.get('kontakt_oss.kontaktinfo') || DEFAULT_CONTACT_INFO;
-    document.getElementById('contactTitle').value = cachedContactInfo.title ?? DEFAULT_CONTACT_INFO.title;
-    document.getElementById('contactSubtitle').value = cachedContactInfo.subtitle ?? DEFAULT_CONTACT_INFO.subtitle;
+    // 3. Kontaktinfo-tittel, undertittel & kontaktpunkter (delt med Kontakt oss)
+    const info = map.get('kontakt_oss.kontaktinfo') || DEFAULT_CONTACT_INFO;
+    document.getElementById('contactTitle').value = info.title ?? DEFAULT_CONTACT_INFO.title;
+    document.getElementById('contactSubtitle').value = info.subtitle ?? DEFAULT_CONTACT_INFO.subtitle;
+
+    const rawItems = Array.isArray(info.items) ? info.items : DEFAULT_CONTACT_INFO.items;
+    currentContactItems = rawItems.map(item => ({
+      ...item,
+      id: item.id || crypto.randomUUID(),
+      visible: item.visible !== false
+    }));
+    renderContactItemsList();
 
   } catch (err) {
     console.error('Feil ved lasting av forside-innhold:', err);
@@ -410,6 +419,143 @@ function syncSlidesFromDom() {
 }
 
 // ==============================================================================
+// KONTAKTPUNKTER (Delt med Kontakt oss)
+// ==============================================================================
+
+function syncContactItemsFromDom() {
+  const cards = document.querySelectorAll('#contactItemsList > .contact-editor-card');
+  cards.forEach((card, idx) => {
+    if (currentContactItems[idx]) {
+      currentContactItems[idx].title = card.querySelector('.ci-title-input')?.value.trim() || '';
+      currentContactItems[idx].text = card.querySelector('.ci-text-input')?.value.trim() || '';
+      currentContactItems[idx].link = card.querySelector('.ci-link-input')?.value.trim() || '';
+      currentContactItems[idx].icon = card.querySelector('.ci-icon-input')?.value || 'location';
+      currentContactItems[idx].visible = card.querySelector('.ci-visible-input')?.checked ?? true;
+    }
+  });
+}
+
+function moveContactItem(fromIndex, delta) {
+  syncContactItemsFromDom();
+  const toIndex = fromIndex + delta;
+  if (toIndex < 0 || toIndex >= currentContactItems.length) return;
+
+  const [moved] = currentContactItems.splice(fromIndex, 1);
+  currentContactItems.splice(toIndex, 0, moved);
+  renderContactItemsList();
+  autoSaver?.trigger(250);
+}
+
+function renderContactItemsList() {
+  const container = document.getElementById('contactItemsList');
+  if (!container) return;
+  container.innerHTML = '';
+
+  if (currentContactItems.length === 0) {
+    container.innerHTML = '<div style="color: var(--admin-text-muted); padding: 12px;">Ingen kontaktpunkter lagt inn ennå. Trykk «+ Legg til kontaktpunkt» over.</div>';
+    return;
+  }
+
+  currentContactItems.forEach((item, index) => {
+    if (!item.id) item.id = crypto.randomUUID();
+
+    const card = document.createElement('div');
+    card.className = 'contact-editor-card';
+    card.style.cssText = 'background: #f8fafc; border: 1px solid var(--admin-border); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 12px;';
+
+    card.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div class="role-reorder-wrap" style="flex-direction: row; gap: 4px;">
+            <button type="button" class="btn-reorder btn-move-up" title="Flytt opp" aria-label="Flytt opp" ${index === 0 ? 'disabled' : ''}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            </button>
+            <button type="button" class="btn-reorder btn-move-down" title="Flytt ned" aria-label="Flytt ned" ${index === currentContactItems.length - 1 ? 'disabled' : ''}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+          </div>
+          <strong style="font-size: 0.9rem;">Kontaktpunkt ${index + 1}</strong>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <label style="display: flex; align-items: center; gap: 6px; font-size: 0.82rem; margin: 0; cursor: pointer;">
+            <input type="checkbox" class="ci-visible-input" ${item.visible !== false ? 'checked' : ''}> Synlig på nettsiden
+          </label>
+          <button type="button" class="btn-admin btn-admin-danger delete-ci-btn" style="padding: 4px 8px; font-size: 0.75rem;">
+            Slett
+          </button>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Overskrift</label>
+          <input type="text" class="form-control ci-title-input" value="${escapeHtml(item.title || '')}" placeholder="Adresse" required>
+        </div>
+        <div class="form-group">
+          <label>Ikon</label>
+          <select class="form-control ci-icon-input">
+            <option value="location" ${item.icon === 'location' ? 'selected' : ''}>Kartnål (Adresse)</option>
+            <option value="mail" ${item.icon === 'mail' ? 'selected' : ''}>Konvolutt (E-post)</option>
+            <option value="phone" ${item.icon === 'phone' ? 'selected' : ''}>Telefon</option>
+            <option value="syringe" ${item.icon === 'syringe' ? 'selected' : ''}>Sprøyte (Medisinsk)</option>
+            <option value="calendar" ${item.icon === 'calendar' ? 'selected' : ''}>Kalender (Booking / Kurs)</option>
+            <option value="info" ${item.icon === 'info' ? 'selected' : ''}>Info-ikon</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tekst / visningsverdi (støtter linjeskift)</label>
+          <textarea class="form-control ci-text-input" rows="2" placeholder="Domus Medica, Sognsvannsveien 9, 0372 Oslo" style="min-height: 62px;" required>${escapeHtml(item.text || '')}</textarea>
+        </div>
+        <div class="form-group">
+          <label>Lenkeadresse (valgfritt)</label>
+          <input type="text" class="form-control ci-link-input" value="${escapeHtml(item.link || '')}" placeholder="mailto:post@oams.no eller https://...">
+        </div>
+      </div>
+    `;
+
+    card.querySelector('.btn-move-up').addEventListener('click', () => moveContactItem(index, -1));
+    card.querySelector('.btn-move-down').addEventListener('click', () => moveContactItem(index, 1));
+
+    card.querySelector('.delete-ci-btn').addEventListener('click', () => {
+      syncContactItemsFromDom();
+      if (confirm(`Er du sikker på at du vil slette "${item.title || 'dette kontaktpunktet'}"?`)) {
+        currentContactItems.splice(index, 1);
+        renderContactItemsList();
+        autoSaver?.trigger(100);
+      }
+    });
+
+    container.appendChild(card);
+  });
+}
+
+function addContactItemRow() {
+  syncContactItemsFromDom();
+  currentContactItems.push({
+    id: crypto.randomUUID(),
+    title: '',
+    text: '',
+    link: '',
+    icon: 'mail',
+    visible: true
+  });
+  renderContactItemsList();
+  autoSaver?.trigger(300);
+
+  const lastCard = document.querySelector('#contactItemsList > .contact-editor-card:last-child');
+  if (lastCard) {
+    lastCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => {
+      lastCard.querySelector('.ci-title-input')?.focus({ preventScroll: true });
+    }, 300);
+  }
+}
+
+// ==============================================================================
 // LAGRING AV ALLE ENDRINGER
 // ==============================================================================
 
@@ -417,6 +563,7 @@ async function saveAll({ isAuto = false, triggerBtn = null } = {}) {
   if (triggerBtn) setButtonSaving(triggerBtn, true);
 
   syncSlidesFromDom();
+  syncContactItemsFromDom();
 
   try {
     const introContent = {
@@ -439,9 +586,17 @@ async function saveAll({ isAuto = false, triggerBtn = null } = {}) {
     };
 
     const updatedContactInfo = {
-      ...(cachedContactInfo || DEFAULT_CONTACT_INFO),
       title: document.getElementById('contactTitle').value.trim(),
-      subtitle: document.getElementById('contactSubtitle').value.trim()
+      subtitle: document.getElementById('contactSubtitle').value.trim(),
+      items: currentContactItems.map((item, idx) => ({
+        id: item.id || crypto.randomUUID(),
+        title: item.title,
+        text: item.text,
+        link: item.link,
+        icon: item.icon || 'location',
+        visible: item.visible !== false,
+        sort_order: idx + 1
+      }))
     };
 
     const upserts = [
@@ -467,7 +622,6 @@ async function saveAll({ isAuto = false, triggerBtn = null } = {}) {
       if (res.error) throw res.error;
     }
 
-    cachedContactInfo = updatedContactInfo;
     if (triggerBtn) setButtonSaving(triggerBtn, false, 'Lagret ✓');
     if (!isAuto) {
       showToast('Endringene er lagret og publisert på nettsiden! ✓', 'success');
