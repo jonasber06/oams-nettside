@@ -6,6 +6,20 @@
 @import url('../style.css');
 
 :root {
+  color-scheme: light;
+  --surface: #ffffff;
+  --surface-alt: #fbfcfd;
+  --surface-muted: #f8fafc;
+  --surface-accent: #fffafa;
+  --text-dark: #1e293b;
+  --text-muted: #64748b;
+  --text-body: #334155;
+  --text-strong: #0f172a;
+  --text-faint: #94a3b8;
+  --border-color: #e2e8f0;
+  --border-light: #f1f5f9;
+  --border-strong: #cbd5e1;
+
   --admin-sidebar-width: 260px;
   --admin-bg: #f8fafc;
   --admin-card-bg: #ffffff;
